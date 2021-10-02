@@ -1,14 +1,17 @@
 import React from 'react';
 import { Screens, ScreenSelectorProps } from './types';
 
+// todo solve import issue
+// material ui v5 create styles
+
 const ScreenSelector = (props: ScreenSelectorProps) => {
     if (props.selectedScree === Screens.Settings) {
         return (
             <div>
                 <h2>Settings</h2>
-                <div onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
+                <button onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
                     Back to Main Menu
-                </div>
+                </button>
             </div>
         );
     }
@@ -16,9 +19,9 @@ const ScreenSelector = (props: ScreenSelectorProps) => {
         return (
             <div>
                 <h2>'Game screen'</h2>
-                <div onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
+                <button onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
                     Back to Main Menu
-                </div>
+                </button>
             </div>
         );
     }
@@ -29,10 +32,9 @@ const ScreenSelector = (props: ScreenSelectorProps) => {
                 <div>
                     Author: <b>Maciej Kaczanowski</b>
                 </div>
-                <br />
-                <div onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
+                <button onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
                     Back to Main Menu
-                </div>
+                </button>
             </div>
         );
     }
@@ -41,18 +43,18 @@ const ScreenSelector = (props: ScreenSelectorProps) => {
         <div>
             <h1>Space and Void</h1>
             <div>
-                <div>Resume</div>
-                <div onClick={() => props.setSelectedScreen(Screens.Game)}>
+                <button disabled={true}>Resume</button>
+                <button onClick={() => props.setSelectedScreen(Screens.Game)}>
                     New game
-                </div>
-                <div>Load game</div>
-                <div onClick={() => props.setSelectedScreen(Screens.Settings)}>
+                </button>
+                <button disabled={true}>Load game</button>
+                <button onClick={() => props.setSelectedScreen(Screens.Settings)}>
                     Setting
-                </div>
-                <div onClick={() => props.setSelectedScreen(Screens.Credits)}>
+                </button>
+                <button onClick={() => props.setSelectedScreen(Screens.Credits)}>
                     Credits
-                </div>
-                <div>Exit</div>
+                </button>
+                <button disabled={true}>Exit</button>
             </div>
         </div>
     );

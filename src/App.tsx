@@ -1,23 +1,21 @@
 import React, { useState } from 'react';
-import './App.css';
 import { Screens } from './screens/types';
 import { ScreenSelector } from './screens';
+import { createTheme, Theme, ThemeProvider } from '@material-ui/core/styles';
 
-// TODO add material-ui
 
+const theme: Theme = createTheme({});
 const App = () => {
     const [currentScreen, setCurrentScreen] = useState<Screens>(
-        Screens.MainMenu
+        Screens.MainMenu,
     );
     return (
-        <div className="App">
-            <header className="App-header">
-                <ScreenSelector
-                    selectedScree={currentScreen}
-                    setSelectedScreen={(screen) => setCurrentScreen(screen)}
-                />
-            </header>
-        </div>
+        <ThemeProvider theme={theme}>
+            <ScreenSelector
+                selectedScree={currentScreen}
+                setSelectedScreen={(screen) => setCurrentScreen(screen)}
+            />
+        </ThemeProvider>
     );
 };
 
