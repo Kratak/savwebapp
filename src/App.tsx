@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Screens } from './screens/types';
 import { ScreenSelector } from './screens';
-import { createTheme, Theme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, Theme, ThemeProvider } from '@mui/material';
+// import { createTheme, Theme, ThemeProvider } from '@material-ui/core/styles';
 
 
 const theme: Theme = createTheme({});

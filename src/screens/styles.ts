@@ -1,10 +1,7 @@
-import { makeStyles } from '@material-ui/core';
-import { Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme: Theme) => ({
+export const useStyles = makeStyles(() => ({
     module: {
         marginBottom: '3rem',
     },
 }));
-
-export default useStyles;

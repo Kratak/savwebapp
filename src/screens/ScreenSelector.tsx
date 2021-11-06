@@ -1,14 +1,14 @@
 import React from 'react';
 import { Screens, ScreenSelectorProps } from './types';
+import { useStyles } from './styles';
 
-// todo solve import issue
-// material ui v5 create styles
 
 const ScreenSelector = (props: ScreenSelectorProps) => {
+    const styles = useStyles();
     if (props.selectedScree === Screens.Settings) {
         return (
             <div>
-                <h2>Settings</h2>
+                <h2 className={styles.module}>Settings</h2>
                 <button onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
                     Back to Main Menu
                 </button>
