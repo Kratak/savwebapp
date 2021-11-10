@@ -1,22 +1,30 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
+import { LocalizationNS } from './nameSpaces/localizationMameSpaces';
+import { ErrorMessagesNS } from './nameSpaces/errorMessages';
 
 const resources = {
     en: {
-        translation: {
+        [LocalizationNS.translation]: {
             'Welcome to React': 'Welcome to React and react-i18next',
         },
-        part1: {
+        [LocalizationNS.part1]: {
             title: 'Some awsome title',
+        },
+        [LocalizationNS.errorMessages]: {
+            [ErrorMessagesNS.screenNotHandled]: `This screen isn't handled yet`,
         },
     },
     pl: {
-        translation: {
+        [LocalizationNS.translation]: {
             'Welcome to React': 'Bienvenue à React et react-i18next',
         },
-        part1: {
-            title: 'some awsome french title',
+        [LocalizationNS.part1]: {
+            title: 'Niesamowity tytuł',
+        },
+        [LocalizationNS.errorMessages]: {
+            [ErrorMessagesNS.screenNotHandled]: 'Ten ekran nie jest jeszcze obsłużony',
         },
     },
 };
@@ -26,7 +34,7 @@ i18n
     .use(initReactI18next) // bind react-i18next to the instance
     .init({
         fallbackLng: 'en',
-        debug: true,
+        debug: false,
         interpolation: {
             escapeValue: false, // not needed for react!!
         },
