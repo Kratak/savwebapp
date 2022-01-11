@@ -1,3 +1,11 @@
+# Space ns Void web app
+
+## to install locally
+
+`npm install`
+
+___
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
