@@ -6,6 +6,6 @@ export enum Screens {
 }
 
 export interface ScreenSelectorProps {
-    selectedScree: Screens;
+    selectedScreen: Screens;
     setSelectedScreen: (screen: Screens) => void;
 }

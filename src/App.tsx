@@ -16,7 +16,7 @@ const App = () => {
         <ThemeProvider theme={theme}>
             {t('title', { ns: 'part1' })}
             <ScreenSelector
-                selectedScree={currentScreen}
+                selectedScreen={currentScreen}
                 setSelectedScreen={(screen) => setCurrentScreen(screen)}
             />
         </ThemeProvider>
