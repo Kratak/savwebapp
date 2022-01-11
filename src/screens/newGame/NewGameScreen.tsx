@@ -45,11 +45,11 @@ const NewGameScreen = (props: ScreenSelectorProps): JSX.Element => {
     return (
         <div>
             <h1>Space and Void</h1>
-            <div>
+            <div className={styles.windowWrapper}>
                 <h2>'Game screen'</h2>
-                <div ref={mountRef} />
+                <div ref={mountRef} className={styles.threeWrapper}/>
 
-                <button onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
+                <button className={styles.uiWrapper} onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
                     Back to Main Menu
                 </button>
             </div>
