@@ -34,6 +34,7 @@ const Box = (props: any) => {
 
 
 const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
+    const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
     const styles = useStyles();
     return (
         <div>
@@ -43,7 +44,7 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
 
                 <div className={styles.threeWrapper}>
                     <Canvas>
-                        <ambientLight intensity={0.5} />
+                        <ambientLight intensity={ambientLightIntensity} />
                         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                         <pointLight position={[-10, -10, -10]} />
                         <Box position={[-1.2, 0, 0]} />
@@ -53,13 +54,13 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
 
                 <div className={styles.uiWrapper}>
 
-                    <button onClick={() => console.log('increase by .1')}>
+                    <button onClick={() => setAmbientLightIntensity(ambientLightIntensity + .1)}>
                         increase by .1
                     </button>
                     <button onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
                         Back to Main Menu
                     </button>
-                    <button onClick={() => console.log('decrees by .1')}>
+                    <button onClick={() => setAmbientLightIntensity(ambientLightIntensity - .1)}>
                         decrees by .1
                     </button>
                 </div>
