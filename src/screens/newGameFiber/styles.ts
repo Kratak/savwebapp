@@ -9,6 +9,8 @@ export const useStyles = makeStyles(() => ({
     },
     threeWrapper: {
         position: 'relative',
+        width: 640,
+        height: 480
     },
     uiWrapper: {
         position: 'absolute',
