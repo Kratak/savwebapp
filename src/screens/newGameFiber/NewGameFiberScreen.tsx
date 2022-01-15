@@ -5,6 +5,7 @@ import SimpleBox from '../../3Dcomponents/SimpleBox';
 
 import { Screens, ScreenSelectorProps } from '../types';
 import { useStyles } from './styles';
+import { getRandomArrayOfColors, SimpleGameModeColors } from '../../gameModes/simple';
 
 const gameSceneSize = {
     width: 640,
@@ -14,6 +15,12 @@ const gameSceneSize = {
 const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
     const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
     const styles = useStyles();
+
+    console.log(getRandomArrayOfColors({
+        howMuch: 20,
+        availableColors: Object.keys(SimpleGameModeColors),
+    }));
+
     return (
         <div>
             <h1>Space and Void</h1>
