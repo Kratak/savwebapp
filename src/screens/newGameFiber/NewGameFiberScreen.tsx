@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 
 import SimpleBox from '../../3Dcomponents/SimpleBox';
+import { getTilesGrid, SimpleGameModeColors } from '../../gameModes/simple';
+import { TilesGridObject } from '../../gameModes/simple/helpers';
 
 import { Screens, ScreenSelectorProps } from '../types';
 import { useStyles } from './styles';
-import { getTilesGrid, SimpleGameModeColors } from '../../gameModes/simple';
 
 const gameSceneSize = {
     width: 640,
@@ -14,13 +15,19 @@ const gameSceneSize = {
 
 const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
     const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
+    const [tiles, setTiles] = useState<Array<TilesGridObject>>([]);
     const styles = useStyles();
 
-    const tiles = getTilesGrid({
-        columns: 6,
-        rows: 6,
-        availableColors: Object.keys(SimpleGameModeColors),
-    });
+
+    useEffect(() => {
+        const newTiles = getTilesGrid({
+            columns: 6,
+            rows: 6,
+            availableColors: Object.keys(SimpleGameModeColors),
+        });
+
+        setTiles(newTiles);
+    }, []);
 
     return (
         <div>

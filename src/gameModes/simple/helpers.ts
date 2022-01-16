@@ -19,7 +19,7 @@ export const getRandomArrayOfColors = (given: GetRandomArrayOfColorsProps): Arra
 };
 
 
-interface TilesGridObject {
+export interface TilesGridObject {
     position: Vector3;
     color: string;
 }
