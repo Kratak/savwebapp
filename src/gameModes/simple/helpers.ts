@@ -22,6 +22,7 @@ export const getRandomArrayOfColors = (given: GetRandomArrayOfColorsProps): Arra
 export interface TilesGridObject {
     position: Vector3;
     color: string;
+    boxId: string;
 }
 
 interface GetTilesGridProps {
@@ -40,9 +41,11 @@ export const getTilesGrid = (given: GetTilesGridProps): Array<TilesGridObject> =
 
     for (let rows = halfRowsCount * -1; rows < halfRowsCount; rows++) {
         for (let columns = halfColumnsCount * -1; columns < halfColumnsCount; columns++) {
+            const color = given.availableColors[getRandomInt(given.availableColors.length)];
             tiles = [...tiles, {
-                color: given.availableColors[getRandomInt(given.availableColors.length)],
+                color,
                 position: [columns, rows, 0],
+                boxId: `C${columns}-R${rows}-${color}`
             }];
         }
     }

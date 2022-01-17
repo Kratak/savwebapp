@@ -14,6 +14,7 @@ const gameSceneSize = {
 };
 
 const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
+    const selected = useState<string>('');
     const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
     const [tiles, setTiles] = useState<Array<TilesGridObject>>([]);
     const styles = useStyles();
@@ -41,7 +42,8 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                         <pointLight position={[-10, -10, -10]} />
                         {tiles.map((item, index) => {
-                            return <SimpleBox key={index + item.color} position={item.position}
+                            return <SimpleBox selected={selected} boxId={item.boxId} key={item.boxId}
+                                              position={item.position}
                                               boxColor={item.color} />;
                         })}
                     </Canvas>
