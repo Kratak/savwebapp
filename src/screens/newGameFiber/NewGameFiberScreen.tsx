@@ -18,7 +18,7 @@ const colorsKeys: Array<SimpleGameModeColorsKeys> = Object.keys(SimpleGameModeCo
 // const availableColors = Object.keys(SimpleGameModeColors);
 
 const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
-    const selected = useState<string>('');
+    const selectedPosition = useState<string>('');
     const selectedColor = useState<string>('');
     const movedColor = useState<string>('');
     const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
@@ -52,7 +52,7 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                                 boxId={item.boxId}
                                 key={item.boxId}
                                 position={item.position}
-                                selected={selected}
+                                selectedPosition={selectedPosition}
                             />
                         ))}
                     </Canvas>

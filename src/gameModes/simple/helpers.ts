@@ -45,7 +45,7 @@ export const getTilesGrid = <T extends string>(given: GetTilesGridProps<T>): Arr
             tiles = [...tiles, {
                 color,
                 position: [columns, rows, 0],
-                boxId: `C${columns}-R${rows}-${color}`
+                boxId: `ID_${columns}C_${rows}R_${color}`
             }];
         }
     }

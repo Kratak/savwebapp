@@ -5,12 +5,12 @@ import { ThreeEvent } from '@react-three/fiber/dist/declarations/src/core/events
 interface BoxProps extends MeshProps {
     boxColor?: string;
     boxId: string;
-    selected: [string, Dispatch<string>];
+    selectedPosition: [string, Dispatch<string>];
 }
 
 
 const Box = (props: BoxProps) => {
-    const [selected, setSelected] = props.selected;
+    const [selectedPosition, setSelectedPosition] = props.selectedPosition;
     // This reference gives us direct access to the THREE.Mesh object
     const ref: any = useRef();
     // Hold state for hovered and clicked events
@@ -24,24 +24,24 @@ const Box = (props: BoxProps) => {
 
     const handleSelect = (event: ThreeEvent<MouseEvent>) => {
         if (!clicked) {
-            setSelected(props.boxId);
+            setSelectedPosition(props.boxId);
         } else {
-            setSelected('');
+            setSelectedPosition('');
         }
         setClicked(!clicked);
     };
 
     useEffect(() => {
-        if (selected !== props.boxId) {
+        if (selectedPosition !== props.boxId) {
             setClicked(false);
         }
-    }, [selected])
+    }, [selectedPosition])
 
     return (
         <mesh
             {...props}
             ref={ref}
-            scale={selected === props.boxId ? 1.5 : 1}
+            scale={selectedPosition === props.boxId ? 1.5 : 1}
             onClick={handleSelect}
             onPointerOver={(event) => setHovered(true)}
             onPointerOut={(event) => setHovered(false)}>
