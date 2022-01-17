@@ -19,8 +19,8 @@ const colorsKeys: Array<SimpleGameModeColorsKeys> = Object.keys(SimpleGameModeCo
 
 const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
     const selected = useState<string>('');
-    // const selectedColor = useState<string>('');
-    // const movedColor = useState<string>('');
+    const selectedColor = useState<string>('');
+    const movedColor = useState<string>('');
     const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
     const [tiles, setTiles] = useState<Array<TilesGridObject<SimpleGameModeColorsKeys>>>([]);
     const styles = useStyles();
