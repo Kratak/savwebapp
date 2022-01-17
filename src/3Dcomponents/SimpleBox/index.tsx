@@ -6,11 +6,15 @@ interface BoxProps extends MeshProps {
     boxColor?: string;
     boxId: string;
     selectedPosition: [string, Dispatch<string>];
+    selectedColorID: [string, Dispatch<string>];
+    movedColorID: [string, Dispatch<string>];
 }
 
 
 const Box = (props: BoxProps) => {
     const [selectedPosition, setSelectedPosition] = props.selectedPosition;
+    const [selectedColorID, setSelectedColorID] = props.selectedColorID;
+    const [movedColorID, setMovedColorID] = props.movedColorID;
     // This reference gives us direct access to the THREE.Mesh object
     const ref: any = useRef();
     // Hold state for hovered and clicked events
@@ -21,6 +25,7 @@ const Box = (props: BoxProps) => {
     // Return the view, these are regular Threejs elements expressed in JSX
     // useEffect(() => {
     // }, [props.boxId]);
+
 
     const handleSelect = (event: ThreeEvent<MouseEvent>) => {
         if (!clicked) {
@@ -35,7 +40,22 @@ const Box = (props: BoxProps) => {
         if (selectedPosition !== props.boxId) {
             setClicked(false);
         }
-    }, [selectedPosition])
+    }, [selectedPosition]);
+
+    useEffect(() => {
+        if (selectedPosition === props.boxId) {
+            if (!movedColorID) {
+                setSelectedColorID(props.boxId);
+                //TODO scenarios firstSelected
+            }
+            if (!!selectedColorID && selectedColorID !==props.boxId){
+                setMovedColorID(props.boxId)
+            }
+            //TODO scenarios firstDeselected
+            //TODO scenarios correct secondSelected
+            //TODO scenarios wrong secondSelected
+        }
+    }, [selectedColorID, movedColorID, selectedPosition]);
 
     return (
         <mesh
