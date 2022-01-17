@@ -1,6 +1,8 @@
-import React, { useRef, useState, useEffect, Dispatch } from 'react';
+import React, { useRef, useState, useEffect, Dispatch, useCallback } from 'react';
 import { MeshProps } from '@react-three/fiber/dist/declarations/src/three-types';
 import { ThreeEvent } from '@react-three/fiber/dist/declarations/src/core/events';
+
+import { adjustColor } from '../../genericHelpers';
 
 interface BoxProps extends MeshProps {
     boxColor?: string;
@@ -9,7 +11,6 @@ interface BoxProps extends MeshProps {
     selectedColorID: [string, Dispatch<string>];
     movedColorID: [string, Dispatch<string>];
 }
-
 
 const Box = (props: BoxProps) => {
     const [selectedPosition, setSelectedPosition] = props.selectedPosition;
@@ -26,6 +27,7 @@ const Box = (props: BoxProps) => {
     // useEffect(() => {
     // }, [props.boxId]);
 
+    const hoveredColor = useCallback(() => props.boxColor && adjustColor(props.boxColor, 20), [props.boxColor]);
 
     const handleSelect = (event: ThreeEvent<MouseEvent>) => {
         if (!clicked) {
@@ -48,8 +50,8 @@ const Box = (props: BoxProps) => {
                 setSelectedColorID(props.boxId);
                 //TODO scenarios firstSelected
             }
-            if (!!selectedColorID && selectedColorID !==props.boxId){
-                setMovedColorID(props.boxId)
+            if (!!selectedColorID && selectedColorID !== props.boxId) {
+                setMovedColorID(props.boxId);
             }
             //TODO scenarios firstDeselected
             //TODO scenarios correct secondSelected
@@ -61,12 +63,12 @@ const Box = (props: BoxProps) => {
         <mesh
             {...props}
             ref={ref}
-            scale={selectedPosition === props.boxId ? 1.5 : 1}
+            scale={selectedPosition === props.boxId ? 1.5 : hovered ? 1.05 : 1}
             onClick={handleSelect}
             onPointerOver={(event) => setHovered(true)}
             onPointerOut={(event) => setHovered(false)}>
             <boxGeometry args={[.7, .7, .7]} />
-            <meshStandardMaterial color={hovered ? 'hotpink' : props?.boxColor || 'orange'} />
+            <meshStandardMaterial color={hovered ? hoveredColor() : props?.boxColor || 'orange'} />
         </mesh>
     );
 };
