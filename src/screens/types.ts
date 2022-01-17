@@ -2,7 +2,8 @@ export enum Screens {
     MainMenu = 'MainMenu',
     Game = 'Game',
     Settings = 'Settings',
-    Credits = 'Credits'
+    Credits = 'Credits',
+    GameFaber = 'GameFaber'
 }
 
 export interface ScreenSelectorProps {

@@ -3,6 +3,7 @@ import CreditsScreen from './credits';
 import MainMenuScreen from './mainMenu';
 import SettingsScreen from './settings';
 import NewGameScreen from './newGame';
+import NewGameFiberScreen from './newGameFiber';
 
 export const AvailableScreens: {
     [key in Screens]: {
@@ -13,6 +14,10 @@ export const AvailableScreens: {
     [Screens.Credits]: {
         key: Screens.Credits,
         component: CreditsScreen,
+    },
+    [Screens.GameFaber]: {
+        key: Screens.GameFaber,
+        component: NewGameFiberScreen,
     },
     [Screens.MainMenu]: {
         key: Screens.MainMenu,

@@ -11,8 +11,11 @@ const MainMenu = (props: ScreenSelectorProps): JSX.Element => {
             <h1>Space and Void</h1>
             <div>
                 <button disabled={true}>Resume</button>
-                <button onClick={() => props.setSelectedScreen(Screens.Game)}>
+                <button disabled={true} onClick={() => props.setSelectedScreen(Screens.Game)}>
                     New game
+                </button>
+                <button onClick={() => props.setSelectedScreen(Screens.GameFaber)}>
+                    New game FIBER
                 </button>
                 <button disabled={true}>Load game</button>
                 <button onClick={() => props.setSelectedScreen(Screens.Settings)}>
