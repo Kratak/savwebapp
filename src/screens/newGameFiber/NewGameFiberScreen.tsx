@@ -4,6 +4,7 @@ import { Canvas } from '@react-three/fiber';
 import SimpleBox from '../../3Dcomponents/SimpleBox';
 import { getTilesGrid, SimpleGameModeColors } from '../../gameModes/simple';
 import { TilesGridObject } from '../../gameModes/simple/helpers';
+import { SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
 
 import { Screens, ScreenSelectorProps } from '../types';
 import { useStyles } from './styles';
@@ -13,17 +14,22 @@ const gameSceneSize = {
     height: 480,
 };
 
+const colorsKeys: Array<SimpleGameModeColorsKeys> = Object.keys(SimpleGameModeColorsKeys) as Array<SimpleGameModeColorsKeys>;
+// const availableColors = Object.keys(SimpleGameModeColors);
+
 const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
+    const selected = useState<string>('');
+    // const selectedColor = useState<string>('');
+    // const movedColor = useState<string>('');
     const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
-    const [tiles, setTiles] = useState<Array<TilesGridObject>>([]);
+    const [tiles, setTiles] = useState<Array<TilesGridObject<SimpleGameModeColorsKeys>>>([]);
     const styles = useStyles();
 
-
     useEffect(() => {
-        const newTiles = getTilesGrid({
+        const newTiles = getTilesGrid<SimpleGameModeColorsKeys>({
             columns: 6,
             rows: 6,
-            availableColors: Object.keys(SimpleGameModeColors),
+            colorsKeys,
         });
 
         setTiles(newTiles);
@@ -40,10 +46,15 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                         <ambientLight intensity={ambientLightIntensity} />
                         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                         <pointLight position={[-10, -10, -10]} />
-                        {tiles.map((item, index) => {
-                            return <SimpleBox key={index + item.color} position={item.position}
-                                              boxColor={item.color} />;
-                        })}
+                        {tiles.map((item, index) => (
+                            <SimpleBox
+                                boxColor={SimpleGameModeColors[item.color]}
+                                boxId={item.boxId}
+                                key={item.boxId}
+                                position={item.position}
+                                selected={selected}
+                            />
+                        ))}
                     </Canvas>
                 </div>
 
