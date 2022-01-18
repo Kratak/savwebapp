@@ -18,16 +18,10 @@ const colorsKeys: Array<SimpleGameModeColorsKeys> = Object.keys(SimpleGameModeCo
 // const availableColors = Object.keys(SimpleGameModeColors);
 
 const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
-    const selectedPosition = useState<string>('');
-    const selectedColorID = useState<string>('');
-    const movedColorID = useState<string>('');
+    const selectedTiles = useState<Array<string>>([]);
     const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
     const [tiles, setTiles] = useState<Array<TilesGridObject<SimpleGameModeColorsKeys>>>([]);
     const styles = useStyles();
-
-    console.log('selectedPosition', selectedPosition[0]);
-    console.log('selectedColorID', selectedColorID[0]);
-    console.log('movedColorID', movedColorID[0]);
 
     useEffect(() => {
         const newTiles = getTilesGrid<SimpleGameModeColorsKeys>({
@@ -56,9 +50,7 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                                 boxId={item.boxId}
                                 key={item.boxId}
                                 position={item.position}
-                                selectedPosition={selectedPosition}
-                                selectedColorID={selectedColorID}
-                                movedColorID={movedColorID}
+                                selectedTiles={selectedTiles}
                             />
                         ))}
                     </Canvas>

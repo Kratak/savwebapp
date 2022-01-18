@@ -7,15 +7,11 @@ import { adjustColor } from '../../genericHelpers';
 interface BoxProps extends MeshProps {
     boxColor?: string;
     boxId: string;
-    selectedPosition: [string, Dispatch<string>];
-    selectedColorID: [string, Dispatch<string>];
-    movedColorID: [string, Dispatch<string>];
+    selectedTiles: [Array<string>, Dispatch<Array<string>>];
 }
 
 const Box = (props: BoxProps) => {
-    const [selectedPosition, setSelectedPosition] = props.selectedPosition;
-    const [selectedColorID, setSelectedColorID] = props.selectedColorID;
-    const [movedColorID, setMovedColorID] = props.movedColorID;
+    const [selectedTiles, setSelectedTiles] = props.selectedTiles;
     // This reference gives us direct access to the THREE.Mesh object
     const ref: any = useRef();
     // Hold state for hovered and clicked events
@@ -30,40 +26,24 @@ const Box = (props: BoxProps) => {
     const hoveredColor = useCallback(() => props.boxColor && adjustColor(props.boxColor, 20), [props.boxColor]);
 
     const handleSelect = (event: ThreeEvent<MouseEvent>) => {
-        if (!clicked) {
-            setSelectedPosition(props.boxId);
-        } else {
-            setSelectedPosition('');
-        }
+        const arr = !clicked ? props.boxId === selectedTiles[0] ? [props.boxId] : [props.boxId, ...selectedTiles] : [];
         setClicked(!clicked);
+        setSelectedTiles(arr.slice(0, 2));
     };
 
     useEffect(() => {
-        if (selectedPosition !== props.boxId) {
+        const includesCheck = selectedTiles.includes(props.boxId);
+        if (!includesCheck) {
             setClicked(false);
         }
-    }, [selectedPosition]);
+    }, [selectedTiles, clicked]);
 
-    useEffect(() => {
-        if (selectedPosition === props.boxId) {
-            if (!movedColorID) {
-                setSelectedColorID(props.boxId);
-                //TODO scenarios firstSelected
-            }
-            if (!!selectedColorID && selectedColorID !== props.boxId) {
-                setMovedColorID(props.boxId);
-            }
-            //TODO scenarios firstDeselected
-            //TODO scenarios correct secondSelected
-            //TODO scenarios wrong secondSelected
-        }
-    }, [selectedColorID, movedColorID, selectedPosition]);
 
     return (
         <mesh
             {...props}
             ref={ref}
-            scale={selectedPosition === props.boxId ? 1.5 : hovered ? 1.05 : 1}
+            scale={clicked ? 1.5 : hovered ? 1.05 : 1}
             onClick={handleSelect}
             onPointerOver={(event) => setHovered(true)}
             onPointerOut={(event) => setHovered(false)}>
