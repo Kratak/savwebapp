@@ -7,31 +7,30 @@ import { TilesGridObject } from '../../gameModes/simple/helpers';
 import { SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
 
 import { Screens, ScreenSelectorProps } from '../types';
+import UseCamera from './UseCamera';
 import { useStyles } from './styles';
-
-const gameSceneSize = {
-    width: 640,
-    height: 480,
-};
+import { initials } from './initials';
 
 const colorsKeys: Array<SimpleGameModeColorsKeys> = Object.keys(SimpleGameModeColorsKeys) as Array<SimpleGameModeColorsKeys>;
-// const availableColors = Object.keys(SimpleGameModeColors);
 
 const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
     const selectedTiles = useState<Array<string>>([]);
     const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
+    const [cameraZoom, setCameraZoom] = useState(initials.camera.z);
     const [tiles, setTiles] = useState<Array<TilesGridObject<SimpleGameModeColorsKeys>>>([]);
     const styles = useStyles();
 
     useEffect(() => {
         const newTiles = getTilesGrid<SimpleGameModeColorsKeys>({
-            columns: 6,
-            rows: 6,
+            columns: 7,
+            rows: 9,
             colorsKeys,
         });
 
+
         setTiles(newTiles);
     }, []);
+
 
     return (
         <div>
@@ -40,7 +39,8 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                 <h2>'Game screen'</h2>
 
                 <div className={styles.threeWrapper}>
-                    <Canvas>
+                    <Canvas camera={{ position: initials.camera.cameraPosition }}>
+                        <UseCamera cameraZoom={cameraZoom} />
                         <ambientLight intensity={ambientLightIntensity} />
                         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                         <pointLight position={[-10, -10, -10]} />
@@ -57,16 +57,26 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                 </div>
 
                 <div className={styles.uiWrapper}>
-
-                    <button onClick={() => setAmbientLightIntensity(ambientLightIntensity + .1)}>
-                        increase by .1
-                    </button>
-                    <button onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
-                        Back to Main Menu
-                    </button>
-                    <button onClick={() => setAmbientLightIntensity(ambientLightIntensity - .1)}>
-                        decrees by .1
-                    </button>
+                    <div>
+                        <button onClick={() => setAmbientLightIntensity(ambientLightIntensity + .1)}>
+                            increase by .1
+                        </button>
+                        <button onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
+                            Back to Main Menu
+                        </button>
+                        <button onClick={() => setAmbientLightIntensity(ambientLightIntensity - .1)}>
+                            decrees by .1
+                        </button>
+                    </div>
+                    <div>
+                        <button onClick={() => setCameraZoom(cameraZoom + 1)}>
+                            -
+                        </button>
+                        <span>camera zoom/out</span>
+                        <button onClick={() => setCameraZoom(cameraZoom - 1)}>
+                            +
+                        </button>
+                    </div>
                 </div>
 
             </div>
