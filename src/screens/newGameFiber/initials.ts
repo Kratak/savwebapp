@@ -1,6 +1,6 @@
 import { Vector3 } from '@react-three/fiber/dist/declarations/src/three-types';
 
-const initialZ = 10;
+const initialZ = 7;
 const initialX = 0;
 const initialY = 0;
 
