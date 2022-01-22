@@ -1,5 +1,5 @@
 import { Vector3 } from '@react-three/fiber/dist/declarations/src/three-types';
-import { useState } from 'react';
+
 import { calculationsHelpers } from '../../genericHelpers';
 
 export const getRandomInt = (max: number) => {
@@ -35,34 +35,36 @@ interface GetTilesGridProps<T> {
 
 
 export const getTilesGrid = <T extends string>(given: GetTilesGridProps<T>): Array<TilesGridObject<T>> => {
+    let previousRowColor: Array<string> = [];
     let tiles: Array<TilesGridObject<T>> = [];
     const rowStartIndex = Math.floor(given.rows / 2);
     const columnStartIndex = Math.floor(given.columns / 2);
 
     const halfRowsCount = rowStartIndex + Number(calculationsHelpers.isOdd(given.rows));
     const halfColumnsCount = columnStartIndex + Number(calculationsHelpers.isOdd(given.columns));
-    // const [previousCollumColor, setPreviousCollumColor] = useState<string>('')
-    // const [previousRowColor, setPreviousRowColor] = useState<string>('')
-    // const [currentRow, setCurrentRow] = useState<number>(0)
 
     for (let rows = rowStartIndex * -1; rows < halfRowsCount; rows++) {
         for (let columns = columnStartIndex * -1; columns < halfColumnsCount; columns++) {
             const color = given.colorsKeys[getRandomInt(given.colorsKeys.length)];
 
-            // for (let rows = 0; rows < given.rows; rows++) {
-            //     // setCurrentRow(rows);
-            //     for (let columns = 0 ; columns < given.columns; columns++) {
-            //         let color = given.colorsKeys[getRandomInt(given.colorsKeys.length)];
-            // if (rows !== currentRow) {
-            //     setPreviousCollumColor(color);
-            // }
-            // setPreviousRowColor(color)
-            tiles = [...tiles, {
+            let newTile: TilesGridObject<T> = {
                 color,
                 position: [columns, rows, 0],
                 boxId: `ID_${columns}C_${rows}R_${color}`,
-            }];
+            };
+            if (previousRowColor.filter(item => item === newTile.color).length === 2) {
+                const newGivenColor = given.colorsKeys.filter(item => item !== newTile.color);
+                newTile = {
+                    ...newTile,
+                    color: newGivenColor[getRandomInt(newGivenColor.length)],
+                };
+                previousRowColor = [];
+            }
+
+            tiles = [...tiles, newTile];
+            previousRowColor = tiles.length > 0 ? [tiles[tiles.length - 1].color, ...previousRowColor].slice(0, 2) : previousRowColor;
         }
+
     }
 
 
