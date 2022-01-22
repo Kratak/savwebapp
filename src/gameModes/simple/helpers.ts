@@ -21,13 +21,13 @@ export const getRandomArrayOfColors = (given: GetRandomArrayOfColorsProps): Arra
 };
 
 
-export interface TilesGridObject<T> {
+export interface TilesGridObject<T extends string> {
     position: Vector3;
     color: T;
     boxId: string;
 }
 
-interface GetTilesGridProps<T> {
+interface GetTilesGridProps<T extends string> {
     rows: number;
     columns: number;
     colorsKeys: Array<T>;
