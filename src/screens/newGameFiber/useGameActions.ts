@@ -16,15 +16,14 @@ export const UseGameActions = (props: ScreenSelectorProps) => {
     const selectedTiles = useState<Array<string>>([]);
     const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
     const [cameraZoom, setCameraZoom] = useState(initials.camera.z);
-    const [tiles, setTiles] = useState<Array<TilesGridObject<SimpleGameModeColorsKeys>>>([]);
+    const [tiles, setTiles] = useState<Array<Array<TilesGridObject<SimpleGameModeColorsKeys>>>>([]);
 
     useEffect(() => {
         const newTiles = getTilesGrid<SimpleGameModeColorsKeys>({
             columns: 7,
             rows: 9,
-            colorsKeys,
+            colors: colorsKeys,
         });
-
 
         setTiles(newTiles);
     }, []);

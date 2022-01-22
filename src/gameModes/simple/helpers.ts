@@ -1,6 +1,4 @@
 import { Vector3 } from '@react-three/fiber/dist/declarations/src/three-types';
-import { useState } from 'react';
-import { calculationsHelpers } from '../../genericHelpers';
 
 export const getRandomInt = (max: number) => {
     return Math.floor(Math.random() * max);
@@ -21,50 +19,45 @@ export const getRandomArrayOfColors = (given: GetRandomArrayOfColorsProps): Arra
 };
 
 
-export interface TilesGridObject<T> {
+export interface TilesGridObject<T extends string> {
     position: Vector3;
     color: T;
     boxId: string;
 }
 
-interface GetTilesGridProps<T> {
+interface GetTilesGridProps<T extends string> {
     rows: number;
     columns: number;
-    colorsKeys: Array<T>;
+    colors: Array<T>;
 }
 
 
-export const getTilesGrid = <T extends string>(given: GetTilesGridProps<T>): Array<TilesGridObject<T>> => {
-    let tiles: Array<TilesGridObject<T>> = [];
-    const rowStartIndex = Math.floor(given.rows / 2);
-    const columnStartIndex = Math.floor(given.columns / 2);
+export const getTilesGrid = <T extends string>(given: GetTilesGridProps<T>) => {
+    let depTiles: Array<Array<TilesGridObject<T>>> = [];
 
-    const halfRowsCount = rowStartIndex + Number(calculationsHelpers.isOdd(given.rows));
-    const halfColumnsCount = columnStartIndex + Number(calculationsHelpers.isOdd(given.columns));
-    // const [previousCollumColor, setPreviousCollumColor] = useState<string>('')
-    // const [previousRowColor, setPreviousRowColor] = useState<string>('')
-    // const [currentRow, setCurrentRow] = useState<number>(0)
+    for (let columns = 0; columns < given.columns; columns++) {
+        let getObj = depTiles[columns] || [];
+        for (let rows = 0; rows < given.rows; rows++) {
+            let color = given.colors[getRandomInt(given.colors.length)];
+            const columnNumber = columns - Math.floor(given.columns / 2);
+            const rowNumber = rows - Math.floor(given.rows / 2);
+            if (columns > 1 && depTiles[columns - 1][rows].color === color && depTiles[columns - 2][rows].color === color) {
+                const availableColor = given.colors.filter(item => item !== color);
+                color = availableColor[getRandomInt(availableColor.length - 1)];
+            }
+            if (rows > 1 && getObj[rows - 1].color === color && getObj[rows - 2].color === color) {
+                const availableColor = given.colors.filter(item => item !== color);
+                color = availableColor[getRandomInt(availableColor.length - 1)];
 
-    for (let rows = rowStartIndex * -1; rows < halfRowsCount; rows++) {
-        for (let columns = columnStartIndex * -1; columns < halfColumnsCount; columns++) {
-            const color = given.colorsKeys[getRandomInt(given.colorsKeys.length)];
-
-            // for (let rows = 0; rows < given.rows; rows++) {
-            //     // setCurrentRow(rows);
-            //     for (let columns = 0 ; columns < given.columns; columns++) {
-            //         let color = given.colorsKeys[getRandomInt(given.colorsKeys.length)];
-            // if (rows !== currentRow) {
-            //     setPreviousCollumColor(color);
-            // }
-            // setPreviousRowColor(color)
-            tiles = [...tiles, {
+            }
+            getObj = [...getObj, {
                 color,
-                position: [columns, rows, 0],
-                boxId: `ID_${columns}C_${rows}R_${color}`,
+                position: [columnNumber, rowNumber, 0],
+                boxId: `ID_${columnNumber}C_${rowNumber}R_${color}`,
             }];
         }
+        depTiles = [...depTiles, getObj];
     }
 
-
-    return tiles;
+    return depTiles;
 };
