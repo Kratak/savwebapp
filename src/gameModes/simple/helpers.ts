@@ -1,4 +1,6 @@
 import { Vector3 } from '@react-three/fiber/dist/declarations/src/three-types';
+import { useState } from 'react';
+import { calculationsHelpers } from '../../genericHelpers';
 
 export const getRandomInt = (max: number) => {
     return Math.floor(Math.random() * max);
@@ -34,21 +36,35 @@ interface GetTilesGridProps<T> {
 
 export const getTilesGrid = <T extends string>(given: GetTilesGridProps<T>): Array<TilesGridObject<T>> => {
     let tiles: Array<TilesGridObject<T>> = [];
-    const halfColumnsCount = Math.floor(given.columns / 2);
-    const halfRowsCount = Math.floor(given.rows / 2);
+    const rowStartIndex = Math.floor(given.rows / 2);
+    const columnStartIndex = Math.floor(given.columns / 2);
 
-    console.log(halfColumnsCount, halfRowsCount);
+    const halfRowsCount = rowStartIndex + Number(calculationsHelpers.isOdd(given.rows));
+    const halfColumnsCount = columnStartIndex + Number(calculationsHelpers.isOdd(given.columns));
+    // const [previousCollumColor, setPreviousCollumColor] = useState<string>('')
+    // const [previousRowColor, setPreviousRowColor] = useState<string>('')
+    // const [currentRow, setCurrentRow] = useState<number>(0)
 
-    for (let rows = halfRowsCount * -1; rows < halfRowsCount; rows++) {
-        for (let columns = halfColumnsCount * -1; columns < halfColumnsCount; columns++) {
+    for (let rows = rowStartIndex * -1; rows < halfRowsCount; rows++) {
+        for (let columns = columnStartIndex * -1; columns < halfColumnsCount; columns++) {
             const color = given.colorsKeys[getRandomInt(given.colorsKeys.length)];
+
+            // for (let rows = 0; rows < given.rows; rows++) {
+            //     // setCurrentRow(rows);
+            //     for (let columns = 0 ; columns < given.columns; columns++) {
+            //         let color = given.colorsKeys[getRandomInt(given.colorsKeys.length)];
+            // if (rows !== currentRow) {
+            //     setPreviousCollumColor(color);
+            // }
+            // setPreviousRowColor(color)
             tiles = [...tiles, {
                 color,
                 position: [columns, rows, 0],
-                boxId: `C${columns}-R${rows}-${color}`
+                boxId: `ID_${columns}C_${rows}R_${color}`,
             }];
         }
     }
+
 
     return tiles;
 };

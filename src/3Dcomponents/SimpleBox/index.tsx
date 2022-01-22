@@ -1,16 +1,17 @@
-import React, { useRef, useState, useEffect, Dispatch } from 'react';
+import React, { useRef, useState, useEffect, Dispatch, useCallback } from 'react';
 import { MeshProps } from '@react-three/fiber/dist/declarations/src/three-types';
 import { ThreeEvent } from '@react-three/fiber/dist/declarations/src/core/events';
+
+import { adjustColor } from '../../genericHelpers';
 
 interface BoxProps extends MeshProps {
     boxColor?: string;
     boxId: string;
-    selected: [string, Dispatch<string>];
+    selectedTiles: [Array<string>, Dispatch<Array<string>>];
 }
 
-
 const Box = (props: BoxProps) => {
-    const [selected, setSelected] = props.selected;
+    const [selectedTiles, setSelectedTiles] = props.selectedTiles;
     // This reference gives us direct access to the THREE.Mesh object
     const ref: any = useRef();
     // Hold state for hovered and clicked events
@@ -22,31 +23,32 @@ const Box = (props: BoxProps) => {
     // useEffect(() => {
     // }, [props.boxId]);
 
+    const hoveredColor = useCallback(() => props.boxColor && adjustColor(props.boxColor, 20), [props.boxColor]);
+
     const handleSelect = (event: ThreeEvent<MouseEvent>) => {
-        if (!clicked) {
-            setSelected(props.boxId);
-        } else {
-            setSelected('');
-        }
+        const arr = !clicked ? props.boxId === selectedTiles[0] ? [props.boxId] : [props.boxId, ...selectedTiles] : [];
         setClicked(!clicked);
+        setSelectedTiles(arr.slice(0, 2));
     };
 
     useEffect(() => {
-        if (selected !== props.boxId) {
+        const includesCheck = selectedTiles.includes(props.boxId);
+        if (!includesCheck) {
             setClicked(false);
         }
-    }, [selected])
+    }, [selectedTiles, clicked]);
+
 
     return (
         <mesh
             {...props}
             ref={ref}
-            scale={selected === props.boxId ? 1.5 : 1}
+            scale={clicked ? 1.5 : hovered ? 1.05 : 1}
             onClick={handleSelect}
             onPointerOver={(event) => setHovered(true)}
             onPointerOut={(event) => setHovered(false)}>
             <boxGeometry args={[.7, .7, .7]} />
-            <meshStandardMaterial color={hovered ? 'hotpink' : props?.boxColor || 'orange'} />
+            <meshStandardMaterial color={hovered ? hoveredColor() : props?.boxColor || 'orange'} />
         </mesh>
     );
 };
