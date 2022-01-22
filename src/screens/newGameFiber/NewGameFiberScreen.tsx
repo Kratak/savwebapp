@@ -29,20 +29,18 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                         <ambientLight intensity={settings.passedValues.intensity} />
                         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                         <pointLight position={[-10, -10, -10]} />
-                        {tiles.map((item, index) => {
-                                return item.map(innerItem => {
-                                    console.log('innerItem', innerItem)
-                                    return (
-                                        <SimpleBox
-                                            boxColor={SimpleGameModeColors[innerItem.color]}
-                                            boxId={innerItem.boxId}
-                                            key={innerItem.boxId}
-                                            position={innerItem.position}
-                                            selectedTiles={selectedTiles}
-                                        />
-                                    );
-                                });
-                            },
+                        {tiles.map((item, index) =>
+                            item.map(innerItem =>
+                                (
+                                    <SimpleBox
+                                        boxColor={SimpleGameModeColors[innerItem.color]}
+                                        boxId={innerItem.boxId}
+                                        key={innerItem.boxId}
+                                        position={innerItem.position}
+                                        selectedTiles={selectedTiles}
+                                    />
+                                ),
+                            ),
                         )}
                     </Canvas>
                 </div>
