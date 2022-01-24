@@ -1,29 +1,38 @@
-import { Modal } from '@mui/material';
-import { ModalProps } from '@mui/material/Modal/Modal';
-import { useStyles } from './styles';
-import { Screens } from '../../screens/types';
 import React from 'react';
+import { MenuItem, Modal, Select, SelectChangeEvent } from '@mui/material';
+import { ModalProps } from '@mui/material/Modal/Modal';
 
-interface SettingsProps extends ModalProps {
-    customHandles: SettingCustomHandlesProps;
-    passedValues: SettingPassedValuesProps;
+import { Screens } from '../../screens/types';
+import { ColorThemeObject } from '../../screens/newGameFiber/initials';
+
+import { useStyles } from './styles';
+
+export interface SettingsProps<ThemesKeys extends string> extends ModalProps {
+    customHandles: SettingCustomHandlesProps<ThemesKeys>;
+    passedValues: SettingPassedValuesProps<ThemesKeys>;
 }
 
-export interface SettingCustomHandlesProps {
+export interface SettingCustomHandlesProps<ThemesKeys extends string> {
     onClose: (isOpen: boolean) => void;
     setAmbientLightIntensity: (intensity: number) => void;
     setSelectedScreen: (scree: Screens) => void;
     setCameraZoom: (cameraZoom: number) => void;
+    setSelectedTheme: (selectedTheme: ThemesKeys) => void;
 };
 
-export interface SettingPassedValuesProps {
+export interface SettingPassedValuesProps<ThemesKeys> {
     intensity: number;
     cameraZoom: number;
+    selectedTheme: ThemesKeys;
+    availableThemes: Array<ColorThemeObject<ThemesKeys>>;
 }
 
-const Settings = ({ customHandles, passedValues, ...rest }: SettingsProps) => {
+const Settings = <ThemeKeys extends string>({ customHandles, passedValues, ...rest }: SettingsProps<ThemeKeys>) => {
     const styles = useStyles();
 
+    const handleChange = (event: SelectChangeEvent) => {
+        customHandles.setSelectedTheme(event.target.value as ThemeKeys);
+    };
     return (<Modal {...rest}>
         <div className={styles.module}>
             <div>
@@ -52,6 +61,19 @@ const Settings = ({ customHandles, passedValues, ...rest }: SettingsProps) => {
                     <button onClick={() => customHandles.setCameraZoom(passedValues.cameraZoom + 1)}>
                         - 1
                     </button>
+                </div>
+                <div>
+                    <Select
+                        labelId='demo-simple-select-label'
+                        id='demo-simple-select'
+                        value={passedValues.selectedTheme}
+                        label='Age'
+                        onChange={handleChange}
+                    >
+                        {passedValues.availableThemes.map((item, index) => {
+                            return <MenuItem key={item.label + index} value={item.value}>{item.label}</MenuItem>;
+                        })}
+                    </Select>
                 </div>
             </div>
             <div onClick={() => customHandles.onClose(false)}>

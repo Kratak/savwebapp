@@ -7,7 +7,11 @@ export enum SpacePalletKey {
     Gravitation = 'Gravitation',
     RedDwarf = 'RedDwarf',
     SuperNova ='SuperNova',
-    YellowSun ='YellowSun'
+    YellowSun ='YellowSun',
+    WordleGreen = 'WordleGreen',
+    WordleYellow = 'WordleYellow',
+    WordleGrey = 'WordleGrey',
+    WordleWhite = 'WordleWhite',
 }
 
 export const SpacePalletColors: { [key in SpacePalletKey]: string } = {
@@ -20,4 +24,8 @@ export const SpacePalletColors: { [key in SpacePalletKey]: string } = {
     [SpacePalletKey.RedDwarf]: '#B74C36',
     [SpacePalletKey.SuperNova]: '#6ACFED',
     [SpacePalletKey.YellowSun]: '#F1F269',
+    [SpacePalletKey.WordleGreen]: '#56964F',
+    [SpacePalletKey.WordleYellow]: '#B3A044',
+    [SpacePalletKey.WordleGrey]: '#606467',
+    [SpacePalletKey.WordleWhite]: '#F5F5F5',
 };

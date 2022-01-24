@@ -1,4 +1,4 @@
-import { Vector3 } from '@react-three/fiber/dist/declarations/src/three-types';
+import { Vector3Tuple } from 'three/src/math/Vector3';
 
 export const getRandomInt = (max: number) => {
     return Math.floor(Math.random() * max);
@@ -20,7 +20,7 @@ export const getRandomArrayOfColors = (given: GetRandomArrayOfColorsProps): Arra
 
 
 export interface TilesGridObject<T extends string> {
-    position: Vector3;
+    position: Vector3Tuple;
     color: T;
     boxId: string;
 }

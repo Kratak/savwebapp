@@ -38,6 +38,8 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                                         key={innerItem.boxId}
                                         position={innerItem.position}
                                         selectedTiles={selectedTiles}
+                                        tiles={tiles}
+                                        setTiles={handlers.setTiles}
                                     />
                                 ),
                             ),
