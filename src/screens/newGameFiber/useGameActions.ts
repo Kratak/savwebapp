@@ -18,6 +18,22 @@ export const UseGameActions = (props: ScreenSelectorProps): UseGameActionsReturn
     const [tiles, setTiles] = useState<Array<Array<TilesGridObject<SimpleGameModeColorsKeys>>>>([]);
     const [selectedTheme, setSelectedTheme] = useState<AvailableThemesKeys>(initials.colorThemes[0].value);
 
+
+    const passedValues: SettingPassedValuesProps<AvailableThemesKeys> = {
+        intensity: ambientLightIntensity,
+        cameraZoom,
+        selectedTheme,
+        availableThemes: initials.colorThemes,
+    };
+
+    const handlers: SettingCustomHandlesProps<AvailableThemesKeys> = {
+        onClose: (isOpen) => setOpenSetting(isOpen),
+        setCameraZoom: (givenCameraZoom) => setCameraZoom(givenCameraZoom),
+        setSelectedScreen: (scree) => props.setSelectedScreen(scree),
+        setAmbientLightIntensity: (givenIntensity) => setAmbientLightIntensity(givenIntensity),
+        setSelectedTheme: (theme) => setSelectedTheme(theme),
+    };
+
     useEffect(() => {
         const newTiles = getTilesGrid<SimpleGameModeColorsKeys>({
             columns: 7,
@@ -28,22 +44,6 @@ export const UseGameActions = (props: ScreenSelectorProps): UseGameActionsReturn
         setTiles(newTiles);
     }, [selectedTheme]);
 
-    const handlers: SettingCustomHandlesProps<AvailableThemesKeys> = {
-        onClose: (isOpen) => setOpenSetting(isOpen),
-        setCameraZoom: (givenCameraZoom) => setCameraZoom(givenCameraZoom),
-        setSelectedScreen: (scree) => props.setSelectedScreen(scree),
-        setAmbientLightIntensity: (givenIntensity) => setAmbientLightIntensity(givenIntensity),
-        setSelectedTheme: (theme) => setSelectedTheme(theme),
-    };
-
-    const passedValues: SettingPassedValuesProps<AvailableThemesKeys> = {
-        intensity: ambientLightIntensity,
-        cameraZoom,
-        selectedTheme,
-        availableThemes: initials.colorThemes,
-    };
-
-
     return {
         classes: styles,
         settings: {
@@ -53,6 +53,7 @@ export const UseGameActions = (props: ScreenSelectorProps): UseGameActionsReturn
         },
         handlers: {
             setOpenSetting,
+            setTiles,
         },
         tiles,
         selectedTiles,
