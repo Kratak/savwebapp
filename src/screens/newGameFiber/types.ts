@@ -18,6 +18,7 @@ export interface UseGameActionsReturn {
     handlers: {
         setOpenSetting: Dispatch<boolean>;
         setTiles: Dispatch<Array<Array<TilesGridObject<SimpleGameModeColorsKeys>>>>
+        deleteRow: (toDelete: { passedColumnIndex?: number; passedRowsIndex?: number; }) => void;
     };
     tiles: Array<Array<TilesGridObject<SimpleGameModeColorsKeys>>>;
     selectedTiles: [Array<string>, Dispatch<Array<string>>];

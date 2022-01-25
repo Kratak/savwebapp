@@ -34,6 +34,39 @@ export const UseGameActions = (props: ScreenSelectorProps): UseGameActionsReturn
         setSelectedTheme: (theme) => setSelectedTheme(theme),
     };
 
+    const deleteRow = (toDelete: { passedColumnIndex?: number; passedRowsIndex?: number; }): void => {
+        setTiles(tiles.map((column, originColumnIndex) => {
+            let columnIndex = originColumnIndex;
+            if (toDelete.passedColumnIndex) {
+                columnIndex = toDelete.passedColumnIndex;
+            }
+            return column.map((row, originRowIndex) => {
+                let newRow = row;
+                let rowIndex = originRowIndex;
+                if (toDelete.passedRowsIndex) {
+                    rowIndex = toDelete.passedRowsIndex;
+                }
+
+                if (columnIndex === originColumnIndex && rowIndex === originRowIndex) {
+                    newRow = {
+                        ...row,
+                        color: SimpleGameModeColorsKeys.red,
+                    };
+                }
+
+                if (typeof toDelete.passedColumnIndex !== 'undefined' && typeof toDelete.passedColumnIndex !== 'undefined') {
+                    if (columnIndex === originColumnIndex || rowIndex === originRowIndex) {
+                        newRow = {
+                            ...row,
+                            color: SimpleGameModeColorsKeys.red,
+                        };
+                    }
+                }
+                return newRow;
+            });
+        }));
+    };
+
     useEffect(() => {
         const newTiles = getTilesGrid<SimpleGameModeColorsKeys>({
             columns: 7,
@@ -54,6 +87,7 @@ export const UseGameActions = (props: ScreenSelectorProps): UseGameActionsReturn
         handlers: {
             setOpenSetting,
             setTiles,
+            deleteRow,
         },
         tiles,
         selectedTiles,

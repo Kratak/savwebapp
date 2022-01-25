@@ -45,6 +45,15 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                             ),
                         )}
                     </Canvas>
+                    <div className={classes.uiWrapper}>
+                        <div onClick={() => handlers.deleteRow({ passedRowsIndex: 1 })}>row one</div>
+                        <div onClick={() => handlers.deleteRow({ passedRowsIndex: 3 })}>row 3</div>
+                        <div onClick={() => handlers.deleteRow({ passedColumnIndex: 1 })}>column 1</div>
+                        <div onClick={() => handlers.deleteRow({ passedColumnIndex: 1, passedRowsIndex: 1 })}>
+                            column 1
+                            row 1
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
