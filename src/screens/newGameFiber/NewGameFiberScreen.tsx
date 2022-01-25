@@ -36,10 +36,11 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                                     }
                                     return (
                                         <SimpleBox
+                                            gridPosition={innerItem.gridPosition}
                                             boxColor={SimpleGameModeColors[innerItem.color]}
                                             boxId={innerItem.boxId}
                                             key={innerItem.boxId}
-                                            position={innerItem.position}
+                                            tilePosition={innerItem.position}
                                             selectedTiles={selectedTiles}
                                             tiles={tiles}
                                             setTiles={handlers.setTiles}

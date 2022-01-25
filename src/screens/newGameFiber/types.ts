@@ -1,12 +1,19 @@
 import { Dispatch } from 'react';
 import { ClassNameMap } from '@mui/styles';
+import { Vector3Tuple } from 'three/src/math/Vector3';
 
 import { SettingCustomHandlesProps, SettingPassedValuesProps } from '../../UIcomponents/settings/settings';
-import { TilesGridObject } from '../../gameModes/simple/helpers';
+import { GridPositionProps, TilesGridObject } from '../../gameModes/simple/helpers';
 import { SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
 
 import { NewGameFiberStylesKeys } from './styles';
 import { AvailableThemesKeys } from './initials';
+
+export interface SelectedTilesData {
+    boxId: string;
+    position: Vector3Tuple;
+    gridPosition: GridPositionProps;
+}
 
 export interface UseGameActionsReturn {
     classes: ClassNameMap<NewGameFiberStylesKeys>;
@@ -21,5 +28,5 @@ export interface UseGameActionsReturn {
         deleteRow: (toDelete: { passedColumnIndex?: number; passedRowsIndex?: number; }) => void;
     };
     tiles: Array<Array<TilesGridObject<SimpleGameModeColorsKeys>>>;
-    selectedTiles: [Array<string>, Dispatch<Array<string>>];
+    selectedTiles: [Array<SelectedTilesData>, Dispatch<Array<SelectedTilesData>>];
 }

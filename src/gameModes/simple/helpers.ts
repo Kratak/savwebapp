@@ -22,8 +22,14 @@ export const getRandomArrayOfColors = (given: GetRandomArrayOfColorsProps): Arra
 export interface TilesGridObject<T extends string> {
     renderTile: boolean;
     position: Vector3Tuple;
+    gridPosition: GridPositionProps;
     color: T;
     boxId: string;
+}
+
+export interface GridPositionProps {
+    columns: number;
+    rows: number;
 }
 
 interface GetTilesGridProps<T extends string> {
@@ -52,6 +58,10 @@ export const getTilesGrid = <T extends string>(given: GetTilesGridProps<T>) => {
 
             }
             getObj = [...getObj, {
+                gridPosition: {
+                    columns,
+                    rows,
+                },
                 renderTile: true,
                 color,
                 position: [columnNumber, rowNumber, 0],
