@@ -47,18 +47,20 @@ export const UseGameActions = (props: ScreenSelectorProps): UseGameActionsReturn
                     rowIndex = toDelete.passedRowsIndex;
                 }
 
-                if (columnIndex === originColumnIndex && rowIndex === originRowIndex) {
-                    newRow = {
-                        ...row,
-                        color: SimpleGameModeColorsKeys.red,
-                    };
+                if (typeof toDelete.passedRowsIndex !== 'undefined' || typeof toDelete.passedColumnIndex !== 'undefined') {
+                    if (columnIndex === originColumnIndex && rowIndex === originRowIndex) {
+                        newRow = {
+                            ...row,
+                            renderTile: false,
+                        };
+                    }
                 }
 
-                if (typeof toDelete.passedColumnIndex !== 'undefined' && typeof toDelete.passedColumnIndex !== 'undefined') {
+                if (typeof toDelete.passedRowsIndex !== 'undefined' && typeof toDelete.passedColumnIndex !== 'undefined') {
                     if (columnIndex === originColumnIndex || rowIndex === originRowIndex) {
                         newRow = {
                             ...row,
-                            color: SimpleGameModeColorsKeys.red,
+                            renderTile: false,
                         };
                     }
                 }

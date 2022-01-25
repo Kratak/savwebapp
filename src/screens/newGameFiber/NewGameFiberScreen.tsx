@@ -30,25 +30,29 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                         <pointLight position={[-10, -10, -10]} />
                         {tiles.map((item, index) =>
-                            item.map(innerItem =>
-                                (
-                                    <SimpleBox
-                                        boxColor={SimpleGameModeColors[innerItem.color]}
-                                        boxId={innerItem.boxId}
-                                        key={innerItem.boxId}
-                                        position={innerItem.position}
-                                        selectedTiles={selectedTiles}
-                                        tiles={tiles}
-                                        setTiles={handlers.setTiles}
-                                    />
-                                ),
+                            item.map(innerItem => {
+                                    if (!innerItem.renderTile) {
+                                        return;
+                                    }
+                                    return (
+                                        <SimpleBox
+                                            boxColor={SimpleGameModeColors[innerItem.color]}
+                                            boxId={innerItem.boxId}
+                                            key={innerItem.boxId}
+                                            position={innerItem.position}
+                                            selectedTiles={selectedTiles}
+                                            tiles={tiles}
+                                            setTiles={handlers.setTiles}
+                                        />
+                                    );
+                                },
                             ),
                         )}
                     </Canvas>
                     <div className={classes.uiWrapper}>
-                        <div onClick={() => handlers.deleteRow({ passedRowsIndex: 1 })}>row one</div>
+                        <div onClick={() => handlers.deleteRow({ passedRowsIndex: 2 })}>row 2</div>
                         <div onClick={() => handlers.deleteRow({ passedRowsIndex: 3 })}>row 3</div>
-                        <div onClick={() => handlers.deleteRow({ passedColumnIndex: 1 })}>column 1</div>
+                        <div onClick={() => handlers.deleteRow({ passedColumnIndex: 5 })}>column 5</div>
                         <div onClick={() => handlers.deleteRow({ passedColumnIndex: 1, passedRowsIndex: 1 })}>
                             column 1
                             row 1
