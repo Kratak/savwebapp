@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react';
 
 import { SettingCustomHandlesProps, SettingPassedValuesProps } from '../../UIcomponents/settings/settings';
-import { SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
 import { getTilesGrid, TilesGridObject } from '../../gameModes/simple/helpers';
 
 import { ScreenSelectorProps } from '../types';
 import { AvailableThemesKeys, initials } from './initials';
 import { useStyles } from './styles';
-import { UseGameActionsReturn } from './types';
+import { SelectedTilesData, UseGameActionsReturn } from './types';
 
-export const UseGameActions = (props: ScreenSelectorProps): UseGameActionsReturn => {
+export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorProps): UseGameActionsReturn<ColorKeys> => {
     const styles = useStyles();
     const [openSetting, setOpenSetting] = useState(false);
-    const selectedTiles = useState<Array<string>>([]);
+    const selectedTiles = useState<Array<SelectedTilesData<ColorKeys>>>([]);
     const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
     const [cameraZoom, setCameraZoom] = useState(initials.camera.z);
-    const [tiles, setTiles] = useState<Array<Array<TilesGridObject<SimpleGameModeColorsKeys>>>>([]);
+    const [tiles, setTiles] = useState<Array<Array<TilesGridObject<ColorKeys>>>>([]);
     const [selectedTheme, setSelectedTheme] = useState<AvailableThemesKeys>(initials.colorThemes[0].value);
 
 
@@ -34,15 +33,58 @@ export const UseGameActions = (props: ScreenSelectorProps): UseGameActionsReturn
         setSelectedTheme: (theme) => setSelectedTheme(theme),
     };
 
+    const deleteRow = (toDelete: { passedColumnIndex?: number; passedRowsIndex?: number; }): void => {
+        setTiles(tiles.map((column, originColumnIndex) => {
+            let columnIndex = originColumnIndex;
+            if (toDelete.passedColumnIndex) {
+                columnIndex = toDelete.passedColumnIndex;
+            }
+            return column.map((row, originRowIndex) => {
+                let newRow = row;
+                let rowIndex = originRowIndex;
+                if (toDelete.passedRowsIndex) {
+                    rowIndex = toDelete.passedRowsIndex;
+                }
+
+                if (typeof toDelete.passedRowsIndex !== 'undefined' || typeof toDelete.passedColumnIndex !== 'undefined') {
+                    if (columnIndex === originColumnIndex && rowIndex === originRowIndex) {
+                        newRow = {
+                            ...row,
+                            renderTile: false,
+                        };
+                    }
+                }
+
+                if (typeof toDelete.passedRowsIndex !== 'undefined' && typeof toDelete.passedColumnIndex !== 'undefined') {
+                    if (columnIndex === originColumnIndex || rowIndex === originRowIndex) {
+                        newRow = {
+                            ...row,
+                            renderTile: false,
+                        };
+                    }
+                }
+                return newRow;
+            });
+        }));
+    };
+
     useEffect(() => {
-        const newTiles = getTilesGrid<SimpleGameModeColorsKeys>({
+        const newTiles = getTilesGrid<ColorKeys>({
             columns: 7,
             rows: 9,
-            colors: initials.availableColorThemes[selectedTheme],
+            colors: initials.availableColorThemes[selectedTheme] as Array<ColorKeys>,
         });
-
         setTiles(newTiles);
     }, [selectedTheme]);
+
+    useEffect(() => {
+        if (selectedTiles[0].length > 1) {
+            // todo single swap action
+            // console.log('ddsa')
+        }
+
+
+    },[selectedTiles[0]])
 
     return {
         classes: styles,
@@ -54,6 +96,7 @@ export const UseGameActions = (props: ScreenSelectorProps): UseGameActionsReturn
         handlers: {
             setOpenSetting,
             setTiles,
+            deleteRow,
         },
         tiles,
         selectedTiles,

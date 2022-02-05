@@ -2,16 +2,16 @@ import React from 'react';
 import { Canvas } from '@react-three/fiber';
 
 import SimpleBox from '../../3Dcomponents/SimpleBox';
-import { SimpleGameModeColors } from '../../gameModes/simple';
 import { Settings } from '../../UIcomponents/settings';
 
 import { ScreenSelectorProps } from '../types';
 import UseCamera from './UseCamera';
 import { initials } from './initials';
 import { UseGameActions } from './useGameActions';
+import { SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
 
 const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
-    const { classes, settings, handlers, tiles, selectedTiles } = UseGameActions(props);
+    const { classes, settings, handlers, tiles, selectedTiles } = UseGameActions<SimpleGameModeColorsKeys>(props);
 
     return (
         <div>
@@ -30,21 +30,35 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                         <pointLight position={[-10, -10, -10]} />
                         {tiles.map((item, index) =>
-                            item.map(innerItem =>
-                                (
-                                    <SimpleBox
-                                        boxColor={SimpleGameModeColors[innerItem.color]}
-                                        boxId={innerItem.boxId}
-                                        key={innerItem.boxId}
-                                        position={innerItem.position}
-                                        selectedTiles={selectedTiles}
-                                        tiles={tiles}
-                                        setTiles={handlers.setTiles}
-                                    />
-                                ),
+                            item.map(innerItem => {
+                                    if (!innerItem.renderTile) {
+                                        return;
+                                    }
+                                    return (
+                                        <SimpleBox<SimpleGameModeColorsKeys>
+                                            gridPosition={innerItem.gridPosition}
+                                            boxColor={innerItem.color}
+                                            boxId={innerItem.boxId}
+                                            key={innerItem.boxId}
+                                            tilePosition={innerItem.position}
+                                            selectedTiles={selectedTiles}
+                                            tiles={tiles}
+                                            setTiles={handlers.setTiles}
+                                        />
+                                    );
+                                },
                             ),
                         )}
                     </Canvas>
+                    <div className={classes.uiWrapper}>
+                        <div onClick={() => handlers.deleteRow({ passedRowsIndex: 2 })}>row 2</div>
+                        <div onClick={() => handlers.deleteRow({ passedRowsIndex: 3 })}>row 3</div>
+                        <div onClick={() => handlers.deleteRow({ passedColumnIndex: 5 })}>column 5</div>
+                        <div onClick={() => handlers.deleteRow({ passedColumnIndex: 1, passedRowsIndex: 1 })}>
+                            column 1
+                            row 1
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
