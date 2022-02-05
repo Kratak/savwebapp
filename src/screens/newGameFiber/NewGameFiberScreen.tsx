@@ -2,16 +2,16 @@ import React from 'react';
 import { Canvas } from '@react-three/fiber';
 
 import SimpleBox from '../../3Dcomponents/SimpleBox';
-import { SimpleGameModeColors } from '../../gameModes/simple';
 import { Settings } from '../../UIcomponents/settings';
 
 import { ScreenSelectorProps } from '../types';
 import UseCamera from './UseCamera';
 import { initials } from './initials';
 import { UseGameActions } from './useGameActions';
+import { SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
 
 const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
-    const { classes, settings, handlers, tiles, selectedTiles } = UseGameActions(props);
+    const { classes, settings, handlers, tiles, selectedTiles } = UseGameActions<SimpleGameModeColorsKeys>(props);
 
     return (
         <div>
@@ -35,9 +35,9 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                                         return;
                                     }
                                     return (
-                                        <SimpleBox
+                                        <SimpleBox<SimpleGameModeColorsKeys>
                                             gridPosition={innerItem.gridPosition}
-                                            boxColor={SimpleGameModeColors[innerItem.color]}
+                                            boxColor={innerItem.color}
                                             boxId={innerItem.boxId}
                                             key={innerItem.boxId}
                                             tilePosition={innerItem.position}
