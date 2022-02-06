@@ -93,9 +93,9 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                 color: selectedTiles[0][0].color,
             };
 
-            let addScore: number = 0;
+            let addScore = false;
             let revert = true;
-            let colorToAdd: ColorKeys | null = null;
+            let colorsToAdd = scoreCounters.map(item => item);
 
             const firstFilteredColumnToCheck = tiles[firstItem.gridPosition.columns].filter(item => item.color === firstItem.color);
             const secondFilteredColumnToCheck = tiles[secondItem.gridPosition.columns].filter(item => item.color === secondItem.color);
@@ -130,8 +130,16 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                     }
                 });
                 if (tempArr.length > 2) {
-                    addScore = tempArr.length;
-                    colorToAdd = tempArr[0].color;
+                    addScore = true;
+                    colorsToAdd = colorsToAdd.map(item => {
+                        if (item.key === tempArr[0].color) {
+                            return {
+                                key: tempArr[0].color,
+                                value: item.value + tempArr.length,
+                            };
+                        }
+                        return item;
+                    });
                     revert = false;
                     tempArr = [];
                 }
@@ -159,8 +167,16 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                     }
                 });
                 if (tempArr.length > 2) {
-                    addScore = tempArr.length;
-                    colorToAdd = tempArr[0].color;
+                    addScore = true;
+                    colorsToAdd = colorsToAdd.map(item => {
+                        if (item.key === tempArr[0].color) {
+                            return {
+                                key: tempArr[0].color,
+                                value: item.value + tempArr.length,
+                            };
+                        }
+                        return item;
+                    });
                     revert = false;
                     tempArr = [];
                 }
@@ -189,8 +205,16 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                     }
                 });
                 if (tempArr.length > 2) {
-                    addScore = tempArr.length;
-                    colorToAdd = tempArr[0].color;
+                    addScore = true;
+                    colorsToAdd = colorsToAdd.map(item => {
+                        if (item.key === tempArr[0].color) {
+                            return {
+                                key: tempArr[0].color,
+                                value: item.value + tempArr.length,
+                            };
+                        }
+                        return item;
+                    });
                     revert = false;
                     tempArr = [];
                 }
@@ -219,8 +243,16 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                     }
                 });
                 if (tempArr.length > 2) {
-                    addScore = tempArr.length;
-                    colorToAdd = tempArr[0].color;
+                    addScore = true;
+                    colorsToAdd = colorsToAdd.map(item => {
+                        if (item.key === tempArr[0].color) {
+                            return {
+                                key: tempArr[0].color,
+                                value: item.value + tempArr.length,
+                            };
+                        }
+                        return item;
+                    });
                     revert = false;
                     tempArr = [];
                 }
@@ -228,20 +260,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
 
 
             if (!revert && addScore) {
-                setScoreCounters(scoreCounters.map(item => {
-                    if (item.key === colorToAdd) {
-                        return {
-                            ...item,
-                            value: item.value + addScore,
-                        };
-
-                    }
-                    return item;
-                }));
-                colorToAdd = null;
-                revert = true;
-                addScore = 0;
-
+                setScoreCounters(colorsToAdd);
             }
 
             selectedTiles[1]([]);
