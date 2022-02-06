@@ -23,6 +23,7 @@ export interface UseGameActionsReturn<ColorKeys extends string> {
     };
     handlers: {
         setOpenSetting: Dispatch<boolean>;
+        setReadyForCounting: Dispatch<boolean>;
         setTiles: Dispatch<Array<Array<TilesGridObject<ColorKeys>>>>
         deleteRow: (toDelete: { passedColumnIndex?: number; passedRowsIndex?: number; }) => void;
     };

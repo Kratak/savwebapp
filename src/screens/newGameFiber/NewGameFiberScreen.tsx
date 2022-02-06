@@ -45,6 +45,7 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                                             selectedTiles={data.selectedTiles}
                                             tiles={data.tiles}
                                             setTiles={handlers.setTiles}
+                                            setReadyForCounting={handlers.setReadyForCounting}
                                         />
                                     );
                                 },

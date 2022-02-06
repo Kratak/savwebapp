@@ -17,6 +17,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
     const [tiles, setTiles] = useState<Array<Array<TilesGridObject<ColorKeys>>>>([]);
     const [selectedTheme, setSelectedTheme] = useState<AvailableThemesKeys>(initials.colorThemes[0].value);
     const [scoreCounter, setScoreCounter] = useState<number>(0);
+    const [readyForCounting, setReadyForCounting] = useState<boolean>(false);
 
 
     const passedValues: SettingPassedValuesProps<AvailableThemesKeys> = {
@@ -79,13 +80,158 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
     }, [selectedTheme]);
 
     useEffect(() => {
-        if (selectedTiles[0].length > 1) {
-            // todo single swap action
-            // console.log('ddsa')
+        if (selectedTiles[0].length > 1 && readyForCounting) {
+            // NOTE: color are reversed in purpose, to refactor later [Kratak]
+            const firstItem: SelectedTilesData<ColorKeys> = {
+                ...selectedTiles[0][0],
+                color: selectedTiles[0][1].color,
+            };
+            const secondItem: SelectedTilesData<ColorKeys> = {
+                ...selectedTiles[0][1],
+                color: selectedTiles[0][0].color,
+            };
+
+            let addScore = false;
+            let revert = true;
+
+            const firstFilteredColumnToCheck = tiles[firstItem.gridPosition.columns].filter(item => item.color === firstItem.color);
+            const secondFilteredColumnToCheck = tiles[secondItem.gridPosition.columns].filter(item => item.color === secondItem.color);
+            const firstFilteredRowToCheck = tiles.flat().filter(item => item.gridPosition.rows === firstItem.gridPosition.rows && item.color === firstItem.color);
+            const secondFilteredRowToCheck = tiles.flat().filter(item => item.gridPosition.rows === secondItem.gridPosition.rows && item.color === secondItem.color);
+
+            const firstColumnsValid = firstFilteredColumnToCheck.length > 2;
+            const firstRowsValid = firstFilteredRowToCheck.length > 2;
+            const secondColumnsValid = secondFilteredColumnToCheck.length > 2;
+            const secondRowsValid = secondFilteredRowToCheck.length > 2;
+
+            if (firstColumnsValid) {
+                let tempArr: Array<TilesGridObject<ColorKeys>> = [];
+
+                firstFilteredColumnToCheck.forEach((item, index) => {
+                    if (index < firstFilteredColumnToCheck.length - 1) {
+                        if ((firstFilteredColumnToCheck[index + 1].gridPosition.rows - item.gridPosition.rows) === 1) {
+                            tempArr = [...tempArr, item];
+                        } else {
+                            if (tempArr.length < 2) {
+                                tempArr = [];
+                            }
+                        }
+                    } else {
+                        if ((item.gridPosition.rows - firstFilteredColumnToCheck[index - 1].gridPosition.rows) === 1) {
+                            tempArr = [...tempArr, item];
+                        } else {
+                            if (tempArr.length < 2) {
+                                tempArr = [];
+                            }
+                        }
+                    }
+                });
+                if (tempArr.length > 2) {
+                    addScore = true;
+                    revert = false;
+                    tempArr = [];
+                }
+            }
+            if (firstRowsValid) {
+                let tempArr: Array<TilesGridObject<ColorKeys>> = [];
+
+                firstFilteredRowToCheck.forEach((item, index) => {
+                    if (index < firstFilteredRowToCheck.length - 1) {
+                        if ((firstFilteredRowToCheck[index + 1].gridPosition.columns - item.gridPosition.columns) === 1) {
+                            tempArr = [...tempArr, item];
+                        } else {
+                            if (tempArr.length < 2) {
+                                tempArr = [];
+                            }
+                        }
+                    } else {
+                        if ((item.gridPosition.columns - firstFilteredRowToCheck[index - 1].gridPosition.columns) === 1) {
+                            tempArr = [...tempArr, item];
+                        } else {
+                            if (tempArr.length < 2) {
+                                tempArr = [];
+                            }
+                        }
+                    }
+                });
+                if (tempArr.length > 2) {
+                    addScore = true;
+                    revert = false;
+                    tempArr = [];
+                }
+
+            }
+            if (secondColumnsValid) {
+                let tempArr: Array<TilesGridObject<ColorKeys>> = [];
+
+                secondFilteredColumnToCheck.forEach((item, index) => {
+                    if (index < secondFilteredColumnToCheck.length - 1) {
+                        if ((secondFilteredColumnToCheck[index + 1].gridPosition.rows - item.gridPosition.rows) === 1) {
+                            tempArr = [...tempArr, item];
+                        } else {
+                            if (tempArr.length < 2) {
+                                tempArr = [];
+                            }
+                        }
+                    } else {
+                        if ((item.gridPosition.rows - secondFilteredColumnToCheck[index - 1].gridPosition.rows) === 1) {
+                            tempArr = [...tempArr, item];
+                        } else {
+                            if (tempArr.length < 2) {
+                                tempArr = [];
+                            }
+                        }
+                    }
+                });
+                if (tempArr.length > 2) {
+                    addScore = true;
+                    revert = false;
+                    tempArr = [];
+                }
+
+            }
+            if (secondRowsValid) {
+                let tempArr: Array<TilesGridObject<ColorKeys>> = [];
+
+                secondFilteredRowToCheck.forEach((item, index) => {
+                    if (index < secondFilteredRowToCheck.length - 1) {
+                        if ((secondFilteredRowToCheck[index + 1].gridPosition.columns - item.gridPosition.columns) === 1) {
+                            tempArr = [...tempArr, item];
+                        } else {
+                            if (tempArr.length < 2) {
+                                tempArr = [];
+                            }
+                        }
+                    } else {
+                        if ((item.gridPosition.columns - secondFilteredRowToCheck[index - 1].gridPosition.columns) === 1) {
+                            tempArr = [...tempArr, item];
+                        } else {
+                            if (tempArr.length < 2) {
+                                tempArr = [];
+                            }
+                        }
+                    }
+                });
+                if (tempArr.length > 2) {
+                    addScore = true;
+                    revert = false;
+                    tempArr = [];
+                }
+            }
+
+
+            if (!revert && addScore) {
+                setScoreCounter(scoreCounter + 1);
+                revert = true;
+                addScore = false;
+
+            }
+
+            selectedTiles[1]([]);
+            setReadyForCounting(false);
         }
 
-
-    }, [selectedTiles[0]]);
+    }, [tiles, selectedTiles[0], readyForCounting]);
 
     return {
         settings: {
@@ -95,6 +241,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
         },
         handlers: {
             setOpenSetting,
+            setReadyForCounting,
             setTiles,
             deleteRow,
         },
