@@ -16,7 +16,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
     const [cameraZoom, setCameraZoom] = useState(initials.camera.z);
     const [tiles, setTiles] = useState<Array<Array<TilesGridObject<ColorKeys>>>>([]);
     const [selectedTheme, setSelectedTheme] = useState<AvailableThemesKeys>(initials.colorThemes[0].value);
-    const [scoreCounter, setScoreCounter] = useState<number>(0);
+    const [scoreCounters, setScoreCounters] = useState<Array<{ key: ColorKeys; value: number }>>([]);
     const [readyForCounting, setReadyForCounting] = useState<boolean>(false);
 
 
@@ -71,12 +71,14 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
     };
 
     useEffect(() => {
+        const selectedColorKey = initials.availableColorThemes[selectedTheme] as Array<ColorKeys>;
         const newTiles = getTilesGrid<ColorKeys>({
             columns: 7,
             rows: 9,
-            colors: initials.availableColorThemes[selectedTheme] as Array<ColorKeys>,
+            colors: selectedColorKey,
         });
         setTiles(newTiles);
+        setScoreCounters(selectedColorKey.map(item => ({ key: item, value: 0 })));
     }, [selectedTheme]);
 
     useEffect(() => {
@@ -91,8 +93,9 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                 color: selectedTiles[0][0].color,
             };
 
-            let addScore = false;
+            let addScore: number = 0;
             let revert = true;
+            let colorToAdd: ColorKeys | null = null;
 
             const firstFilteredColumnToCheck = tiles[firstItem.gridPosition.columns].filter(item => item.color === firstItem.color);
             const secondFilteredColumnToCheck = tiles[secondItem.gridPosition.columns].filter(item => item.color === secondItem.color);
@@ -127,7 +130,8 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                     }
                 });
                 if (tempArr.length > 2) {
-                    addScore = true;
+                    addScore = tempArr.length;
+                    colorToAdd = tempArr[0].color;
                     revert = false;
                     tempArr = [];
                 }
@@ -155,7 +159,8 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                     }
                 });
                 if (tempArr.length > 2) {
-                    addScore = true;
+                    addScore = tempArr.length;
+                    colorToAdd = tempArr[0].color;
                     revert = false;
                     tempArr = [];
                 }
@@ -184,7 +189,8 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                     }
                 });
                 if (tempArr.length > 2) {
-                    addScore = true;
+                    addScore = tempArr.length;
+                    colorToAdd = tempArr[0].color;
                     revert = false;
                     tempArr = [];
                 }
@@ -213,7 +219,8 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                     }
                 });
                 if (tempArr.length > 2) {
-                    addScore = true;
+                    addScore = tempArr.length;
+                    colorToAdd = tempArr[0].color;
                     revert = false;
                     tempArr = [];
                 }
@@ -221,9 +228,19 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
 
 
             if (!revert && addScore) {
-                setScoreCounter(scoreCounter + 1);
+                setScoreCounters(scoreCounters.map(item => {
+                    if (item.key === colorToAdd) {
+                        return {
+                            ...item,
+                            value: item.value + addScore,
+                        };
+
+                    }
+                    return item;
+                }));
+                colorToAdd = null;
                 revert = true;
-                addScore = false;
+                addScore = 0;
 
             }
 
@@ -231,7 +248,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             setReadyForCounting(false);
         }
 
-    }, [tiles, selectedTiles[0], readyForCounting]);
+    }, [scoreCounters, tiles, selectedTiles[0], readyForCounting]);
 
     return {
         settings: {
@@ -247,7 +264,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
         },
         data: {
             displayData: {
-                scoreCounter,
+                scoreCounters,
             },
             classes: styles,
             tiles,

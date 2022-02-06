@@ -8,7 +8,7 @@ import { ScreenSelectorProps } from '../types';
 import UseCamera from './UseCamera';
 import { initials } from './initials';
 import { UseGameActions } from './useGameActions';
-import { SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
+import { SimpleGameModeColors, SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
 
 const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
     const { data, settings, handlers } = UseGameActions<SimpleGameModeColorsKeys>(props);
@@ -21,7 +21,11 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                 <Settings {...settings}>
                     <div></div>
                 </Settings>
-                <div>Current score: {data.displayData.scoreCounter}</div>
+                <div className={data.classes.counters}>
+                    {data.displayData.scoreCounters.map(item => <div
+                        key={item.key} className={data.classes.counter}
+                        style={{ border: `solid 2px ${SimpleGameModeColors[item.key]}` }}>{item.value}</div>)}
+                </div>
                 <div onClick={() => handlers.setOpenSetting(true)}>open setting</div>
 
                 <div className={data.classes.threeWrapper}>

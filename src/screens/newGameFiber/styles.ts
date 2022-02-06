@@ -6,7 +6,9 @@ export enum NewGameFiberStylesKeys {
     module = 'module',
     windowWrapper = 'windowWrapper',
     threeWrapper = 'threeWrapper',
-    uiWrapper = 'uiWrapper'
+    uiWrapper = 'uiWrapper',
+    counters = 'counters',
+    counter = 'counter'
 }
 
 export const useStyles = makeStyles(() => ({
@@ -31,5 +33,16 @@ export const useStyles = makeStyles(() => ({
         padding: 10,
         bottom: -50,
         left: 20,
+    },
+    counters: {
+        padding: 5,
+        display: 'flex',
+        backgroundColor: SpacePalletColors.Space,
+    },
+    counter: {
+        borderRadius: 5,
+        fontSize: 20,
+        padding: 10,
+        margin: 5,
     },
 }));

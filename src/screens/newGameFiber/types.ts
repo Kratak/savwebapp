@@ -29,7 +29,7 @@ export interface UseGameActionsReturn<ColorKeys extends string> {
     };
     data: {
         displayData: {
-            scoreCounter: number;
+            scoreCounters: Array<{ key: ColorKeys; value: number }>;
         };
         classes: ClassNameMap<NewGameFiberStylesKeys>;
         tiles: Array<Array<TilesGridObject<ColorKeys>>>;
