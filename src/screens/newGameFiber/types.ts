@@ -16,7 +16,6 @@ export interface SelectedTilesData<ColorKeys extends string> {
 }
 
 export interface UseGameActionsReturn<ColorKeys extends string> {
-    classes: ClassNameMap<NewGameFiberStylesKeys>;
     settings: {
         customHandles: SettingCustomHandlesProps<AvailableThemesKeys>;
         passedValues: SettingPassedValuesProps<AvailableThemesKeys>;
@@ -27,6 +26,12 @@ export interface UseGameActionsReturn<ColorKeys extends string> {
         setTiles: Dispatch<Array<Array<TilesGridObject<ColorKeys>>>>
         deleteRow: (toDelete: { passedColumnIndex?: number; passedRowsIndex?: number; }) => void;
     };
-    tiles: Array<Array<TilesGridObject<ColorKeys>>>;
-    selectedTiles: [Array<SelectedTilesData<ColorKeys>>, Dispatch<Array<SelectedTilesData<ColorKeys>>>];
+    data: {
+        displayData: {
+            scoreCounter: number;
+        };
+        classes: ClassNameMap<NewGameFiberStylesKeys>;
+        tiles: Array<Array<TilesGridObject<ColorKeys>>>;
+        selectedTiles: [Array<SelectedTilesData<ColorKeys>>, Dispatch<Array<SelectedTilesData<ColorKeys>>>];
+    };
 }

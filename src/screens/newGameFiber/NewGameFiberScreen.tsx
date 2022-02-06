@@ -11,25 +11,26 @@ import { UseGameActions } from './useGameActions';
 import { SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
 
 const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
-    const { classes, settings, handlers, tiles, selectedTiles } = UseGameActions<SimpleGameModeColorsKeys>(props);
+    const { data, settings, handlers } = UseGameActions<SimpleGameModeColorsKeys>(props);
 
     return (
         <div>
             <h1>Space and Void</h1>
-            <div className={classes.windowWrapper}>
+            <div className={data.classes.windowWrapper}>
                 <h2>'Game screen'</h2>
                 <Settings {...settings}>
                     <div></div>
                 </Settings>
+                <div>Current score: {data.displayData.scoreCounter}</div>
                 <div onClick={() => handlers.setOpenSetting(true)}>open setting</div>
 
-                <div className={classes.threeWrapper}>
+                <div className={data.classes.threeWrapper}>
                     <Canvas camera={{ position: initials.camera.cameraPosition }}>
                         <UseCamera cameraZoom={settings.passedValues.cameraZoom} />
                         <ambientLight intensity={settings.passedValues.intensity} />
                         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                         <pointLight position={[-10, -10, -10]} />
-                        {tiles.map((item, index) =>
+                        {data.tiles.map((item, index) =>
                             item.map(innerItem => {
                                     if (!innerItem.renderTile) {
                                         return;
@@ -41,8 +42,8 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                                             boxId={innerItem.boxId}
                                             key={innerItem.boxId}
                                             tilePosition={innerItem.position}
-                                            selectedTiles={selectedTiles}
-                                            tiles={tiles}
+                                            selectedTiles={data.selectedTiles}
+                                            tiles={data.tiles}
                                             setTiles={handlers.setTiles}
                                         />
                                     );
@@ -50,7 +51,7 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                             ),
                         )}
                     </Canvas>
-                    <div className={classes.uiWrapper}>
+                    <div className={data.classes.uiWrapper}>
                         <div onClick={() => handlers.deleteRow({ passedRowsIndex: 2 })}>row 2</div>
                         <div onClick={() => handlers.deleteRow({ passedRowsIndex: 3 })}>row 3</div>
                         <div onClick={() => handlers.deleteRow({ passedColumnIndex: 5 })}>column 5</div>

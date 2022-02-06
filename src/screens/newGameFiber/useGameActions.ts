@@ -16,6 +16,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
     const [cameraZoom, setCameraZoom] = useState(initials.camera.z);
     const [tiles, setTiles] = useState<Array<Array<TilesGridObject<ColorKeys>>>>([]);
     const [selectedTheme, setSelectedTheme] = useState<AvailableThemesKeys>(initials.colorThemes[0].value);
+    const [scoreCounter, setScoreCounter] = useState<number>(0);
 
 
     const passedValues: SettingPassedValuesProps<AvailableThemesKeys> = {
@@ -84,10 +85,9 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
         }
 
 
-    },[selectedTiles[0]])
+    }, [selectedTiles[0]]);
 
     return {
-        classes: styles,
         settings: {
             customHandles: handlers,
             passedValues: passedValues,
@@ -98,7 +98,13 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             setTiles,
             deleteRow,
         },
-        tiles,
-        selectedTiles,
+        data: {
+            displayData: {
+                scoreCounter,
+            },
+            classes: styles,
+            tiles,
+            selectedTiles,
+        },
     };
 };
