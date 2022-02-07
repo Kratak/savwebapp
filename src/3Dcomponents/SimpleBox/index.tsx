@@ -16,6 +16,7 @@ interface BoxProps<ColorKeys extends string> extends MeshProps {
     selectedTiles: [Array<SelectedTilesData<ColorKeys>>, Dispatch<Array<SelectedTilesData<ColorKeys>>>];
     tiles: Array<Array<TilesGridObject<ColorKeys>>>;
     setTiles: Dispatch<Array<Array<TilesGridObject<ColorKeys>>>>;
+    setReadyForCounting: Dispatch<boolean>;
 }
 
 const Box = <ColorKeys extends string>(props: BoxProps<ColorKeys>) => {
@@ -115,7 +116,7 @@ const Box = <ColorKeys extends string>(props: BoxProps<ColorKeys>) => {
             }));
 
 
-            setSelectedTiles([]);
+            props.setReadyForCounting(true);
             setClicked(false);
         }
     }, [selectedTiles]);
