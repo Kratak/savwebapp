@@ -6,7 +6,7 @@ import { getTilesGrid, TilesGridObject } from '../../gameModes/simple/helpers';
 import { ScreenSelectorProps } from '../types';
 import { AvailableThemesKeys, initials } from './initials';
 import { useStyles } from './styles';
-import { SelectedTilesData, UseGameActionsReturn } from './types';
+import { HandlerDeleteProps, SelectedTilesData, UseGameActionsReturn } from './types';
 
 export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorProps): UseGameActionsReturn<ColorKeys> => {
     const styles = useStyles();
@@ -35,20 +35,20 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
         setSelectedTheme: (theme) => setSelectedTheme(theme),
     };
 
-    const deleteRow = (toDelete: { passedColumnIndex?: number; passedRowsIndex?: number; }): void => {
+    const tilesToDelete = (toDelete: HandlerDeleteProps): void => {
         setTiles(tiles.map((column, originColumnIndex) => {
             let columnIndex = originColumnIndex;
-            if (toDelete.passedColumnIndex) {
-                columnIndex = toDelete.passedColumnIndex;
+            if (toDelete.column?.index) {
+                columnIndex = toDelete.column?.index;
             }
             return column.map((row, originRowIndex) => {
                 let newRow = row;
                 let rowIndex = originRowIndex;
-                if (toDelete.passedRowsIndex) {
-                    rowIndex = toDelete.passedRowsIndex;
+                if (toDelete.row?.index) {
+                    rowIndex = toDelete.row?.index;
                 }
 
-                if (typeof toDelete.passedRowsIndex !== 'undefined' || typeof toDelete.passedColumnIndex !== 'undefined') {
+                if (typeof toDelete.row?.index !== 'undefined' || typeof toDelete.column?.index !== 'undefined') {
                     if (columnIndex === originColumnIndex && rowIndex === originRowIndex) {
                         newRow = {
                             ...row,
@@ -57,7 +57,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                     }
                 }
 
-                if (typeof toDelete.passedRowsIndex !== 'undefined' && typeof toDelete.passedColumnIndex !== 'undefined') {
+                if (typeof toDelete.row?.index !== 'undefined' && typeof toDelete.column?.index !== 'undefined') {
                     if (columnIndex === originColumnIndex || rowIndex === originRowIndex) {
                         newRow = {
                             ...row,
@@ -279,7 +279,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             setOpenSetting,
             setReadyForCounting,
             setTiles,
-            deleteRow,
+            tilesToDelete,
         },
         data: {
             displayData: {

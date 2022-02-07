@@ -15,6 +15,17 @@ export interface SelectedTilesData<ColorKeys extends string> {
     color: ColorKeys;
 }
 
+export interface HandlerDeleteProps {
+    column?: {
+        index: number;
+        range?: Array<GridPositionProps>
+    }
+    row?: {
+        index: number;
+        range?: Array<GridPositionProps>
+    }
+}
+
 export interface UseGameActionsReturn<ColorKeys extends string> {
     settings: {
         customHandles: SettingCustomHandlesProps<AvailableThemesKeys>;
@@ -25,7 +36,7 @@ export interface UseGameActionsReturn<ColorKeys extends string> {
         setOpenSetting: Dispatch<boolean>;
         setReadyForCounting: Dispatch<boolean>;
         setTiles: Dispatch<Array<Array<TilesGridObject<ColorKeys>>>>
-        deleteRow: (toDelete: { passedColumnIndex?: number; passedRowsIndex?: number; }) => void;
+        tilesToDelete: (toDelete: HandlerDeleteProps) => void;
     };
     data: {
         displayData: {
