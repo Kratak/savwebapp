@@ -18,11 +18,11 @@ export interface SelectedTilesData<ColorKeys extends string> {
 export interface HandlerDeleteProps {
     column?: {
         index: number;
-        range?: Array<GridPositionProps>
+        rows?: Array<number>
     }
     row?: {
         index: number;
-        range?: Array<GridPositionProps>
+        columns?: Array<number>
     }
 }
 

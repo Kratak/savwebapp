@@ -57,13 +57,21 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                         )}
                     </Canvas>
                     <div className={data.classes.uiWrapper}>
-                        <div onClick={() => handlers.tilesToDelete({ row: { index: 2 } })}>row 2</div>
-                        <div onClick={() => handlers.tilesToDelete({ row: { index: 3 } })}>row 3</div>
-                        <div onClick={() => handlers.tilesToDelete({ column: { index: 5 } })}>column 5</div>
-                        <div onClick={() => handlers.tilesToDelete({ row: { index: 1 }, column: { index: 1 } })}>
-                            column 1
-                            row 1
+                        <div onClick={() => {
+                            // todo move call to use effect
+                            handlers.tilesToDelete({ column: { index: 3, rows: [1, 2, 3] } });
+                            handlers.tilesToDelete({ row: { index: 2, columns: [2, 3, 4] } });
+                        }
+                        }>row 2 from 2-4 // column 3 from 0-2
                         </div>
+                        <div onClick={() => {
+                            // todo move call to use effect
+                            handlers.tilesToDelete({ row: { index: 4, columns: [2, 3, 4] } });
+                            handlers.tilesToDelete({ column: { index: 3, rows: [1, 2, 3] } });
+                        }
+                        }>row 2 from 2-4 // column 3 from 0-2
+                        </div>
+
                     </div>
                 </div>
             </div>

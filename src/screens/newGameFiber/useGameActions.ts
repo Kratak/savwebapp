@@ -35,7 +35,9 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
         setSelectedTheme: (theme) => setSelectedTheme(theme),
     };
 
+    console.log('render')
     const tilesToDelete = (toDelete: HandlerDeleteProps): void => {
+        console.log('tilesToDelete')
         setTiles(tiles.map((column, originColumnIndex) => {
             let columnIndex = originColumnIndex;
             if (toDelete.column?.index) {
@@ -49,20 +51,64 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                 }
 
                 if (typeof toDelete.row?.index !== 'undefined' || typeof toDelete.column?.index !== 'undefined') {
+                    // console.log('single')
                     if (columnIndex === originColumnIndex && rowIndex === originRowIndex) {
-                        newRow = {
-                            ...row,
-                            renderTile: false,
-                        };
+                        if (toDelete.column?.rows && toDelete.column.rows.length > 0) {
+                                console.log('column', row.renderTile)
+                            newRow = {
+                                ...row,
+                                renderTile: toDelete.column.rows.includes(originRowIndex) ? false : row.renderTile,
+                            };
+
+                        }
+
+                        if (toDelete.row?.columns && toDelete.row?.columns.length > 0) {
+                                console.log('row', row.renderTile)
+                            newRow = {
+                                ...row,
+                                renderTile: toDelete.row.columns.includes(originColumnIndex) ? false : row.renderTile,
+                            };
+
+                        }
+
+                        if (!toDelete.row?.columns && !toDelete.column?.rows) {
+                            newRow = {
+                                ...row,
+                                renderTile: false,
+                            };
+                        }
                     }
                 }
 
                 if (typeof toDelete.row?.index !== 'undefined' && typeof toDelete.column?.index !== 'undefined') {
+                    // console.log('multiple')
+                    //TODO this part work with only one array passed, to investigate
                     if (columnIndex === originColumnIndex || rowIndex === originRowIndex) {
-                        newRow = {
-                            ...row,
-                            renderTile: false,
-                        };
+                        if (toDelete.column?.rows && toDelete.column.rows.length > 0) {
+                            newRow = {
+                                ...row,
+                                renderTile: toDelete.column.rows.includes(originRowIndex) ? false : row.renderTile,
+                            };
+
+
+                        }
+                        if (toDelete.row?.columns && toDelete.row?.columns.length > 0) {
+                            newRow = {
+                                ...row,
+                                renderTile: toDelete.row.columns.includes(originColumnIndex) ? false : row.renderTile,
+                            };
+                        }
+
+
+                    }
+                    if (columnIndex === originColumnIndex || rowIndex === originRowIndex) {
+                        if (!toDelete.row?.columns && !toDelete.column?.rows) {
+                            console.log('else');
+                            newRow = {
+                                ...row,
+                                renderTile: false,
+                            };
+                        }
                     }
                 }
                 return newRow;
