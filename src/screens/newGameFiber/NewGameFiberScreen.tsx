@@ -50,6 +50,9 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                                             tiles={data.tiles}
                                             setTiles={handlers.setTiles}
                                             setReadyForCounting={handlers.setReadyForCounting}
+                                            meshStandardMaterial={{
+                                                wireframe: settings.passedValues.wireframeOn,
+                                            }}
                                         />
                                     );
                                 },

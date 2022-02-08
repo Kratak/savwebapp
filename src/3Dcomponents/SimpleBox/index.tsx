@@ -7,6 +7,7 @@ import { GridPositionProps, TilesGridObject } from '../../gameModes/simple/helpe
 import { SimpleGameModeColors, SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
 import { Vector3Tuple } from 'three/src/math/Vector3';
 import { SelectedTilesData } from '../../screens/newGameFiber/types';
+import { MeshStandardMaterialParameters } from 'three/src/materials/MeshStandardMaterial';
 
 interface BoxProps<ColorKeys extends string> extends MeshProps {
     tilePosition: Vector3Tuple;
@@ -17,6 +18,7 @@ interface BoxProps<ColorKeys extends string> extends MeshProps {
     tiles: Array<Array<TilesGridObject<ColorKeys>>>;
     setTiles: Dispatch<Array<Array<TilesGridObject<ColorKeys>>>>;
     setReadyForCounting: Dispatch<boolean>;
+    meshStandardMaterial?: MeshStandardMaterialParameters;
 }
 
 const Box = <ColorKeys extends string>(props: BoxProps<ColorKeys>) => {
@@ -132,7 +134,9 @@ const Box = <ColorKeys extends string>(props: BoxProps<ColorKeys>) => {
             onPointerOut={(event) => setHovered(false)}>
             <boxGeometry args={[.7, .7, .7]} />
             <meshStandardMaterial
-                color={hovered ? hoveredColor() : SimpleGameModeColors[props.boxColor as SimpleGameModeColorsKeys] || 'orange'} />
+                color={hovered ? hoveredColor() : SimpleGameModeColors[props.boxColor as SimpleGameModeColorsKeys] || 'orange'}
+                {...props.meshStandardMaterial}
+            />
         </mesh>
     );
 };

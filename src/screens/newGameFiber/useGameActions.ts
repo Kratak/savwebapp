@@ -13,6 +13,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
     const [openSetting, setOpenSetting] = useState(false);
     const selectedTiles = useState<Array<SelectedTilesData<ColorKeys>>>([]);
     const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
+    const [wireframeOn, setWireframeOn] = useState<boolean>(false);
     const [cameraZoom, setCameraZoom] = useState(initials.camera.z);
     const [tiles, setTiles] = useState<Array<Array<TilesGridObject<ColorKeys>>>>([]);
     const [selectedTheme, setSelectedTheme] = useState<AvailableThemesKeys>(initials.colorThemes[0].value);
@@ -25,6 +26,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
         cameraZoom,
         selectedTheme,
         availableThemes: initials.colorThemes,
+        wireframeOn
     };
 
     const handlers: SettingCustomHandlesProps<AvailableThemesKeys> = {
@@ -33,6 +35,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
         setSelectedScreen: (scree) => props.setSelectedScreen(scree),
         setAmbientLightIntensity: (givenIntensity) => setAmbientLightIntensity(givenIntensity),
         setSelectedTheme: (theme) => setSelectedTheme(theme),
+        setWireframeOn: (toggle) => setWireframeOn(toggle)
     };
 
     console.log('render')
