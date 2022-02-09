@@ -26,7 +26,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
         cameraZoom,
         selectedTheme,
         availableThemes: initials.colorThemes,
-        wireframeOn
+        wireframeOn,
     };
 
     const handlers: SettingCustomHandlesProps<AvailableThemesKeys> = {
@@ -35,12 +35,10 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
         setSelectedScreen: (scree) => props.setSelectedScreen(scree),
         setAmbientLightIntensity: (givenIntensity) => setAmbientLightIntensity(givenIntensity),
         setSelectedTheme: (theme) => setSelectedTheme(theme),
-        setWireframeOn: (toggle) => setWireframeOn(toggle)
+        setWireframeOn: (toggle) => setWireframeOn(toggle),
     };
 
-    console.log('render')
     const tilesToDelete = (toDelete: HandlerDeleteProps): void => {
-        console.log('tilesToDelete')
         setTiles(tiles.map((column, originColumnIndex) => {
             let columnIndex = originColumnIndex;
             if (toDelete.column?.index) {
@@ -54,10 +52,8 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                 }
 
                 if (typeof toDelete.row?.index !== 'undefined' || typeof toDelete.column?.index !== 'undefined') {
-                    // console.log('single')
                     if (columnIndex === originColumnIndex && rowIndex === originRowIndex) {
                         if (toDelete.column?.rows && toDelete.column.rows.length > 0) {
-                                console.log('column', row.renderTile)
                             newRow = {
                                 ...row,
                                 renderTile: toDelete.column.rows.includes(originRowIndex) ? false : row.renderTile,
@@ -66,7 +62,6 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                         }
 
                         if (toDelete.row?.columns && toDelete.row?.columns.length > 0) {
-                                console.log('row', row.renderTile)
                             newRow = {
                                 ...row,
                                 renderTile: toDelete.row.columns.includes(originColumnIndex) ? false : row.renderTile,
@@ -84,7 +79,6 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                 }
 
                 if (typeof toDelete.row?.index !== 'undefined' && typeof toDelete.column?.index !== 'undefined') {
-                    // console.log('multiple')
                     //TODO this part work with only one array passed, to investigate
                     if (columnIndex === originColumnIndex || rowIndex === originRowIndex) {
                         if (toDelete.column?.rows && toDelete.column.rows.length > 0) {
@@ -106,7 +100,6 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                     }
                     if (columnIndex === originColumnIndex || rowIndex === originRowIndex) {
                         if (!toDelete.row?.columns && !toDelete.column?.rows) {
-                            console.log('else');
                             newRow = {
                                 ...row,
                                 renderTile: false,
@@ -145,6 +138,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             let addScore = false;
             let revert = true;
             let colorsToAdd = scoreCounters.map(item => item);
+            let toDelete: HandlerDeleteProps = {};
 
             const firstFilteredColumnToCheck = tiles[firstItem.gridPosition.columns].filter(item => item.color === firstItem.color);
             const secondFilteredColumnToCheck = tiles[secondItem.gridPosition.columns].filter(item => item.color === secondItem.color);
@@ -189,6 +183,12 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                         }
                         return item;
                     });
+                    toDelete = {
+                        column: {
+                            index: tempArr[0].gridPosition.columns,
+                            rows: tempArr.map(item => item.gridPosition.rows),
+                        },
+                    };
                     revert = false;
                     tempArr = [];
                 }
@@ -226,6 +226,12 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                         }
                         return item;
                     });
+                    toDelete = {
+                        row: {
+                            index: tempArr[0].gridPosition.rows,
+                            columns: tempArr.map(item => item.gridPosition.columns),
+                        },
+                    };
                     revert = false;
                     tempArr = [];
                 }
@@ -264,6 +270,12 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                         }
                         return item;
                     });
+                    toDelete = {
+                        column: {
+                            index: tempArr[0].gridPosition.columns,
+                            rows: tempArr.map(item => item.gridPosition.rows),
+                        },
+                    };
                     revert = false;
                     tempArr = [];
                 }
@@ -303,6 +315,12 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                         return item;
                     });
                     revert = false;
+                    toDelete = {
+                        row: {
+                            index: tempArr[0].gridPosition.rows,
+                            columns: tempArr.map(item => item.gridPosition.columns),
+                        },
+                    };
                     tempArr = [];
                 }
             }
@@ -310,6 +328,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
 
             if (!revert && addScore) {
                 setScoreCounters(colorsToAdd);
+                tilesToDelete(toDelete);
             }
 
             selectedTiles[1]([]);
