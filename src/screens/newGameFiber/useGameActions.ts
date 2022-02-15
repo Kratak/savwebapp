@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
+import classnames from 'classnames';
 
 import { SettingCustomHandlesProps, SettingPassedValuesProps } from '../../UIcomponents/settings/settings';
 import { getTilesGrid, TilesGridObject } from '../../gameModes/simple/helpers';
 
 import { ScreenSelectorProps } from '../types';
 import { AvailableThemesKeys, initials } from './initials';
-import { useStyles } from './styles';
+import { NewGameFiberStylesKeys, useStyles } from './styles';
 import { HandlerDeleteProps, SelectedTilesData, UseGameActionsReturn } from './types';
 
 export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorProps): UseGameActionsReturn<ColorKeys> => {
-    const styles = useStyles();
+    const baseStyles = useStyles();
     const [openSetting, setOpenSetting] = useState(false);
     const selectedTiles = useState<Array<SelectedTilesData<ColorKeys>>>([]);
     const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
@@ -20,6 +21,13 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
     const [scoreCounters, setScoreCounters] = useState<Array<{ key: ColorKeys; value: number }>>([]);
     const [readyForCounting, setReadyForCounting] = useState<boolean>(false);
 
+
+    const styles: { [key in NewGameFiberStylesKeys]: string } = {
+        ...baseStyles,
+        [NewGameFiberStylesKeys.title]: classnames(baseStyles.uiElementsWrapper,baseStyles.title),
+        [NewGameFiberStylesKeys.uiWrapper]: classnames(baseStyles.uiElementsWrapper, baseStyles.uiWrapper),
+        [NewGameFiberStylesKeys.counters]: `${baseStyles.counters} ${baseStyles.uiElementsWrapper}`
+    };
 
     const passedValues: SettingPassedValuesProps<AvailableThemesKeys> = {
         intensity: ambientLightIntensity,

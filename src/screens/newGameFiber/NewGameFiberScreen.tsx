@@ -14,10 +14,10 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
     const { data, settings, handlers } = UseGameActions<SimpleGameModeColorsKeys>(props);
 
     return (
-        <div>
-            <h1>Space and Void</h1>
+        <div className={data.classes.module}>
+            {/*<h1 className={data.classes.title}>Space and Void</h1>*/}
             <div className={data.classes.windowWrapper}>
-                <h2>'Game screen'</h2>
+                <h2 className={data.classes.title}>Game screen / Match title</h2>
                 <Settings {...settings}>
                     <div></div>
                 </Settings>
@@ -26,7 +26,7 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
                         key={item.key} className={data.classes.counter}
                         style={{ border: `solid 2px ${SimpleGameModeColors[item.key]}` }}>{item.value}</div>)}
                 </div>
-                <div onClick={() => handlers.setOpenSetting(true)}>open setting</div>
+                <div className={data.classes.settingButton} onClick={() => handlers.setOpenSetting(true)}>Settings</div>
 
                 <div className={data.classes.threeWrapper}>
                     <Canvas camera={{ position: initials.camera.cameraPosition }}>
