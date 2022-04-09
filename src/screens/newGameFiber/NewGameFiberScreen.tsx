@@ -1,76 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Canvas } from '@react-three/fiber';
 
 import SimpleBox from '../../3Dcomponents/SimpleBox';
-import { getTilesGrid, SimpleGameModeColors } from '../../gameModes/simple';
-import { TilesGridObject } from '../../gameModes/simple/helpers';
-import { SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
+import { SimpleGameModeColors } from '../../gameModes/simple';
+import { Settings } from '../../UIcomponents/settings';
 
-import { Screens, ScreenSelectorProps } from '../types';
-import { useStyles } from './styles';
-
-const gameSceneSize = {
-    width: 640,
-    height: 480,
-};
-
-const colorsKeys: Array<SimpleGameModeColorsKeys> = Object.keys(SimpleGameModeColorsKeys) as Array<SimpleGameModeColorsKeys>;
-// const availableColors = Object.keys(SimpleGameModeColors);
+import { ScreenSelectorProps } from '../types';
+import UseCamera from './UseCamera';
+import { initials } from './initials';
+import { UseGameActions } from './useGameActions';
 
 const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
-    const selected = useState<string>('');
-    // const selectedColor = useState<string>('');
-    // const movedColor = useState<string>('');
-    const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
-    const [tiles, setTiles] = useState<Array<TilesGridObject<SimpleGameModeColorsKeys>>>([]);
-    const styles = useStyles();
-
-    useEffect(() => {
-        const newTiles = getTilesGrid<SimpleGameModeColorsKeys>({
-            columns: 6,
-            rows: 6,
-            colorsKeys,
-        });
-
-        setTiles(newTiles);
-    }, []);
+    const { classes, settings, handlers, tiles, selectedTiles } = UseGameActions(props);
 
     return (
         <div>
             <h1>Space and Void</h1>
-            <div className={styles.windowWrapper}>
+            <div className={classes.windowWrapper}>
                 <h2>'Game screen'</h2>
+                <Settings {...settings}>
+                    <div></div>
+                </Settings>
+                <div onClick={() => handlers.setOpenSetting(true)}>open setting</div>
 
-                <div className={styles.threeWrapper}>
-                    <Canvas>
-                        <ambientLight intensity={ambientLightIntensity} />
+                <div className={classes.threeWrapper}>
+                    <Canvas camera={{ position: initials.camera.cameraPosition }}>
+                        <UseCamera cameraZoom={settings.passedValues.cameraZoom} />
+                        <ambientLight intensity={settings.passedValues.intensity} />
                         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                         <pointLight position={[-10, -10, -10]} />
-                        {tiles.map((item, index) => (
-                            <SimpleBox
-                                boxColor={SimpleGameModeColors[item.color]}
-                                boxId={item.boxId}
-                                key={item.boxId}
-                                position={item.position}
-                                selected={selected}
-                            />
-                        ))}
+                        {tiles.map((item, index) =>
+                            item.map(innerItem =>
+                                (
+                                    <SimpleBox
+                                        boxColor={SimpleGameModeColors[innerItem.color]}
+                                        boxId={innerItem.boxId}
+                                        key={innerItem.boxId}
+                                        position={innerItem.position}
+                                        selectedTiles={selectedTiles}
+                                        tiles={tiles}
+                                        setTiles={handlers.setTiles}
+                                    />
+                                ),
+                            ),
+                        )}
                     </Canvas>
                 </div>
-
-                <div className={styles.uiWrapper}>
-
-                    <button onClick={() => setAmbientLightIntensity(ambientLightIntensity + .1)}>
-                        increase by .1
-                    </button>
-                    <button onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
-                        Back to Main Menu
-                    </button>
-                    <button onClick={() => setAmbientLightIntensity(ambientLightIntensity - .1)}>
-                        decrees by .1
-                    </button>
-                </div>
-
             </div>
         </div>
     );

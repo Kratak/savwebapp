@@ -1,4 +1,4 @@
-import { Vector3 } from '@react-three/fiber/dist/declarations/src/three-types';
+import { Vector3Tuple } from 'three/src/math/Vector3';
 
 export const getRandomInt = (max: number) => {
     return Math.floor(Math.random() * max);
@@ -19,36 +19,45 @@ export const getRandomArrayOfColors = (given: GetRandomArrayOfColorsProps): Arra
 };
 
 
-export interface TilesGridObject<T> {
-    position: Vector3;
+export interface TilesGridObject<T extends string> {
+    position: Vector3Tuple;
     color: T;
     boxId: string;
 }
 
-interface GetTilesGridProps<T> {
+interface GetTilesGridProps<T extends string> {
     rows: number;
     columns: number;
-    colorsKeys: Array<T>;
+    colors: Array<T>;
 }
 
 
-export const getTilesGrid = <T extends string>(given: GetTilesGridProps<T>): Array<TilesGridObject<T>> => {
-    let tiles: Array<TilesGridObject<T>> = [];
-    const halfColumnsCount = Math.floor(given.columns / 2);
-    const halfRowsCount = Math.floor(given.rows / 2);
+export const getTilesGrid = <T extends string>(given: GetTilesGridProps<T>) => {
+    let depTiles: Array<Array<TilesGridObject<T>>> = [];
 
-    console.log(halfColumnsCount, halfRowsCount);
+    for (let columns = 0; columns < given.columns; columns++) {
+        let getObj = depTiles[columns] || [];
+        for (let rows = 0; rows < given.rows; rows++) {
+            let color = given.colors[getRandomInt(given.colors.length)];
+            const columnNumber = columns - Math.floor(given.columns / 2);
+            const rowNumber = rows - Math.floor(given.rows / 2);
+            if (columns > 1 && depTiles[columns - 1][rows].color === color && depTiles[columns - 2][rows].color === color) {
+                const availableColor = given.colors.filter(item => item !== color);
+                color = availableColor[getRandomInt(availableColor.length - 1)];
+            }
+            if (rows > 1 && getObj[rows - 1].color === color && getObj[rows - 2].color === color) {
+                const availableColor = given.colors.filter(item => item !== color);
+                color = availableColor[getRandomInt(availableColor.length - 1)];
 
-    for (let rows = halfRowsCount * -1; rows < halfRowsCount; rows++) {
-        for (let columns = halfColumnsCount * -1; columns < halfColumnsCount; columns++) {
-            const color = given.colorsKeys[getRandomInt(given.colorsKeys.length)];
-            tiles = [...tiles, {
+            }
+            getObj = [...getObj, {
                 color,
-                position: [columns, rows, 0],
-                boxId: `C${columns}-R${rows}-${color}`
+                position: [columnNumber, rowNumber, 0],
+                boxId: `ID_${columnNumber}C_${rowNumber}R_${color}`,
             }];
         }
+        depTiles = [...depTiles, getObj];
     }
 
-    return tiles;
+    return depTiles;
 };

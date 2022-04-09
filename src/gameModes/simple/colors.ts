@@ -6,7 +6,11 @@ export enum SimpleGameModeColorsKeys {
     yellow = 'yellow',
     purple = 'purple',
     green = 'green',
-    white = 'white'
+    white = 'white',
+    WordleGreen = 'WordleGreen',
+    WordleYellow = 'WordleYellow',
+    WordleGrey = 'WordleGrey',
+    WordleWhite = 'WordleWhite'
 }
 
 export const SimpleGameModeColors: { [key in SimpleGameModeColorsKeys]: string } = {
@@ -16,4 +20,8 @@ export const SimpleGameModeColors: { [key in SimpleGameModeColorsKeys]: string }
     [SimpleGameModeColorsKeys.purple]: SpacePalletColors.Gravitation,
     [SimpleGameModeColorsKeys.green]: SpacePalletColors.Regeneration,
     [SimpleGameModeColorsKeys.white]: SpacePalletColors.Space,
+    [SimpleGameModeColorsKeys.WordleGreen]: SpacePalletColors.WordleGreen,
+    [SimpleGameModeColorsKeys.WordleYellow]: SpacePalletColors.YellowSun,
+    [SimpleGameModeColorsKeys.WordleGrey]: SpacePalletColors.WordleGrey,
+    [SimpleGameModeColorsKeys.WordleWhite]: SpacePalletColors.WordleWhite,
 };
