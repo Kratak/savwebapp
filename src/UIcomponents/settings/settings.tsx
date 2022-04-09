@@ -33,6 +33,26 @@ const Settings = <ThemeKeys extends string>({ customHandles, passedValues, ...re
     const handleChange = (event: SelectChangeEvent) => {
         customHandles.setSelectedTheme(event.target.value as ThemeKeys);
     };
+
+    const handleCloseModal = () => {
+        customHandles.onClose(false);
+    };
+
+    const handleSave = () => {
+        let gameSaved = false;
+        try {
+            console.log('game saved');
+            gameSaved = true;
+            alert('game saved')
+
+        } catch (e) {
+            console.log('error durring save');
+        }
+
+        if (gameSaved) {
+            handleCloseModal();
+        }
+    };
     return (<Modal {...rest}>
         <div className={styles.module}>
             <div>
@@ -76,7 +96,10 @@ const Settings = <ThemeKeys extends string>({ customHandles, passedValues, ...re
                     </Select>
                 </div>
             </div>
-            <div onClick={() => customHandles.onClose(false)}>
+            <div onClick={handleSave}>
+                save game
+            </div>
+            <div onClick={handleCloseModal}>
                 close modal
             </div>
         </div>
