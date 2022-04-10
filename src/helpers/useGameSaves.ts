@@ -1,3 +1,5 @@
+import { ScoreCounterProps } from '../screens/newGameFiber/types';
+import { newDate } from '../UIcomponents/settings/settings';
 
 export interface MetaGameDataProps {
     shardCount: number;
@@ -8,41 +10,62 @@ export enum CurrentGameModes {
     match3 = 'match3'
 }
 
-export interface CurrentGameDataProps {
+export interface CurrentGameDataProps<ColorKeys extends string> {
     mode: CurrentGameModes;
     galaxyMapPosition: string;
+    scoreCounters: Array<ScoreCounterProps<ColorKeys>>;
 
 }
 
 export enum SaveDataField {
+    saveId = 'saveId',
     saveName = 'saveName',
+    date = 'date',
     metaGameData = 'metaGameData',
     currentGameData = 'currentGameData'
 }
 
-export interface SaveDataProps {
+export interface SaveDataProps<ColorKeys extends string> {
+    [SaveDataField.saveId]?: string;
     [SaveDataField.saveName]: string;
+    [SaveDataField.date]: Date;
     [SaveDataField.metaGameData]: MetaGameDataProps;
-    [SaveDataField.currentGameData]: CurrentGameDataProps;
+    [SaveDataField.currentGameData]: CurrentGameDataProps<ColorKeys>;
 }
 
-export const useGameSaves = () => {
-    const save = (data: SaveDataProps) => {
-        console.log('gameSaved', data);
-        alert('game saved');
+export enum LocalStorageKeys {
+    saves = 'saves'
+}
+
+export const useGameSaves = <ColorKeys extends string>() => {
+    const save = async (saveData: SaveDataProps<ColorKeys>) => {
+        let data = [saveData];
+        const stringedOldSaves = await localStorage.getItem(LocalStorageKeys.saves);
+
+        if (!!stringedOldSaves) {
+            const oldSaves: Array<SaveDataProps<ColorKeys>> = JSON.parse(stringedOldSaves);
+
+            if (saveData.saveId && !!oldSaves.filter(item => item.saveId === saveData.saveId)) {
+                data = [...data, ...oldSaves.filter(item => item.saveId !== saveData.saveId)];
+            }
+        }
+
+        localStorage.setItem(LocalStorageKeys.saves, JSON.stringify(data));
     };
 
-    const load = (id: string): SaveDataProps => {
+    const load = (id: string): SaveDataProps<ColorKeys> => {
         console.log('game load');
 
         return {
             saveName: 'name',
+            date: newDate,
             metaGameData: {
                 shardCount: 0,
             },
             currentGameData: {
                 galaxyMapPosition: 'position',
                 mode: CurrentGameModes.match3,
+                scoreCounters: [],
             },
         };
     };

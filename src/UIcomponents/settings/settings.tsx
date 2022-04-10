@@ -5,12 +5,15 @@ import { ModalProps } from '@mui/material/Modal/Modal';
 import { Screens } from '../../screens/types';
 import { ColorThemeObject } from '../../screens/newGameFiber/initials';
 import { CurrentGameModes, useGameSaves } from '../../helpers';
+import { getRandomInt } from '../../gameModes/simple';
+import { DataToSaveProps } from '../../screens/newGameFiber/types';
 
 import { useStyles } from './styles';
 
-export interface SettingsProps<ThemesKeys extends string> extends ModalProps {
+export interface SettingsProps<ThemesKeys extends string, ColorKey extends string> extends ModalProps {
     customHandles: SettingCustomHandlesProps<ThemesKeys>;
     passedValues: SettingPassedValuesProps<ThemesKeys>;
+    saveData: DataToSaveProps<ColorKey>;
 }
 
 export interface SettingCustomHandlesProps<ThemesKeys extends string> {
@@ -30,8 +33,11 @@ export interface SettingPassedValuesProps<ThemesKeys> {
     wireframeOn: boolean;
 }
 
-const Settings = <ThemeKeys extends string>({ customHandles, passedValues, ...rest }: SettingsProps<ThemeKeys>) => {
-    const [devSettingAllowed , setDevSettingAllowed] = useState<boolean>(true);
+export const newDate = new Date();
+
+const Settings = <ThemeKeys extends string, ColorKey extends string>(props: SettingsProps<ThemeKeys, ColorKey>) => {
+    const { customHandles, passedValues, saveData, ...rest } = props;
+    const [devSettingAllowed, setDevSettingAllowed] = useState<boolean>(true);
     const styles = useStyles();
     const { save } = useGameSaves();
 
@@ -46,14 +52,19 @@ const Settings = <ThemeKeys extends string>({ customHandles, passedValues, ...re
     const handleSave = () => {
         let gameSaved = false;
         try {
+            // todo format date on display
+            // console.log(newDate.toUTCString());
             save({
+                saveId: getRandomInt(20).toString(),
                 saveName: 'name',
+                date: newDate,
                 metaGameData: {
                     shardCount: 0,
                 },
                 currentGameData: {
                     mode: CurrentGameModes.match3,
                     galaxyMapPosition: 'position',
+                    scoreCounters: saveData.scoreCounters,
                 },
             });
             gameSaved = true;
