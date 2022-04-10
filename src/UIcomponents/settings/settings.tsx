@@ -90,17 +90,6 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
 
                 </div>
                 <div>
-                    <button onClick={() => setDevSettingAllowed(!devSettingAllowed)}>
-                        {`Dev setting ${devSettingAllowed ? 'ON' : 'OFF'}`}
-                    </button>
-                </div>
-                {devSettingAllowed && <div>
-                    <span><strong>DEV:</strong></span>
-                    <button onClick={() => customHandles.setWireframeOn(!passedValues.wireframeOn)}>
-                        {`Wireframe ${passedValues.wireframeOn ? 'ON' : 'OFF'}`}
-                    </button>
-                </div>}
-                <div>
                     <button onClick={() => customHandles.setAmbientLightIntensity(passedValues.intensity + .1)}>
                         + .1
                     </button>
@@ -119,6 +108,18 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
                     </button>
                 </div>
                 <div>
+                    <button onClick={() => setDevSettingAllowed(!devSettingAllowed)}>
+                        {`Dev setting ${devSettingAllowed ? 'ON' : 'OFF'}`}
+                    </button>
+                </div>
+                {devSettingAllowed && <div>
+                    <span><strong>DEV:</strong></span>
+                    <button onClick={() => customHandles.setWireframeOn(!passedValues.wireframeOn)}>
+                        {`Wireframe ${passedValues.wireframeOn ? 'ON' : 'OFF'}`}
+                    </button>
+                </div>}
+                {devSettingAllowed && <div>
+                    <span><strong>DEV:</strong></span>
                     <Select
                         labelId='demo-simple-select-label'
                         id='demo-simple-select'
@@ -130,7 +131,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
                             return <MenuItem key={item.label + index} value={item.value}>{item.label}</MenuItem>;
                         })}
                     </Select>
-                </div>
+                </div>}
             </div>
             <button onClick={() => handleSave(1)}>
                 Save slot 1
@@ -141,9 +142,9 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
             <button onClick={() => handleSave(3)}>
                 Save slot 3
             </button>
-            <div onClick={handleCloseModal}>
+            <button onClick={handleCloseModal}>
                 close modal
-            </div>
+            </button>
         </div>
     </Modal>);
 };
