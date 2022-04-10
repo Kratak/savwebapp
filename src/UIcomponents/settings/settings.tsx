@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MenuItem, Modal, Select, SelectChangeEvent } from '@mui/material';
 import { ModalProps } from '@mui/material/Modal/Modal';
 
@@ -33,13 +33,34 @@ export interface SettingPassedValuesProps<ThemesKeys> {
     wireframeOn: boolean;
 }
 
+export interface SaveSlotProps {
+    name: string;
+    date: Date | null;
+}
+
 export const newDate = new Date();
+
+export const availableSaveSlots: Array<SaveSlotProps> = [
+    {
+        name: '',
+        date: null,
+    }, {
+        name: '',
+        date: null,
+    }, {
+        name: '',
+        date: null,
+    },
+];
 
 const Settings = <ThemeKeys extends string, ColorKey extends string>(props: SettingsProps<ThemeKeys, ColorKey>) => {
     const { customHandles, passedValues, saveData, ...rest } = props;
-    const [devSettingAllowed, setDevSettingAllowed] = useState<boolean>(true);
+
     const styles = useStyles();
     const { save } = useGameSaves();
+
+    const [devSettingAllowed, setDevSettingAllowed] = useState<boolean>(true);
+    const [saveSlots, setSaveSlots] = useState<Array<SaveSlotProps>>([...availableSaveSlots]);
 
     const handleChange = (event: SelectChangeEvent) => {
         customHandles.setSelectedTheme(event.target.value as ThemeKeys);
@@ -77,6 +98,11 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
             handleCloseModal();
         }
     };
+
+    useEffect(() => {
+
+    }, [])
+
     return (<Modal {...rest}>
         <div className={styles.module}>
             <div>
@@ -133,18 +159,15 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
                     </Select>
                 </div>}
             </div>
-            <button onClick={() => handleSave(1)}>
-                Save slot 1
-            </button>
-            <button onClick={() => handleSave(2)}>
-                Save slot 2
-            </button>
-            <button onClick={() => handleSave(3)}>
-                Save slot 3
-            </button>
-            <button onClick={handleCloseModal}>
-                close modal
-            </button>
+            {saveSlots.map((slot, index) => {
+                const message = !!slot.name && !!slot.date ? `${slot.name} ${slot.date.toUTCString()}` : `Save slot ${index + 1}`;
+                return (
+                    <button onClick={() => handleSave(index + 1)}>
+                        {message}
+                    </button>
+                );
+            })}
+
         </div>
     </Modal>);
 };
