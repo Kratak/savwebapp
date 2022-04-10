@@ -4,6 +4,7 @@ import { ModalProps } from '@mui/material/Modal/Modal';
 
 import { Screens } from '../../screens/types';
 import { ColorThemeObject } from '../../screens/newGameFiber/initials';
+import { CurrentGameModes, useGameSaves } from '../../helpers';
 
 import { useStyles } from './styles';
 
@@ -29,6 +30,7 @@ export interface SettingPassedValuesProps<ThemesKeys> {
 
 const Settings = <ThemeKeys extends string>({ customHandles, passedValues, ...rest }: SettingsProps<ThemeKeys>) => {
     const styles = useStyles();
+    const { save } = useGameSaves();
 
     const handleChange = (event: SelectChangeEvent) => {
         customHandles.setSelectedTheme(event.target.value as ThemeKeys);
@@ -41,9 +43,17 @@ const Settings = <ThemeKeys extends string>({ customHandles, passedValues, ...re
     const handleSave = () => {
         let gameSaved = false;
         try {
-            console.log('game saved');
+            save({
+                saveName: 'name',
+                metaGameData: {
+                    shardCount: 0,
+                },
+                currentGameData: {
+                    mode: CurrentGameModes.match3,
+                    galaxyMapPosition: 'position',
+                },
+            });
             gameSaved = true;
-            alert('game saved')
 
         } catch (e) {
             console.log('error durring save');
