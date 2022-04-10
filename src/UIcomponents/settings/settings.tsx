@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MenuItem, Modal, Select, SelectChangeEvent } from '@mui/material';
 import { ModalProps } from '@mui/material/Modal/Modal';
 
@@ -19,6 +19,7 @@ export interface SettingCustomHandlesProps<ThemesKeys extends string> {
     setSelectedScreen: (scree: Screens) => void;
     setCameraZoom: (cameraZoom: number) => void;
     setSelectedTheme: (selectedTheme: ThemesKeys) => void;
+    setWireframeOn: (toggle: boolean) => void;
 };
 
 export interface SettingPassedValuesProps<ThemesKeys> {
@@ -26,9 +27,11 @@ export interface SettingPassedValuesProps<ThemesKeys> {
     cameraZoom: number;
     selectedTheme: ThemesKeys;
     availableThemes: Array<ColorThemeObject<ThemesKeys>>;
+    wireframeOn: boolean;
 }
 
 const Settings = <ThemeKeys extends string>({ customHandles, passedValues, ...rest }: SettingsProps<ThemeKeys>) => {
+    const [devSettingAllowed , setDevSettingAllowed] = useState<boolean>(true);
     const styles = useStyles();
     const { save } = useGameSaves();
 
@@ -73,7 +76,19 @@ const Settings = <ThemeKeys extends string>({ customHandles, passedValues, ...re
                     <button onClick={() => customHandles.setSelectedScreen(Screens.MainMenu)}>
                         Back to Main Menu
                     </button>
+
                 </div>
+                <div>
+                    <button onClick={() => setDevSettingAllowed(!devSettingAllowed)}>
+                        {`Dev setting ${devSettingAllowed ? 'ON' : 'OFF'}`}
+                    </button>
+                </div>
+                {devSettingAllowed && <div>
+                    <span><strong>DEV:</strong></span>
+                    <button onClick={() => customHandles.setWireframeOn(!passedValues.wireframeOn)}>
+                        {`Wireframe ${passedValues.wireframeOn ? 'ON' : 'OFF'}`}
+                    </button>
+                </div>}
                 <div>
                     <button onClick={() => customHandles.setAmbientLightIntensity(passedValues.intensity + .1)}>
                         + .1

@@ -14,7 +14,7 @@ const App = () => {
     const { t } = useTranslation();
     return (
         <ThemeProvider theme={theme}>
-            {t('title', { ns: 'part1' })}
+            {/*{t('title', { ns: 'part1' })}*/}
             <ScreenSelector
                 selectedScreen={currentScreen}
                 setSelectedScreen={(screen) => setCurrentScreen(screen)}

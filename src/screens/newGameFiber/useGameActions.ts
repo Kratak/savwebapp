@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react';
+import classnames from 'classnames';
 
 import { SettingCustomHandlesProps, SettingPassedValuesProps } from '../../UIcomponents/settings/settings';
 import { getTilesGrid, TilesGridObject } from '../../gameModes/simple/helpers';
 
 import { ScreenSelectorProps } from '../types';
 import { AvailableThemesKeys, initials } from './initials';
-import { useStyles } from './styles';
-import { SelectedTilesData, UseGameActionsReturn } from './types';
+import { NewGameFiberStylesKeys, useStyles } from './styles';
+import { HandlerDeleteProps, SelectedTilesData, UseGameActionsReturn } from './types';
 
 export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorProps): UseGameActionsReturn<ColorKeys> => {
-    const styles = useStyles();
+    const baseStyles = useStyles();
     const [openSetting, setOpenSetting] = useState(false);
     const selectedTiles = useState<Array<SelectedTilesData<ColorKeys>>>([]);
     const [ambientLightIntensity, setAmbientLightIntensity] = useState(0.5);
+    const [wireframeOn, setWireframeOn] = useState<boolean>(false);
     const [cameraZoom, setCameraZoom] = useState(initials.camera.z);
     const [tiles, setTiles] = useState<Array<Array<TilesGridObject<ColorKeys>>>>([]);
     const [selectedTheme, setSelectedTheme] = useState<AvailableThemesKeys>(initials.colorThemes[0].value);
@@ -20,11 +22,19 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
     const [readyForCounting, setReadyForCounting] = useState<boolean>(false);
 
 
+    const styles: { [key in NewGameFiberStylesKeys]: string } = {
+        ...baseStyles,
+        [NewGameFiberStylesKeys.title]: classnames(baseStyles.uiElementsWrapper,baseStyles.title),
+        [NewGameFiberStylesKeys.uiWrapper]: classnames(baseStyles.uiElementsWrapper, baseStyles.uiWrapper),
+        [NewGameFiberStylesKeys.counters]: `${baseStyles.counters} ${baseStyles.uiElementsWrapper}`
+    };
+
     const passedValues: SettingPassedValuesProps<AvailableThemesKeys> = {
         intensity: ambientLightIntensity,
         cameraZoom,
         selectedTheme,
         availableThemes: initials.colorThemes,
+        wireframeOn,
     };
 
     const handlers: SettingCustomHandlesProps<AvailableThemesKeys> = {
@@ -33,36 +43,76 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
         setSelectedScreen: (scree) => props.setSelectedScreen(scree),
         setAmbientLightIntensity: (givenIntensity) => setAmbientLightIntensity(givenIntensity),
         setSelectedTheme: (theme) => setSelectedTheme(theme),
+        setWireframeOn: (toggle) => setWireframeOn(toggle),
     };
 
-    const deleteRow = (toDelete: { passedColumnIndex?: number; passedRowsIndex?: number; }): void => {
+    const tilesToDelete = (toDelete: HandlerDeleteProps): void => {
         setTiles(tiles.map((column, originColumnIndex) => {
             let columnIndex = originColumnIndex;
-            if (toDelete.passedColumnIndex) {
-                columnIndex = toDelete.passedColumnIndex;
+            if (toDelete.column?.index) {
+                columnIndex = toDelete.column?.index;
             }
             return column.map((row, originRowIndex) => {
                 let newRow = row;
                 let rowIndex = originRowIndex;
-                if (toDelete.passedRowsIndex) {
-                    rowIndex = toDelete.passedRowsIndex;
+                if (toDelete.row?.index) {
+                    rowIndex = toDelete.row?.index;
                 }
 
-                if (typeof toDelete.passedRowsIndex !== 'undefined' || typeof toDelete.passedColumnIndex !== 'undefined') {
+                if (typeof toDelete.row?.index !== 'undefined' || typeof toDelete.column?.index !== 'undefined') {
                     if (columnIndex === originColumnIndex && rowIndex === originRowIndex) {
-                        newRow = {
-                            ...row,
-                            renderTile: false,
-                        };
+                        if (toDelete.column?.rows && toDelete.column.rows.length > 0) {
+                            newRow = {
+                                ...row,
+                                renderTile: toDelete.column.rows.includes(originRowIndex) ? false : row.renderTile,
+                            };
+
+                        }
+
+                        if (toDelete.row?.columns && toDelete.row?.columns.length > 0) {
+                            newRow = {
+                                ...row,
+                                renderTile: toDelete.row.columns.includes(originColumnIndex) ? false : row.renderTile,
+                            };
+
+                        }
+
+                        if (!toDelete.row?.columns && !toDelete.column?.rows) {
+                            newRow = {
+                                ...row,
+                                renderTile: false,
+                            };
+                        }
                     }
                 }
 
-                if (typeof toDelete.passedRowsIndex !== 'undefined' && typeof toDelete.passedColumnIndex !== 'undefined') {
+                if (typeof toDelete.row?.index !== 'undefined' && typeof toDelete.column?.index !== 'undefined') {
+                    //TODO this part work with only one array passed, to investigate
                     if (columnIndex === originColumnIndex || rowIndex === originRowIndex) {
-                        newRow = {
-                            ...row,
-                            renderTile: false,
-                        };
+                        if (toDelete.column?.rows && toDelete.column.rows.length > 0) {
+                            newRow = {
+                                ...row,
+                                renderTile: toDelete.column.rows.includes(originRowIndex) ? false : row.renderTile,
+                            };
+
+
+                        }
+                        if (toDelete.row?.columns && toDelete.row?.columns.length > 0) {
+                            newRow = {
+                                ...row,
+                                renderTile: toDelete.row.columns.includes(originColumnIndex) ? false : row.renderTile,
+                            };
+                        }
+
+
+                    }
+                    if (columnIndex === originColumnIndex || rowIndex === originRowIndex) {
+                        if (!toDelete.row?.columns && !toDelete.column?.rows) {
+                            newRow = {
+                                ...row,
+                                renderTile: false,
+                            };
+                        }
                     }
                 }
                 return newRow;
@@ -96,6 +146,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             let addScore = false;
             let revert = true;
             let colorsToAdd = scoreCounters.map(item => item);
+            let toDelete: HandlerDeleteProps = {};
 
             const firstFilteredColumnToCheck = tiles[firstItem.gridPosition.columns].filter(item => item.color === firstItem.color);
             const secondFilteredColumnToCheck = tiles[secondItem.gridPosition.columns].filter(item => item.color === secondItem.color);
@@ -140,6 +191,12 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                         }
                         return item;
                     });
+                    toDelete = {
+                        column: {
+                            index: tempArr[0].gridPosition.columns,
+                            rows: tempArr.map(item => item.gridPosition.rows),
+                        },
+                    };
                     revert = false;
                     tempArr = [];
                 }
@@ -177,6 +234,12 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                         }
                         return item;
                     });
+                    toDelete = {
+                        row: {
+                            index: tempArr[0].gridPosition.rows,
+                            columns: tempArr.map(item => item.gridPosition.columns),
+                        },
+                    };
                     revert = false;
                     tempArr = [];
                 }
@@ -215,6 +278,12 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                         }
                         return item;
                     });
+                    toDelete = {
+                        column: {
+                            index: tempArr[0].gridPosition.columns,
+                            rows: tempArr.map(item => item.gridPosition.rows),
+                        },
+                    };
                     revert = false;
                     tempArr = [];
                 }
@@ -254,6 +323,12 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                         return item;
                     });
                     revert = false;
+                    toDelete = {
+                        row: {
+                            index: tempArr[0].gridPosition.rows,
+                            columns: tempArr.map(item => item.gridPosition.columns),
+                        },
+                    };
                     tempArr = [];
                 }
             }
@@ -261,6 +336,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
 
             if (!revert && addScore) {
                 setScoreCounters(colorsToAdd);
+                tilesToDelete(toDelete);
             }
 
             selectedTiles[1]([]);
@@ -279,7 +355,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             setOpenSetting,
             setReadyForCounting,
             setTiles,
-            deleteRow,
+            tilesToDelete,
         },
         data: {
             displayData: {
