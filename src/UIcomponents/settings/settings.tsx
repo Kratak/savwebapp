@@ -49,14 +49,14 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
         customHandles.onClose(false);
     };
 
-    const handleSave = () => {
+    const handleSave = (slotNumber: number) => {
         let gameSaved = false;
         try {
             // todo format date on display
             // console.log(newDate.toUTCString());
             save({
-                saveId: getRandomInt(20).toString(),
-                saveName: 'name',
+                saveId: slotNumber.toString(),
+                saveName: `${slotNumber} saved game`,
                 date: newDate,
                 metaGameData: {
                     shardCount: 0,
@@ -132,9 +132,15 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
                     </Select>
                 </div>
             </div>
-            <div onClick={handleSave}>
-                save game
-            </div>
+            <button onClick={() => handleSave(1)}>
+                Save slot 1
+            </button>
+            <button onClick={() => handleSave(2)}>
+                Save slot 2
+            </button>
+            <button onClick={() => handleSave(3)}>
+                Save slot 3
+            </button>
             <div onClick={handleCloseModal}>
                 close modal
             </div>
