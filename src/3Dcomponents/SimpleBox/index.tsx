@@ -2,7 +2,7 @@ import React, { Dispatch, useCallback, useEffect, useRef, useState } from 'react
 import { MeshProps } from '@react-three/fiber/dist/declarations/src/three-types';
 import { ThreeEvent } from '@react-three/fiber/dist/declarations/src/core/events';
 
-import { adjustColor } from '../../genericHelpers';
+import { adjustColor } from '../../helpers';
 import { GridPositionProps, TilesGridObject } from '../../gameModes/simple/helpers';
 import { SimpleGameModeColors, SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
 import { Vector3Tuple } from 'three/src/math/Vector3';
