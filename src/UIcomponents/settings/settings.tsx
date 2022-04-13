@@ -57,6 +57,8 @@ export const availableSaveSlots: Array<SaveSlotProps> = [
     },
 ];
 
+const saveIdPromProps = availableSaveSlots[0].saveId;
+
 const Settings = <ThemeKeys extends string, ColorKey extends string>(props: SettingsProps<ThemeKeys, ColorKey>) => {
     const { customHandles, passedValues, saveData, ...rest } = props;
 
@@ -65,6 +67,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
 
     const [devSettingAllowed, setDevSettingAllowed] = useState<boolean>(true);
     const [saveSlots, setSaveSlots] = useState<Array<SaveSlotProps>>([...availableSaveSlots]);
+    const [autoSaveId, setAutoSaveId] = useState<string>(saveIdPromProps);
 
     const handleChange = (event: SelectChangeEvent) => {
         customHandles.setSelectedTheme(event.target.value as ThemeKeys);
@@ -103,15 +106,36 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
         }
     };
 
+    const handleBackToMainMenu = async () => {
+        await handleSave(autoSaveId);
+        customHandles.setSelectedScreen(Screens.MainMenu);
+    };
+
+    // useEffect(() => {
+    //     getSaveSlot()
+    //         .then((data) => {
+    //             let newData = [...saveSlots];
+    //             data.forEach((item, index) => newData[index] = item);
+    //             setSaveSlots(newData);
+    //         })
+    //         .catch((e) => console.log(e));
+    // }, [saveData]);
+
     useEffect(() => {
         getSaveSlot()
-            .then((data) => {
-                let newData = [...saveSlots];
-                data.forEach((item, index) => newData[index] = item);
-                setSaveSlots(newData);
+            .then(saveData => {
+                if (saveData.length > 0) {
+                    const savedFile = saveData.find(item => item.saveId === autoSaveId);
+                    if (!!savedFile) {
+                        console.log(savedFile);
+                    }
+                } else {
+                    handleSave(availableSaveSlots[0].saveId);
+                }
             })
-            .catch((e) => console.log(e));
-    }, [saveData]);
+            .catch(e => console.log('Issue with save load', e));
+
+    }, []);
 
     return (<Modal {...rest}>
         <div className={styles.module}>
@@ -120,10 +144,9 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
             </div>
             <div>
                 <div>
-                    <button onClick={() => customHandles.setSelectedScreen(Screens.MainMenu)}>
-                        Back to Main Menu
+                    <button onClick={handleCloseModal}>
+                        close settings
                     </button>
-
                 </div>
                 <div>
                     <button onClick={() => customHandles.setAmbientLightIntensity(passedValues.intensity + .1)}>
@@ -169,18 +192,19 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
                     </Select>
                 </div>}
             </div>
-            {saveSlots.map((slot, index) => {
-                const message = !!slot.name && !!slot.date ? `${slot.name} ${new Date(slot.date).toUTCString()}` : `Save slot ${slot.saveId}`;
-                return (
-                    <button key={`${index}-${slot.saveId}`} onClick={() => handleSave(slot.saveId)}>
-                        {message}
-                    </button>
-                );
-            })}
+            {/*{saveSlots.map((slot, index) => {*/}
+            {/*    const message = !!slot.name && !!slot.date ? `${slot.name} ${new Date(slot.date).toUTCString()}` : `Save slot ${slot.saveId}`;*/}
+            {/*    return (*/}
+            {/*        <button key={`${index}-${slot.saveId}`} onClick={() => handleSave(slot.saveId)}>*/}
+            {/*            {message}*/}
+            {/*        </button>*/}
+            {/*    );*/}
+            {/*})}*/}
 
-            <button onClick={handleCloseModal}>
-                close modal
+            <button onClick={handleBackToMainMenu}>
+                Save and go to Main Menu
             </button>
+
 
         </div>
     </Modal>);
