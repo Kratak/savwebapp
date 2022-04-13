@@ -34,6 +34,7 @@ export interface SettingPassedValuesProps<ThemesKeys> {
 }
 
 export interface SaveSlotProps {
+    saveId: string;
     name: string;
     date: Date | null;
 }
@@ -42,12 +43,15 @@ export const newDate = new Date();
 
 export const availableSaveSlots: Array<SaveSlotProps> = [
     {
+        saveId: '1',
         name: '',
         date: null,
     }, {
+        saveId: '2',
         name: '',
         date: null,
     }, {
+        saveId: '3',
         name: '',
         date: null,
     },
@@ -57,7 +61,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
     const { customHandles, passedValues, saveData, ...rest } = props;
 
     const styles = useStyles();
-    const { save } = useGameSaves();
+    const { save, getSaveSlot } = useGameSaves();
 
     const [devSettingAllowed, setDevSettingAllowed] = useState<boolean>(true);
     const [saveSlots, setSaveSlots] = useState<Array<SaveSlotProps>>([...availableSaveSlots]);
@@ -70,13 +74,13 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
         customHandles.onClose(false);
     };
 
-    const handleSave = (slotNumber: number) => {
+    const handleSave = (slotNumber: string) => {
         let gameSaved = false;
         try {
             // todo format date on display
             // console.log(newDate.toUTCString());
             save({
-                saveId: slotNumber.toString(),
+                saveId: slotNumber,
                 saveName: `${slotNumber} saved game`,
                 date: newDate,
                 metaGameData: {
@@ -100,8 +104,14 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
     };
 
     useEffect(() => {
-
-    }, [])
+        getSaveSlot()
+            .then((data) => {
+                let newData = [...saveSlots];
+                data.forEach((item, index) => newData[index] = item);
+                setSaveSlots(newData);
+            })
+            .catch((e) => console.log(e));
+    }, [saveData]);
 
     return (<Modal {...rest}>
         <div className={styles.module}>
@@ -160,13 +170,17 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
                 </div>}
             </div>
             {saveSlots.map((slot, index) => {
-                const message = !!slot.name && !!slot.date ? `${slot.name} ${slot.date.toUTCString()}` : `Save slot ${index + 1}`;
+                const message = !!slot.name && !!slot.date ? `${slot.name} ${new Date(slot.date).toUTCString()}` : `Save slot ${slot.saveId}`;
                 return (
-                    <button onClick={() => handleSave(index + 1)}>
+                    <button key={`${index}-${slot.saveId}`} onClick={() => handleSave(slot.saveId)}>
                         {message}
                     </button>
                 );
             })}
+
+            <button onClick={handleCloseModal}>
+                close modal
+            </button>
 
         </div>
     </Modal>);
