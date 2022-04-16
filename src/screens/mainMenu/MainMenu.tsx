@@ -1,30 +1,36 @@
 import React from 'react';
 import { Screens, ScreenSelectorProps } from '../types';
 import { useStyles } from './styles';
+import { Button } from '@mui/material';
 
 
 const MainMenu = (props: ScreenSelectorProps): JSX.Element => {
     const styles = useStyles();
 
     return (
-        <div>
-            <h1>Space and Void</h1>
-            <div>
-                <button disabled={true}>Resume</button>
-                <button disabled={true} onClick={() => props.setSelectedScreen(Screens.Game)}>
+        <div className={styles.mainMenuWrapper}>
+            <h1 className={styles.gameTitle}>Space and Void</h1>
+            <div className={styles.buttonsWrapper}>
+                <Button className={styles.actionButton} variant={'outlined'}
+                        disabled={true}>Resume</Button>
+                <Button variant={'outlined'} className={styles.actionButton} disabled={true}
+                        onClick={() => props.setSelectedScreen(Screens.Game)}>
                     New game
-                </button>
-                <button onClick={() => props.setSelectedScreen(Screens.GameFaber)}>
+                </Button>
+                <Button variant={'outlined'} className={styles.actionButton}
+                        onClick={() => props.setSelectedScreen(Screens.GameFaber)}>
                     New game FIBER
-                </button>
-                <button disabled={true}>Load game</button>
-                <button onClick={() => props.setSelectedScreen(Screens.Settings)}>
+                </Button>
+                <Button variant={'outlined'} className={styles.actionButton} disabled={true}>Load game</Button>
+                <Button variant={'outlined'} className={styles.actionButton}
+                        onClick={() => props.setSelectedScreen(Screens.Settings)}>
                     Setting
-                </button>
-                <button onClick={() => props.setSelectedScreen(Screens.Credits)}>
+                </Button>
+                <Button variant={'outlined'} className={styles.actionButton}
+                        onClick={() => props.setSelectedScreen(Screens.Credits)}>
                     Credits
-                </button>
-                <button disabled={true}>Exit</button>
+                </Button>
+                <Button variant={'outlined'} className={styles.actionButton} disabled={true}>Exit</Button>
             </div>
         </div>
     );

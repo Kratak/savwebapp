@@ -9,4 +9,5 @@ export enum Screens {
 export interface ScreenSelectorProps {
     selectedScreen: Screens;
     setSelectedScreen: (screen: Screens) => void;
+    className: string;
 }
