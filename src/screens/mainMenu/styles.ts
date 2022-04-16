@@ -20,6 +20,7 @@ export const useStyles = makeStyles(() => ({
     actionButton: {
         '&.MuiButton-root': {
             fontSize: '2rem',
+            minWidth: '25rem',
             maxWidth: '30rem',
             marginBottom: '1.2rem',
             padding: '.9rem 3rem',
