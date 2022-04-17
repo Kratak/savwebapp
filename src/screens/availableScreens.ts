@@ -4,6 +4,7 @@ import MainMenuScreen from './mainMenu';
 import SettingsScreen from './settings';
 import NewGameScreen from './newGame';
 import NewGameFiberScreen from './newGameFiber';
+import LoadsScreen from './loads';
 
 export const AvailableScreens: {
     [key in Screens]: {
@@ -30,5 +31,9 @@ export const AvailableScreens: {
     [Screens.Settings]: {
         key: Screens.Settings,
         component: SettingsScreen,
+    },
+    [Screens.Loads]: {
+        key: Screens.Loads,
+        component: LoadsScreen,
     },
 };

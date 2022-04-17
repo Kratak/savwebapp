@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MenuItem, Modal, Select, SelectChangeEvent } from '@mui/material';
 import { ModalProps } from '@mui/material/Modal/Modal';
 
 import { Screens } from '../../screens/types';
 import { ColorThemeObject } from '../../screens/newGameFiber/initials';
+import { CurrentGameModes, useGameSaves } from '../../helpers';
+import { getRandomInt } from '../../gameModes/simple';
+import { DataToSaveProps } from '../../screens/newGameFiber/types';
 
 import { useStyles } from './styles';
 
-export interface SettingsProps<ThemesKeys extends string> extends ModalProps {
+export interface SettingsProps<ThemesKeys extends string, ColorKey extends string> extends ModalProps {
     customHandles: SettingCustomHandlesProps<ThemesKeys>;
     passedValues: SettingPassedValuesProps<ThemesKeys>;
+    saveData: DataToSaveProps<ColorKey>;
 }
 
 export interface SettingCustomHandlesProps<ThemesKeys extends string> {
@@ -29,13 +33,110 @@ export interface SettingPassedValuesProps<ThemesKeys> {
     wireframeOn: boolean;
 }
 
-const Settings = <ThemeKeys extends string>({ customHandles, passedValues, ...rest }: SettingsProps<ThemeKeys>) => {
-    const [devSettingAllowed , setDevSettingAllowed] = useState<boolean>(true);
+export interface SaveSlotProps {
+    saveId: string;
+    name: string;
+    date: Date | null;
+}
+
+export const newDate = new Date();
+
+export const availableSaveSlots: Array<SaveSlotProps> = [
+    {
+        saveId: '1',
+        name: '',
+        date: null,
+    }, {
+        saveId: '2',
+        name: '',
+        date: null,
+    }, {
+        saveId: '3',
+        name: '',
+        date: null,
+    },
+];
+
+const saveIdPromProps = availableSaveSlots[0].saveId;
+
+const Settings = <ThemeKeys extends string, ColorKey extends string>(props: SettingsProps<ThemeKeys, ColorKey>) => {
+    const { customHandles, passedValues, saveData, ...rest } = props;
+
     const styles = useStyles();
+    const { save, getSaveSlot } = useGameSaves();
+
+    const [devSettingAllowed, setDevSettingAllowed] = useState<boolean>(true);
+    const [saveSlots, setSaveSlots] = useState<Array<SaveSlotProps>>([...availableSaveSlots]);
+    const [autoSaveId, setAutoSaveId] = useState<string>(saveIdPromProps);
 
     const handleChange = (event: SelectChangeEvent) => {
         customHandles.setSelectedTheme(event.target.value as ThemeKeys);
     };
+
+    const handleCloseModal = () => {
+        customHandles.onClose(false);
+    };
+
+    const handleSave = (slotNumber: string) => {
+        let gameSaved = false;
+        try {
+            // todo format date on display
+            // console.log(newDate.toUTCString());
+            save({
+                saveId: slotNumber,
+                saveName: `${slotNumber} saved game`,
+                date: newDate,
+                metaGameData: {
+                    shardCount: 0,
+                },
+                currentGameData: {
+                    mode: CurrentGameModes.match3,
+                    galaxyMapPosition: 'position',
+                    scoreCounters: saveData.scoreCounters,
+                },
+            });
+            gameSaved = true;
+
+        } catch (e) {
+            console.log('error durring save');
+        }
+
+        if (gameSaved) {
+            handleCloseModal();
+        }
+    };
+
+    const handleBackToMainMenu = async () => {
+        await handleSave(autoSaveId);
+        customHandles.setSelectedScreen(Screens.MainMenu);
+    };
+
+    // useEffect(() => {
+    //     getSaveSlot()
+    //         .then((data) => {
+    //             let newData = [...saveSlots];
+    //             data.forEach((item, index) => newData[index] = item);
+    //             setSaveSlots(newData);
+    //         })
+    //         .catch((e) => console.log(e));
+    // }, [saveData]);
+
+    useEffect(() => {
+        getSaveSlot()
+            .then(saveData => {
+                if (saveData.length > 0) {
+                    const savedFile = saveData.find(item => item.saveId === autoSaveId);
+                    if (!!savedFile) {
+                        console.log(savedFile);
+                    }
+                } else {
+                    handleSave(availableSaveSlots[0].saveId);
+                }
+            })
+            .catch(e => console.log('Issue with save load', e));
+
+    }, []);
+
     return (<Modal {...rest}>
         <div className={styles.module}>
             <div>
@@ -43,22 +144,10 @@ const Settings = <ThemeKeys extends string>({ customHandles, passedValues, ...re
             </div>
             <div>
                 <div>
-                    <button onClick={() => customHandles.setSelectedScreen(Screens.MainMenu)}>
-                        Back to Main Menu
-                    </button>
-
-                </div>
-                <div>
-                    <button onClick={() => setDevSettingAllowed(!devSettingAllowed)}>
-                        {`Dev setting ${devSettingAllowed ? 'ON' : 'OFF'}`}
+                    <button onClick={handleCloseModal}>
+                        close settings
                     </button>
                 </div>
-                {devSettingAllowed && <div>
-                    <span><strong>DEV:</strong></span>
-                    <button onClick={() => customHandles.setWireframeOn(!passedValues.wireframeOn)}>
-                        {`Wireframe ${passedValues.wireframeOn ? 'ON' : 'OFF'}`}
-                    </button>
-                </div>}
                 <div>
                     <button onClick={() => customHandles.setAmbientLightIntensity(passedValues.intensity + .1)}>
                         + .1
@@ -78,6 +167,18 @@ const Settings = <ThemeKeys extends string>({ customHandles, passedValues, ...re
                     </button>
                 </div>
                 <div>
+                    <button onClick={() => setDevSettingAllowed(!devSettingAllowed)}>
+                        {`Dev setting ${devSettingAllowed ? 'ON' : 'OFF'}`}
+                    </button>
+                </div>
+                {devSettingAllowed && <div>
+                    <span><strong>DEV:</strong></span>
+                    <button onClick={() => customHandles.setWireframeOn(!passedValues.wireframeOn)}>
+                        {`Wireframe ${passedValues.wireframeOn ? 'ON' : 'OFF'}`}
+                    </button>
+                </div>}
+                {devSettingAllowed && <div>
+                    <span><strong>DEV:</strong></span>
                     <Select
                         labelId='demo-simple-select-label'
                         id='demo-simple-select'
@@ -89,11 +190,22 @@ const Settings = <ThemeKeys extends string>({ customHandles, passedValues, ...re
                             return <MenuItem key={item.label + index} value={item.value}>{item.label}</MenuItem>;
                         })}
                     </Select>
-                </div>
+                </div>}
             </div>
-            <div onClick={() => customHandles.onClose(false)}>
-                close modal
-            </div>
+            {/*{saveSlots.map((slot, index) => {*/}
+            {/*    const message = !!slot.name && !!slot.date ? `${slot.name} ${new Date(slot.date).toUTCString()}` : `Save slot ${slot.saveId}`;*/}
+            {/*    return (*/}
+            {/*        <button key={`${index}-${slot.saveId}`} onClick={() => handleSave(slot.saveId)}>*/}
+            {/*            {message}*/}
+            {/*        </button>*/}
+            {/*    );*/}
+            {/*})}*/}
+
+            <button onClick={handleBackToMainMenu}>
+                Save and go to Main Menu
+            </button>
+
+
         </div>
     </Modal>);
 };
