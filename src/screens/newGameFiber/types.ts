@@ -26,11 +26,21 @@ export interface HandlerDeleteProps {
     }
 }
 
+export interface ScoreCounterProps<ColorKeys extends string> {
+    key: ColorKeys;
+    value: number
+}
+
+export interface DataToSaveProps<ColorKeys extends string> {
+    scoreCounters: Array<ScoreCounterProps<ColorKeys>>;
+}
+
 export interface UseGameActionsReturn<ColorKeys extends string> {
     settings: {
         customHandles: SettingCustomHandlesProps<AvailableThemesKeys>;
         passedValues: SettingPassedValuesProps<AvailableThemesKeys>;
         open: boolean;
+        saveData: DataToSaveProps<ColorKeys>;
     };
     handlers: {
         setOpenSetting: Dispatch<boolean>;
@@ -40,7 +50,7 @@ export interface UseGameActionsReturn<ColorKeys extends string> {
     };
     data: {
         displayData: {
-            scoreCounters: Array<{ key: ColorKeys; value: number }>;
+            scoreCounters: Array<ScoreCounterProps<ColorKeys>>;
         };
         classes: ClassNameMap<NewGameFiberStylesKeys>;
         tiles: Array<Array<TilesGridObject<ColorKeys>>>;

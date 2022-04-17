@@ -50,9 +50,9 @@ const ScreenSelector = (props: ScreenSelectorProps) => {
 
 
     return (
-        <>
+        <div className={props.className}>
             <Component {...passedProps} />
-        </>
+        </div>
     );
 
 };

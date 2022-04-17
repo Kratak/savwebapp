@@ -1,30 +1,63 @@
 import React from 'react';
+import { Button } from '@mui/material';
 import { Screens, ScreenSelectorProps } from '../types';
-import { useStyles } from './styles';
+
+import { useMainMenu } from './useMainMenu';
 
 
 const MainMenu = (props: ScreenSelectorProps): JSX.Element => {
-    const styles = useStyles();
+    const { styles, flags, handlers } = useMainMenu(props);
 
     return (
-        <div>
-            <h1>Space and Void</h1>
-            <div>
-                <button disabled={true}>Resume</button>
-                <button disabled={true} onClick={() => props.setSelectedScreen(Screens.Game)}>
+        <div className={styles.mainMenuWrapper}>
+            <h1 className={styles.gameTitle}>Space and Void</h1>
+            <div className={styles.buttonsWrapper}>
+                <Button
+                    className={styles.actionButton}
+                    disabled={!flags.resumeAvailable}
+                    onClick={handlers.handleResumeGame}
+                    variant={'outlined'}>
+                    Resume
+                </Button>
+                {/*<Button*/}
+                {/*    variant={'outlined'}*/}
+                {/*    className={styles.actionButton}*/}
+                {/*    disabled={true}*/}
+                {/*    onClick={() => props.setSelectedScreen(Screens.Game)}>*/}
+                {/*    old New game*/}
+                {/*</Button>*/}
+                <Button
+                    className={styles.actionButton}
+                    onClick={handlers.handleStartNewGame}
+                    variant={'outlined'}>
                     New game
-                </button>
-                <button onClick={() => props.setSelectedScreen(Screens.GameFaber)}>
-                    New game FIBER
-                </button>
-                <button disabled={true}>Load game</button>
-                <button onClick={() => props.setSelectedScreen(Screens.Settings)}>
+                </Button>
+                <Button
+                    className={styles.actionButton}
+                    disabled={!flags.loadAvailable}
+                    onClick={handlers.handleOpenLoadModal}
+                    variant={'outlined'}
+                >
+                    Load game
+                </Button>
+                <Button
+                    variant={'outlined'}
+                    className={styles.actionButton}
+                    onClick={() => props.setSelectedScreen(Screens.Settings)}>
                     Setting
-                </button>
-                <button onClick={() => props.setSelectedScreen(Screens.Credits)}>
+                </Button>
+                <Button
+                    variant={'outlined'}
+                    className={styles.actionButton}
+                    onClick={() => props.setSelectedScreen(Screens.Credits)}>
                     Credits
-                </button>
-                <button disabled={true}>Exit</button>
+                </Button>
+                <Button
+                    variant={'outlined'}
+                    className={styles.actionButton}
+                    disabled={true}>
+                    Exit
+                </Button>
             </div>
         </div>
     );

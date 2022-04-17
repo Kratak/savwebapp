@@ -350,6 +350,9 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             customHandles: handlers,
             passedValues: passedValues,
             open: openSetting,
+            saveData: {
+                scoreCounters
+            }
         },
         handlers: {
             setOpenSetting,
