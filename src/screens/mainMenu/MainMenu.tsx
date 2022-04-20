@@ -35,7 +35,7 @@ const MainMenu = (props: ScreenSelectorProps): JSX.Element => {
                 <Button
                     className={styles.actionButton}
                     disabled={!flags.loadAvailable}
-                    onClick={handlers.handleOpenLoadModal}
+                    onClick={handlers.handleOpenLoadScreen}
                     variant={'outlined'}
                 >
                     Load game
@@ -43,7 +43,7 @@ const MainMenu = (props: ScreenSelectorProps): JSX.Element => {
                 <Button
                     variant={'outlined'}
                     className={styles.actionButton}
-                    onClick={() => props.setSelectedScreen(Screens.Settings)}>
+                    onClick={handlers.handleOpenSettingsScreen}>
                     Setting
                 </Button>
                 <Button

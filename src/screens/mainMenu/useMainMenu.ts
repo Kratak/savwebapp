@@ -5,14 +5,21 @@ import { useStyles } from './styles';
 export const useMainMenu = (props: ScreenSelectorProps) => {
     const styles = useStyles();
     const [resumeAvailable, setResumeAvailable] = useState<boolean>(false);
-    const [loadAvailable, setLoadAvailable] = useState<boolean>(false);
+    const [loadAvailable, setLoadAvailable] = useState<boolean>(true);
 
     const handleResumeGame = () => {
         console.log('handleResumeGame');
+        props.setSelectedScreen(Screens.GameFaber);
     };
 
-    const handleOpenLoadModal = () => {
+    const handleOpenLoadScreen = () => {
         console.log('handleOpenLoadModal');
+        props.setSelectedScreen(Screens.Loads);
+    };
+
+    const handleOpenSettingsScreen = () => {
+        console.log('handleOpenSettingsScreen');
+        props.setSelectedScreen(Screens.Settings);
     };
 
     const handleStartNewGame = () => {
@@ -29,7 +36,8 @@ export const useMainMenu = (props: ScreenSelectorProps) => {
         handlers: {
             handleResumeGame,
             handleStartNewGame,
-            handleOpenLoadModal,
+            handleOpenLoadScreen,
+            handleOpenSettingsScreen,
         },
     };
 };
