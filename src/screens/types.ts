@@ -1,3 +1,5 @@
+import { GlobalDataProviderProps } from '../App';
+
 export enum Screens {
     MainMenu = 'MainMenu',
     Game = 'Game',
@@ -8,7 +10,7 @@ export enum Screens {
 }
 
 export interface ScreenSelectorProps {
-    selectedScreen: Screens;
-    setSelectedScreen: (screen: Screens) => void;
+    globalData: GlobalDataProviderProps;
+    setGlobalDataProvider: (globalData: GlobalDataProviderProps) => void;
     className: string;
 }

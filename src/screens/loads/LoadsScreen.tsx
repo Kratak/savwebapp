@@ -3,6 +3,7 @@ import { Button } from '@mui/material';
 
 import { Screens, ScreenSelectorProps } from '../types';
 import { useStyles } from './styles';
+import { useInGameScreenPush } from '../../helpers/useInGameScreenPush';
 
 
 interface SlotDataProps {
@@ -29,15 +30,16 @@ const initialData: Array<SlotDataProps> = [
 
 const LoadsScreen = (props: ScreenSelectorProps): JSX.Element => {
     const styles = useStyles();
+    const { screenHandlers } = useInGameScreenPush(props);
 
     const [slotData, setSlotData] = useState<Array<SlotDataProps>>([]);
 
     const handleLoadGame = () => {
-        props.setSelectedScreen(Screens.GameFaber);
+        screenHandlers.gotToSelectedScreen(Screens.GameFaber);
     };
 
     const handleBackToMainMenu = () => {
-        props.setSelectedScreen(Screens.MainMenu);
+        screenHandlers.gotToSelectedScreen(Screens.MainMenu);
     };
 
     useEffect(() => {

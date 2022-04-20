@@ -19,7 +19,7 @@ export interface SettingsProps<ThemesKeys extends string, ColorKey extends strin
 export interface SettingCustomHandlesProps<ThemesKeys extends string> {
     onClose: (isOpen: boolean) => void;
     setAmbientLightIntensity: (intensity: number) => void;
-    setSelectedScreen: (scree: Screens) => void;
+    setGlobalDataProvider: (scree: Screens) => void;
     setCameraZoom: (cameraZoom: number) => void;
     setSelectedTheme: (selectedTheme: ThemesKeys) => void;
     setWireframeOn: (toggle: boolean) => void;
@@ -108,7 +108,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
 
     const handleBackToMainMenu = async () => {
         await handleSave(autoSaveId);
-        customHandles.setSelectedScreen(Screens.MainMenu);
+        customHandles.setGlobalDataProvider(Screens.MainMenu);
     };
 
     // useEffect(() => {

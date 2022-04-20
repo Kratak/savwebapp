@@ -3,6 +3,7 @@ import * as THREE from 'three';
 
 import { Screens, ScreenSelectorProps } from '../types';
 import { useStyles } from './styles';
+import { useInGameScreenPush } from '../../helpers/useInGameScreenPush';
 
 const gameSceneSize = {
     width: 640,
@@ -11,6 +12,7 @@ const gameSceneSize = {
 
 
 const NewGameScreen = (props: ScreenSelectorProps): JSX.Element => {
+    const { screenHandlers } = useInGameScreenPush(props);
     const [cubeSize, setCubeSize] = useState(1);
     const [cubeScale, setCubeScale] = useState(10);
     const [cubeScalePing, setCubeScalePing] = useState(false);
@@ -67,7 +69,7 @@ const NewGameScreen = (props: ScreenSelectorProps): JSX.Element => {
                     }}>
                         increase by .1
                     </button>
-                    <button onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
+                    <button onClick={() => screenHandlers.gotToSelectedScreen(Screens.MainMenu)}>
                         Back to Main Menu
                     </button>
                     <button onClick={() => {

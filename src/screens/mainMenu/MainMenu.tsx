@@ -6,7 +6,7 @@ import { useMainMenu } from './useMainMenu';
 
 
 const MainMenu = (props: ScreenSelectorProps): JSX.Element => {
-    const { styles, flags, handlers } = useMainMenu(props);
+    const { styles, flags, handlers, screenHandlers } = useMainMenu(props);
 
     return (
         <div className={styles.mainMenuWrapper}>
@@ -23,7 +23,7 @@ const MainMenu = (props: ScreenSelectorProps): JSX.Element => {
                 {/*    variant={'outlined'}*/}
                 {/*    className={styles.actionButton}*/}
                 {/*    disabled={true}*/}
-                {/*    onClick={() => props.setSelectedScreen(Screens.Game)}>*/}
+                {/*    onClick={() => screenHandlers.gotToSelectedScreen(Screens.Game)}>*/}
                 {/*    old New game*/}
                 {/*</Button>*/}
                 <Button
@@ -49,7 +49,7 @@ const MainMenu = (props: ScreenSelectorProps): JSX.Element => {
                 <Button
                     variant={'outlined'}
                     className={styles.actionButton}
-                    onClick={() => props.setSelectedScreen(Screens.Credits)}>
+                    onClick={() => screenHandlers.gotToSelectedScreen(Screens.Credits)}>
                     Credits
                 </Button>
                 <Button

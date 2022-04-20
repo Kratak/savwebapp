@@ -1,30 +1,32 @@
 import { useState } from 'react';
 import { Screens, ScreenSelectorProps } from '../types';
 import { useStyles } from './styles';
+import { useInGameScreenPush } from '../../helpers/useInGameScreenPush';
 
 export const useMainMenu = (props: ScreenSelectorProps) => {
     const styles = useStyles();
+    const { screenHandlers } = useInGameScreenPush(props);
     const [resumeAvailable, setResumeAvailable] = useState<boolean>(false);
     const [loadAvailable, setLoadAvailable] = useState<boolean>(true);
 
     const handleResumeGame = () => {
         console.log('handleResumeGame');
-        props.setSelectedScreen(Screens.GameFaber);
+        screenHandlers.gotToSelectedScreen(Screens.GameFaber);
     };
 
     const handleOpenLoadScreen = () => {
         console.log('handleOpenLoadModal');
-        props.setSelectedScreen(Screens.Loads);
+        screenHandlers.gotToSelectedScreen(Screens.Loads);
     };
 
     const handleOpenSettingsScreen = () => {
         console.log('handleOpenSettingsScreen');
-        props.setSelectedScreen(Screens.Settings);
+        screenHandlers.gotToSelectedScreen(Screens.Settings);
     };
 
     const handleStartNewGame = () => {
         console.log('handleResumeGame');
-        props.setSelectedScreen(Screens.GameFaber);
+        screenHandlers.gotToSelectedScreen(Screens.GameFaber);
     };
 
     return {
@@ -39,5 +41,6 @@ export const useMainMenu = (props: ScreenSelectorProps) => {
             handleOpenLoadScreen,
             handleOpenSettingsScreen,
         },
+        screenHandlers,
     };
 };
