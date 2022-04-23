@@ -39,10 +39,10 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
         wireframeOn,
     };
 
-    const handlers: SettingCustomHandlesProps<AvailableThemesKeys> = {
+    const settingsHandlers: SettingCustomHandlesProps<AvailableThemesKeys> = {
         onClose: (isOpen) => setOpenSetting(isOpen),
         setCameraZoom: (givenCameraZoom) => setCameraZoom(givenCameraZoom),
-        setGlobalDataProvider: (scree) => screenHandlers.gotToSelectedScreen(scree),
+        setSelectedScreen: (scree) => screenHandlers.gotToSelectedScreen(scree),
         setAmbientLightIntensity: (givenIntensity) => setAmbientLightIntensity(givenIntensity),
         setSelectedTheme: (theme) => setSelectedTheme(theme),
         setWireframeOn: (toggle) => setWireframeOn(toggle),
@@ -349,7 +349,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
 
     return {
         settings: {
-            customHandles: handlers,
+            settingsHandlers,
             passedValues: passedValues,
             open: openSetting,
             saveData: {

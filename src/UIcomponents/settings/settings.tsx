@@ -11,7 +11,7 @@ import { DataToSaveProps } from '../../screens/newGameFiber/types';
 import { useStyles } from './styles';
 
 export interface SettingsProps<ThemesKeys extends string, ColorKey extends string> extends ModalProps {
-    customHandles: SettingCustomHandlesProps<ThemesKeys>;
+    settingsHandlers: SettingCustomHandlesProps<ThemesKeys>;
     passedValues: SettingPassedValuesProps<ThemesKeys>;
     saveData: DataToSaveProps<ColorKey>;
 }
@@ -19,7 +19,7 @@ export interface SettingsProps<ThemesKeys extends string, ColorKey extends strin
 export interface SettingCustomHandlesProps<ThemesKeys extends string> {
     onClose: (isOpen: boolean) => void;
     setAmbientLightIntensity: (intensity: number) => void;
-    setGlobalDataProvider: (scree: Screens) => void;
+    setSelectedScreen: (scree: Screens) => void;
     setCameraZoom: (cameraZoom: number) => void;
     setSelectedTheme: (selectedTheme: ThemesKeys) => void;
     setWireframeOn: (toggle: boolean) => void;
@@ -45,7 +45,8 @@ export const newDate = new Date();
 const saveIdPromProps = initialSaveSlots[0].saveId;
 
 const Settings = <ThemeKeys extends string, ColorKey extends string>(props: SettingsProps<ThemeKeys, ColorKey>) => {
-    const { customHandles, passedValues, saveData, ...rest } = props;
+    console.log('Settings rendered');
+    const { settingsHandlers, passedValues, saveData, ...rest } = props;
 
     const styles = useStyles();
     const { save, getSaveSlot } = useGameSaves();
@@ -55,14 +56,15 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
     const [autoSaveId, setAutoSaveId] = useState<string>(saveIdPromProps);
 
     const handleChange = (event: SelectChangeEvent) => {
-        customHandles.setSelectedTheme(event.target.value as ThemeKeys);
+        settingsHandlers.setSelectedTheme(event.target.value as ThemeKeys);
     };
 
     const handleCloseModal = () => {
-        customHandles.onClose(false);
+        settingsHandlers.onClose(false);
     };
 
     const handleSave = (slotNumber: string) => {
+        console.log('handleSave', slotNumber);
         let gameSaved = false;
         try {
             // todo format date on display
@@ -93,7 +95,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
 
     const handleBackToMainMenu = async () => {
         await handleSave(autoSaveId);
-        customHandles.setGlobalDataProvider(Screens.MainMenu);
+        settingsHandlers.setSelectedScreen(Screens.MainMenu);
     };
 
     // useEffect(() => {
@@ -115,6 +117,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
                         console.log(savedFile);
                     }
                 } else {
+                    console.log('getSaveSlot() else')
                     handleSave(initialSaveSlots[0].saveId);
                 }
             })
@@ -134,20 +137,20 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
                     </button>
                 </div>
                 <div>
-                    <button onClick={() => customHandles.setAmbientLightIntensity(passedValues.intensity + .1)}>
+                    <button onClick={() => settingsHandlers.setAmbientLightIntensity(passedValues.intensity + .1)}>
                         + .1
                     </button>
                     <span>{`light density:[${passedValues.intensity}]`}</span>
-                    <button onClick={() => customHandles.setAmbientLightIntensity(passedValues.intensity - .1)}>
+                    <button onClick={() => settingsHandlers.setAmbientLightIntensity(passedValues.intensity - .1)}>
                         - .1
                     </button>
                 </div>
                 <div>
-                    <button onClick={() => customHandles.setCameraZoom(passedValues.cameraZoom - 1)}>
+                    <button onClick={() => settingsHandlers.setCameraZoom(passedValues.cameraZoom - 1)}>
                         + 1
                     </button>
                     <span>{`camera zoom/out:[${passedValues.cameraZoom}]`}</span>
-                    <button onClick={() => customHandles.setCameraZoom(passedValues.cameraZoom + 1)}>
+                    <button onClick={() => settingsHandlers.setCameraZoom(passedValues.cameraZoom + 1)}>
                         - 1
                     </button>
                 </div>
@@ -158,7 +161,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
                 </div>
                 {devSettingAllowed && <div>
                     <span><strong>DEV:</strong></span>
-                    <button onClick={() => customHandles.setWireframeOn(!passedValues.wireframeOn)}>
+                    <button onClick={() => settingsHandlers.setWireframeOn(!passedValues.wireframeOn)}>
                         {`Wireframe ${passedValues.wireframeOn ? 'ON' : 'OFF'}`}
                     </button>
                 </div>}
