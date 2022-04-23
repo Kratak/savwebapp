@@ -1,36 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
 
+import { useInGameScreenPush } from '../../helpers/useInGameScreenPush';
+import { useGameSaves } from '../../helpers';
+
 import { Screens, ScreenSelectorProps } from '../types';
 import { useStyles } from './styles';
-import { useInGameScreenPush } from '../../helpers/useInGameScreenPush';
+import { SlotDataProps } from './types';
 
-
-interface SlotDataProps {
-    name: string;
-    id: string;
-    disabled: boolean;
-}
-
-const initialData: Array<SlotDataProps> = [
+export const initialSaveSlots: Array<SlotDataProps> = [
     {
-        id: 'Slot 1',
+        saveId: 'Slot 1',
         name: 'Slot 1',
         disabled: true,
+        date: null,
     }, {
-        id: 'Slot 2',
+        saveId: 'Slot 2',
         name: 'Slot 2',
         disabled: true,
+        date: null,
     }, {
-        id: 'Slot 3',
+        saveId: 'Slot 3',
         name: 'Slot 3',
         disabled: true,
+        date: null,
     },
 ];
 
 const LoadsScreen = (props: ScreenSelectorProps): JSX.Element => {
     const styles = useStyles();
     const { screenHandlers } = useInGameScreenPush(props);
+    const { getSaveSlot } = useGameSaves();
 
     const [slotData, setSlotData] = useState<Array<SlotDataProps>>([]);
 
@@ -43,7 +43,12 @@ const LoadsScreen = (props: ScreenSelectorProps): JSX.Element => {
     };
 
     useEffect(() => {
-        setSlotData(initialData);
+        setSlotData(initialSaveSlots);
+        getSaveSlot()
+            .then((saveData) => {
+                console.log(saveData);
+            })
+            .catch(e => console.log('Issue during load saves', e));
     }, []);
 
     return (
@@ -51,7 +56,7 @@ const LoadsScreen = (props: ScreenSelectorProps): JSX.Element => {
             <h1 className={styles.gameTitle}>Load game from save</h1>
             <div className={styles.buttonsWrapper}>
                 {slotData.map(slot => (<Button
-                    key={slot.id}
+                    key={slot.saveId}
                     className={styles.actionButton}
                     disabled={slot.disabled}
                     onClick={handleLoadGame}

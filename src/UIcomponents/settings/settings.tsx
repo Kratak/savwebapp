@@ -5,7 +5,7 @@ import { ModalProps } from '@mui/material/Modal/Modal';
 import { Screens } from '../../screens/types';
 import { ColorThemeObject } from '../../screens/newGameFiber/initials';
 import { CurrentGameModes, useGameSaves } from '../../helpers';
-import { getRandomInt } from '../../gameModes/simple';
+import { SlotDataProps, initialSaveSlots } from '../../screens/loads';
 import { DataToSaveProps } from '../../screens/newGameFiber/types';
 
 import { useStyles } from './styles';
@@ -41,23 +41,8 @@ export interface SaveSlotProps {
 
 export const newDate = new Date();
 
-export const availableSaveSlots: Array<SaveSlotProps> = [
-    {
-        saveId: '1',
-        name: '',
-        date: null,
-    }, {
-        saveId: '2',
-        name: '',
-        date: null,
-    }, {
-        saveId: '3',
-        name: '',
-        date: null,
-    },
-];
 
-const saveIdPromProps = availableSaveSlots[0].saveId;
+const saveIdPromProps = initialSaveSlots[0].saveId;
 
 const Settings = <ThemeKeys extends string, ColorKey extends string>(props: SettingsProps<ThemeKeys, ColorKey>) => {
     const { customHandles, passedValues, saveData, ...rest } = props;
@@ -66,7 +51,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
     const { save, getSaveSlot } = useGameSaves();
 
     const [devSettingAllowed, setDevSettingAllowed] = useState<boolean>(true);
-    const [saveSlots, setSaveSlots] = useState<Array<SaveSlotProps>>([...availableSaveSlots]);
+    const [saveSlots, setSaveSlots] = useState<Array<SlotDataProps>>([...initialSaveSlots]);
     const [autoSaveId, setAutoSaveId] = useState<string>(saveIdPromProps);
 
     const handleChange = (event: SelectChangeEvent) => {
@@ -130,7 +115,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
                         console.log(savedFile);
                     }
                 } else {
-                    handleSave(availableSaveSlots[0].saveId);
+                    handleSave(initialSaveSlots[0].saveId);
                 }
             })
             .catch(e => console.log('Issue with save load', e));
