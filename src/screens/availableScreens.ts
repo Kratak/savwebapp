@@ -4,6 +4,7 @@ import MainMenuScreen from './mainMenu';
 import SettingsScreen from './settings';
 import { SimpleBattlefield } from './gameScreens';
 import LoadsScreen from './loads';
+import NewGameScreen from './newGame';
 
 export const AvailableScreens: {
     [key in Screens]: {
@@ -18,6 +19,10 @@ export const AvailableScreens: {
     [Screens.MainMenu]: {
         key: Screens.MainMenu,
         component: MainMenuScreen,
+    },
+    [Screens.NewGame]: {
+        key: Screens.NewGame,
+        component: NewGameScreen,
     },
     [Screens.Settings]: {
         key: Screens.Settings,

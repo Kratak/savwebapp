@@ -30,7 +30,7 @@ export const useMainMenu = (props: ScreenSelectorProps) => {
 
     const handleStartNewGame = () => {
         console.log('handleResumeGame');
-        screenHandlers.gotToSelectedScreen(Screens.InGameSimpleBattlefield);
+        screenHandlers.gotToSelectedScreen(Screens.NewGame);
     };
 
     useEffect(() => {
