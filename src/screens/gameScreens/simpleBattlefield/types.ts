@@ -2,8 +2,8 @@ import { Dispatch } from 'react';
 import { ClassNameMap } from '@mui/styles';
 import { Vector3Tuple } from 'three/src/math/Vector3';
 
-import { SettingCustomHandlesProps, SettingPassedValuesProps } from '../../UIcomponents/settings/settings';
-import { GridPositionProps, TilesGridObject } from '../../gameModes/simple/helpers';
+import { SettingCustomHandlesProps, SettingPassedValuesProps } from '../../../UIcomponents/settings/settings';
+import { GridPositionProps, TilesGridObject } from '../../../gameModes/simple/helpers';
 
 import { NewGameFiberStylesKeys } from './styles';
 import { AvailableThemesKeys } from './initials';

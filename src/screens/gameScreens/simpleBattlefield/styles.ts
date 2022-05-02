@@ -1,7 +1,7 @@
 import { makeStyles } from '@mui/styles';
 
-import Backgrounds from '../../assets/backgrounds/neutral_space_tile_background.jpg';
-import { SpacePalletColors } from '../../constans/tileColors';
+import Backgrounds from '../../../assets/backgrounds/neutral_space_tile_background.jpg';
+import { SpacePalletColors } from '../../../constans/tileColors';
 
 export enum NewGameFiberStylesKeys {
     module = 'module',

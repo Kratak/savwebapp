@@ -35,7 +35,7 @@ const LoadsScreen = (props: ScreenSelectorProps): JSX.Element => {
     const [slotData, setSlotData] = useState<Array<SlotDataProps>>([]);
 
     const handleLoadGame = () => {
-        screenHandlers.gotToSelectedScreen(Screens.GameFaber);
+        screenHandlers.gotToSelectedScreen(Screens.InGameSimpleBattlefield);
     };
 
     const handleBackToMainMenu = () => {

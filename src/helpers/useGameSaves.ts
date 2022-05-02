@@ -1,4 +1,4 @@
-import { ScoreCounterProps } from '../screens/newGameFiber/types';
+import { ScoreCounterProps } from '../screens/gameScreens/simpleBattlefield/types';
 import { newDate, SaveSlotProps } from '../UIcomponents/settings/settings';
 
 export interface MetaGameDataProps {

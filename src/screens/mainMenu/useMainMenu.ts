@@ -15,7 +15,7 @@ export const useMainMenu = (props: ScreenSelectorProps) => {
 
     const handleResumeGame = () => {
         console.log('handleResumeGame');
-        screenHandlers.gotToSelectedScreen(Screens.GameFaber);
+        screenHandlers.gotToSelectedScreen(Screens.InGameSimpleBattlefield);
     };
 
     const handleOpenLoadScreen = () => {
@@ -30,7 +30,7 @@ export const useMainMenu = (props: ScreenSelectorProps) => {
 
     const handleStartNewGame = () => {
         console.log('handleResumeGame');
-        screenHandlers.gotToSelectedScreen(Screens.GameFaber);
+        screenHandlers.gotToSelectedScreen(Screens.InGameSimpleBattlefield);
     };
 
     useEffect(() => {

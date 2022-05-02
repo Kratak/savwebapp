@@ -6,7 +6,7 @@ import { adjustColor } from '../../helpers';
 import { GridPositionProps, TilesGridObject } from '../../gameModes/simple/helpers';
 import { SimpleGameModeColors, SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
 import { Vector3Tuple } from 'three/src/math/Vector3';
-import { SelectedTilesData } from '../../screens/newGameFiber/types';
+import { SelectedTilesData } from '../../screens/gameScreens/simpleBattlefield/types';
 import { MeshStandardMaterialParameters } from 'three/src/materials/MeshStandardMaterial';
 
 interface BoxProps<ColorKeys extends string> extends MeshProps {
