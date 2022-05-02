@@ -43,13 +43,30 @@ const LoadsScreen = (props: ScreenSelectorProps): JSX.Element => {
     };
 
     useEffect(() => {
-        setSlotData(initialSaveSlots);
+        let dataToDisplay = [...initialSaveSlots];
+
         getSaveSlot()
             .then((saveData) => {
-                console.log(saveData);
+                dataToDisplay = dataToDisplay.map(item => {
+                    const searchedSave = saveData.find(singleSave => singleSave.saveId === item.saveId);
+                    if (typeof searchedSave !== 'undefined') {
+                        return {
+                            ...searchedSave,
+                            disabled: false,
+                        };
+                    }
+                    return item;
+                });
+                setSlotData(dataToDisplay);
             })
-            .catch(e => console.log('Issue during load saves', e));
+            .catch(e => {
+                console.log('Issue during load saves', e);
+                setSlotData(dataToDisplay);
+
+            });
+
     }, []);
+
 
     return (
         <div className={styles.mainMenuWrapper}>
