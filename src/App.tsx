@@ -7,10 +7,18 @@ import { ScreenSelector } from './screens';
 import './i18n';
 import { useStyles } from './styles';
 
+export interface GlobalDataProviderProps {
+    currentScreen: Screens;
+}
+
+export const initialGlobalDataProvider: GlobalDataProviderProps = {
+    currentScreen: Screens.MainMenu,
+};
+
 const theme: Theme = createTheme({});
 const App = () => {
-    const [currentScreen, setCurrentScreen] = useState<Screens>(
-        Screens.MainMenu,
+    const [globalDataProvider, setGlobalDataProvider] = useState<GlobalDataProviderProps>(
+        initialGlobalDataProvider,
     );
     const { t } = useTranslation();
     const styles = useStyles();
@@ -21,8 +29,8 @@ const App = () => {
             {/*{t('title', { ns: 'part1' })}*/}
             <ScreenSelector
                 className={styles.appWrapper}
-                selectedScreen={currentScreen}
-                setSelectedScreen={(screen) => setCurrentScreen(screen)}
+                globalData={globalDataProvider}
+                setGlobalDataProvider={(globalData) => setGlobalDataProvider(globalData)}
             />
         </ThemeProvider>
     );

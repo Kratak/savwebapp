@@ -37,7 +37,7 @@ export interface DataToSaveProps<ColorKeys extends string> {
 
 export interface UseGameActionsReturn<ColorKeys extends string> {
     settings: {
-        customHandles: SettingCustomHandlesProps<AvailableThemesKeys>;
+        settingsHandlers: SettingCustomHandlesProps<AvailableThemesKeys>;
         passedValues: SettingPassedValuesProps<AvailableThemesKeys>;
         open: boolean;
         saveData: DataToSaveProps<ColorKeys>;

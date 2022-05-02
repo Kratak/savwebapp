@@ -3,6 +3,7 @@ import classnames from 'classnames';
 
 import { SettingCustomHandlesProps, SettingPassedValuesProps } from '../../UIcomponents/settings/settings';
 import { getTilesGrid, TilesGridObject } from '../../gameModes/simple/helpers';
+import { useInGameScreenPush } from '../../helpers/useInGameScreenPush';
 
 import { ScreenSelectorProps } from '../types';
 import { AvailableThemesKeys, initials } from './initials';
@@ -10,6 +11,7 @@ import { NewGameFiberStylesKeys, useStyles } from './styles';
 import { HandlerDeleteProps, SelectedTilesData, UseGameActionsReturn } from './types';
 
 export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorProps): UseGameActionsReturn<ColorKeys> => {
+    const { screenHandlers } = useInGameScreenPush(props);
     const baseStyles = useStyles();
     const [openSetting, setOpenSetting] = useState(false);
     const selectedTiles = useState<Array<SelectedTilesData<ColorKeys>>>([]);
@@ -37,10 +39,10 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
         wireframeOn,
     };
 
-    const handlers: SettingCustomHandlesProps<AvailableThemesKeys> = {
+    const settingsHandlers: SettingCustomHandlesProps<AvailableThemesKeys> = {
         onClose: (isOpen) => setOpenSetting(isOpen),
         setCameraZoom: (givenCameraZoom) => setCameraZoom(givenCameraZoom),
-        setSelectedScreen: (scree) => props.setSelectedScreen(scree),
+        setSelectedScreen: (scree) => screenHandlers.gotToSelectedScreen(scree),
         setAmbientLightIntensity: (givenIntensity) => setAmbientLightIntensity(givenIntensity),
         setSelectedTheme: (theme) => setSelectedTheme(theme),
         setWireframeOn: (toggle) => setWireframeOn(toggle),
@@ -347,7 +349,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
 
     return {
         settings: {
-            customHandles: handlers,
+            settingsHandlers,
             passedValues: passedValues,
             open: openSetting,
             saveData: {
