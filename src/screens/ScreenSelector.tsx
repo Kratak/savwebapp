@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Screens, ScreenSelectorProps } from './types';
+import { ScreenSelectorProps } from './types';
 import { AvailableScreens } from './availableScreens';
 import { LocalizationNS } from '../i18n/nameSpaces/localizationMameSpaces';
 import { ErrorMessagesNS } from '../i18n/nameSpaces/errorMessages';
@@ -9,21 +9,21 @@ import { ErrorMessagesNS } from '../i18n/nameSpaces/errorMessages';
 const ScreenSelector = (props: ScreenSelectorProps) => {
     const { t } = useTranslation();
     // const styles = useStyles();
-    // if (props.selectedScreen === Screens.Settings) {
+    // if (props.globalDataProvider === Screens.Settings) {
     //     return (
     //         <div>
     //             <h2 className={styles.module}>Settings</h2>
-    //             <button onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
+    //             <button onClick={() => screenHandlers.gotToSelectedScreen(Screens.MainMenu)}>
     //                 Back to Main Menu
     //             </button>
     //         </div>
     //     );
     // }
-    // if (props.selectedScreen === Screens.Game) {
+    // if (props.globalDataProvider === Screens.Game) {
     //     return (
     //         <div>
     //             <h2>'Game screen'</h2>
-    //             <button onClick={() => props.setSelectedScreen(Screens.MainMenu)}>
+    //             <button onClick={() => screenHandlers.gotToSelectedScreen(Screens.MainMenu)}>
     //                 Back to Main Menu
     //             </button>
     //         </div>
@@ -35,16 +35,16 @@ const ScreenSelector = (props: ScreenSelectorProps) => {
     //     );
     // }
 
-    if (!AvailableScreens[props.selectedScreen]) {
+    if (!AvailableScreens[props.globalData.currentScreen]) {
         const errorMessage = t(ErrorMessagesNS.screenNotHandled, '', { ns: LocalizationNS.errorMessages });
 
         return <div>{errorMessage}</div>;
     }
 
-    const Component = AvailableScreens[props.selectedScreen].component;
+    const Component = AvailableScreens[props.globalData.currentScreen].component;
 
     const passedProps = {
-        key: AvailableScreens[props.selectedScreen].key,
+        key: AvailableScreens[props.globalData.currentScreen].key,
         ...props,
     };
 
