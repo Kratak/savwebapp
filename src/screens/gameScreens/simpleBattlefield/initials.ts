@@ -1,6 +1,6 @@
 import { Vector3 } from '@react-three/fiber/dist/declarations/src/three-types';
 
-import { SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
+import { SimpleGameModeColorsKeys } from '../../../gameModes/simple/colors';
 
 const initialZ = 7;
 const initialX = 0;

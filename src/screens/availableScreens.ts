@@ -2,8 +2,7 @@ import { Screens } from './types';
 import CreditsScreen from './credits';
 import MainMenuScreen from './mainMenu';
 import SettingsScreen from './settings';
-import NewGameScreen from './newGame';
-import NewGameFiberScreen from './newGameFiber';
+import { SimpleBattlefield } from './gameScreens';
 import LoadsScreen from './loads';
 
 export const AvailableScreens: {
@@ -16,17 +15,9 @@ export const AvailableScreens: {
         key: Screens.Credits,
         component: CreditsScreen,
     },
-    [Screens.GameFaber]: {
-        key: Screens.GameFaber,
-        component: NewGameFiberScreen,
-    },
     [Screens.MainMenu]: {
         key: Screens.MainMenu,
         component: MainMenuScreen,
-    },
-    [Screens.Game]: {
-        key: Screens.Game,
-        component: NewGameScreen,
     },
     [Screens.Settings]: {
         key: Screens.Settings,
@@ -35,5 +26,9 @@ export const AvailableScreens: {
     [Screens.Loads]: {
         key: Screens.Loads,
         component: LoadsScreen,
+    },
+    [Screens.InGameSimpleBattlefield]: {
+        key: Screens.InGameSimpleBattlefield,
+        component: SimpleBattlefield,
     },
 };

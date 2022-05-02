@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
-import { Screens, ScreenSelectorProps } from '../types';
+import { Screens, ScreenSelectorProps } from '../../types';
 import { useStyles } from './styles';
-import { useInGameScreenPush } from '../../helpers/useInGameScreenPush';
+import { useInGameScreenPush } from '../../../helpers/useInGameScreenPush';
 
 const gameSceneSize = {
     width: 640,

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import classnames from 'classnames';
 
-import { SettingCustomHandlesProps, SettingPassedValuesProps } from '../../UIcomponents/settings/settings';
-import { getTilesGrid, TilesGridObject } from '../../gameModes/simple/helpers';
-import { useInGameScreenPush } from '../../helpers/useInGameScreenPush';
+import { SettingCustomHandlesProps, SettingPassedValuesProps } from '../../../UIcomponents/settings/settings';
+import { getTilesGrid, TilesGridObject } from '../../../gameModes/simple/helpers';
+import { useInGameScreenPush } from '../../../helpers/useInGameScreenPush';
 
-import { ScreenSelectorProps } from '../types';
+import { ScreenSelectorProps } from '../../types';
 import { AvailableThemesKeys, initials } from './initials';
 import { NewGameFiberStylesKeys, useStyles } from './styles';
 import { HandlerDeleteProps, SelectedTilesData, UseGameActionsReturn } from './types';

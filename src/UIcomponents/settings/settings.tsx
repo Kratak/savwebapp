@@ -3,10 +3,10 @@ import { MenuItem, Modal, Select, SelectChangeEvent } from '@mui/material';
 import { ModalProps } from '@mui/material/Modal/Modal';
 
 import { Screens } from '../../screens/types';
-import { ColorThemeObject } from '../../screens/newGameFiber/initials';
+import { ColorThemeObject } from '../../screens/gameScreens/simpleBattlefield/initials';
 import { CurrentGameModes, useGameSaves } from '../../helpers';
 import { SlotDataProps, initialSaveSlots } from '../../screens/loads';
-import { DataToSaveProps } from '../../screens/newGameFiber/types';
+import { DataToSaveProps } from '../../screens/gameScreens/simpleBattlefield/types';
 
 import { useStyles } from './styles';
 

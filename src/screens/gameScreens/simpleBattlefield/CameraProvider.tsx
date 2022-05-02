@@ -6,7 +6,7 @@ interface UseCameraProps {
     cameraZoom: number;
 }
 
-const UseCamera = ({ cameraZoom }: UseCameraProps) => {
+const CameraProvider = ({ cameraZoom }: UseCameraProps) => {
     useThree((state) => {
         state.camera.position.set(initials.camera.x, initials.camera.y, cameraZoom);
     });
@@ -14,4 +14,4 @@ const UseCamera = ({ cameraZoom }: UseCameraProps) => {
     return <></>;
 };
 
-export default UseCamera;
+export default CameraProvider;
