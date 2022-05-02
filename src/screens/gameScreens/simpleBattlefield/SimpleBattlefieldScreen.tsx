@@ -1,16 +1,16 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
 
-import SimpleBox from '../../3Dcomponents/SimpleBox';
-import { Settings } from '../../UIcomponents/settings';
+import SimpleBox from '../../../3Dcomponents/SimpleBox';
+import { Settings } from '../../../UIcomponents/settings';
+import { SimpleGameModeColors, SimpleGameModeColorsKeys } from '../../../gameModes/simple/colors';
+import { ScreenSelectorProps } from '../../types';
 
-import { ScreenSelectorProps } from '../types';
-import UseCamera from './UseCamera';
+import CameraProvider from './CameraProvider';
 import { initials } from './initials';
 import { UseGameActions } from './useGameActions';
-import { SimpleGameModeColors, SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
 
-const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
+const SimpleBattlefieldScreen = (props: ScreenSelectorProps): JSX.Element => {
     const { data, settings, handlers } = UseGameActions<SimpleGameModeColorsKeys>(props);
 
     return (
@@ -30,7 +30,7 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
 
                 <div className={data.classes.threeWrapper}>
                     <Canvas camera={{ position: initials.camera.cameraPosition }}>
-                        <UseCamera cameraZoom={settings.passedValues.cameraZoom} />
+                        <CameraProvider cameraZoom={settings.passedValues.cameraZoom} />
                         <ambientLight intensity={settings.passedValues.intensity} />
                         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                         <pointLight position={[-10, -10, -10]} />
@@ -82,6 +82,6 @@ const NewGameFiberScreen = (props: ScreenSelectorProps): JSX.Element => {
     );
 };
 
-export default NewGameFiberScreen;
+export default SimpleBattlefieldScreen;
 
 
