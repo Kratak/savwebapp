@@ -19,6 +19,7 @@ export const useStyles = makeStyles(() => ({
     },
     actionButton: {
         '&.MuiButton-root': {
+            flexDirection: 'column',
             fontSize: '2rem',
             minWidth: '25rem',
             maxWidth: '30rem',

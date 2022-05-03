@@ -1,12 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 
 import { useInGameScreenPush } from '../../helpers/useInGameScreenPush';
 import { useGameSaves } from '../../helpers';
 import { initialSaveSlots, SlotDataProps } from '../loads';
+import { GlobalDataProviderProps } from '../../App';
 
 import { Screens, ScreenSelectorProps } from '../types';
 import { useStyles } from './styles';
+
+
+//yyyy-MM-dd:HH-mm-ss
+// todo get luxon
+const formatDate = (date: Date) => {
+    return `${date.getFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDay() + 1} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+};
 
 const NewGameScreen = (props: ScreenSelectorProps): JSX.Element => {
     const styles = useStyles();
@@ -15,8 +23,16 @@ const NewGameScreen = (props: ScreenSelectorProps): JSX.Element => {
 
     const [slotData, setSlotData] = useState<Array<SlotDataProps>>([]);
 
-    const handleLoadGame = () => {
-        screenHandlers.gotToSelectedScreen(Screens.InGameSimpleBattlefield);
+    const handleSelectSlot = (slotId: string) => () => {
+        const dataToSet: GlobalDataProviderProps = {
+            ...props.globalData,
+            currentScreen: Screens.InGameSimpleBattlefield,
+            currentSaveData: {
+                ...props.globalData.currentSaveData,
+                id: slotId,
+            },
+        };
+        props.setGlobalDataProvider(dataToSet);
     };
 
     const handleBackToMainMenu = () => {
@@ -24,7 +40,7 @@ const NewGameScreen = (props: ScreenSelectorProps): JSX.Element => {
     };
 
     useEffect(() => {
-        let dataToDisplay = [...initialSaveSlots];
+        let dataToDisplay = [...initialSaveSlots.map(item => ({ ...item, disabled: false }))];
 
         getSaveSlot()
             .then((saveData) => {
@@ -52,19 +68,22 @@ const NewGameScreen = (props: ScreenSelectorProps): JSX.Element => {
     return (
         <div className={styles.mainMenuWrapper}>
             <h1 className={styles.gameTitle}>Start new game</h1>
-            <h2 >Select save slot</h2>
+            <h2>Select save slot</h2>
             <div className={styles.buttonsWrapper}>
                 {slotData.map(slot => (<Button
                     key={slot.saveId}
                     className={styles.actionButton}
                     disabled={slot.disabled}
-                    onClick={handleLoadGame}
-                    variant={'outlined'}>
-                    {slot.name}
+                    onClick={handleSelectSlot(slot.saveId)}
+                    variant={'outlined'}
+                >
+                    <span>
+                        {slot.name}
+                    </span>
+                    {slot.date !== null && <span style={{ fontSize: 9 }}>{formatDate(new Date(slot.date))}</span>}
                 </Button>))}
                 <Button
                     className={styles.actionButton}
-                    // disabled={!flags.resumeAvailable}
                     onClick={handleBackToMainMenu}
                     variant={'outlined'}>
                     Back to Main Menu

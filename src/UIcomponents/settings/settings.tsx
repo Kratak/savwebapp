@@ -45,7 +45,6 @@ export const newDate = new Date();
 const saveIdPromProps = initialSaveSlots[0].saveId;
 
 const Settings = <ThemeKeys extends string, ColorKey extends string>(props: SettingsProps<ThemeKeys, ColorKey>) => {
-    console.log('Settings rendered');
     const { settingsHandlers, passedValues, saveData, ...rest } = props;
 
     const styles = useStyles();
@@ -109,6 +108,9 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
     // }, [saveData]);
 
     useEffect(() => {
+        if (props.saveData.saveId !== null) {
+            setAutoSaveId(props.saveData.saveId);
+        }
         getSaveSlot()
             .then(saveData => {
                 if (saveData.length > 0) {
@@ -117,7 +119,6 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
                         console.log(savedFile);
                     }
                 } else {
-                    console.log('getSaveSlot() else')
                     handleSave(initialSaveSlots[0].saveId);
                 }
             })

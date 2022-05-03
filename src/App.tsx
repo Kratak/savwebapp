@@ -9,6 +9,9 @@ import { useStyles } from './styles';
 
 export interface GlobalDataProviderProps {
     currentScreen: Screens;
+    currentSaveData: {
+        id: string | null;
+    };
 }
 
 export const initialGlobalDataProvider: GlobalDataProviderProps = {

@@ -353,7 +353,8 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             passedValues: passedValues,
             open: openSetting,
             saveData: {
-                scoreCounters
+                saveId: props.globalData.currentSaveData.id,
+                scoreCounters,
             }
         },
         handlers: {
