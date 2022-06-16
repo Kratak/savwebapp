@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { MenuItem, Modal, Select, SelectChangeEvent } from '@mui/material';
 import { ModalProps } from '@mui/material/Modal/Modal';
 
@@ -63,7 +63,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
         settingsHandlers.onClose(false);
     };
 
-    const handleSave = (slotNumber: string) => {
+    const handleSave = useCallback((slotNumber: string) => {
         console.log('handleSave', slotNumber);
         let gameSaved = false;
         try {
@@ -91,7 +91,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
         if (gameSaved) {
             handleCloseModal();
         }
-    };
+    }, [save]);
 
     const handleBackToMainMenu = async () => {
         await handleSave(autoSaveId);
