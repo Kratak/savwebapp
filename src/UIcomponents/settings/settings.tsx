@@ -57,7 +57,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
 
     const handleChange = useCallback((event: SelectChangeEvent) => {
         settingsHandlers.setSelectedTheme(event.target.value as ThemeKeys);
-    }, [settingsHandlers.setSelectedTheme]);
+    }, [settingsHandlers, settingsHandlers.setSelectedTheme]);
 
     const handleCloseModal = useCallback(() => {
         settingsHandlers.onClose(false);

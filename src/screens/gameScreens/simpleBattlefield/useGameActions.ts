@@ -345,7 +345,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             setReadyForCounting(false);
         }
 
-    }, [tilesToDelete, scoreCounters, selectedTiles, tiles, selectedTiles[0], readyForCounting]);
+    }, [tilesToDelete, scoreCounters, selectedTiles, tiles, readyForCounting]);
 
     return {
         settings: {
