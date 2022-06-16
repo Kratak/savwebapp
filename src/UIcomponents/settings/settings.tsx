@@ -91,7 +91,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
         if (gameSaved) {
             handleCloseModal();
         }
-    }, [save]);
+    }, [save, handleCloseModal, saveData.scoreCounters]);
 
     const handleBackToMainMenu = async () => {
         await handleSave(autoSaveId);
