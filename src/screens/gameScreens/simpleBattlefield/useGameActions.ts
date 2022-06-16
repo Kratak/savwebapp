@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import classnames from 'classnames';
 
 import { SettingCustomHandlesProps, SettingPassedValuesProps } from '../../../UIcomponents/settings/settings';
@@ -48,7 +48,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
         setWireframeOn: (toggle) => setWireframeOn(toggle),
     };
 
-    const tilesToDelete = useCallback((toDelete: HandlerDeleteProps): void => {
+    const tilesToDelete = (toDelete: HandlerDeleteProps): void => {
         setTiles(tiles.map((column, originColumnIndex) => {
             let columnIndex = originColumnIndex;
             if (toDelete.column?.index) {
@@ -120,7 +120,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                 return newRow;
             });
         }));
-    }, []);
+    };
 
     useEffect(() => {
         const selectedColorKey = initials.availableColorThemes[selectedTheme] as Array<ColorKeys>;
