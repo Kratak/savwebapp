@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createTheme, CssBaseline, Theme, ThemeProvider } from '@mui/material';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 
 import { Screens } from './screens/types';
 import { ScreenSelector } from './screens';
@@ -9,10 +9,16 @@ import { useStyles } from './styles';
 
 export interface GlobalDataProviderProps {
     currentScreen: Screens;
+    currentSaveData: {
+        id: string | null;
+    };
 }
 
 export const initialGlobalDataProvider: GlobalDataProviderProps = {
-    currentScreen: Screens.MainMenu,
+    currentScreen: Screens.NewGame,
+    currentSaveData: {
+        id: null,
+    },
 };
 
 const theme: Theme = createTheme({});
@@ -20,7 +26,7 @@ const App = () => {
     const [globalDataProvider, setGlobalDataProvider] = useState<GlobalDataProviderProps>(
         initialGlobalDataProvider,
     );
-    const { t } = useTranslation();
+    // const { t } = useTranslation();
     const styles = useStyles();
 
     return (

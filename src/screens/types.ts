@@ -2,10 +2,11 @@ import { GlobalDataProviderProps } from '../App';
 
 export enum Screens {
     MainMenu = 'MainMenu',
-    Settings = 'Settings',
+    NewGame = 'NewGame',
     Credits = 'Credits',
-    InGameSimpleBattlefield = 'InGameSimpleBattlefield',
-    Loads = 'Loads'
+    Settings = 'Settings',
+    Loads = 'Loads',
+    InGameSimpleBattlefield = 'InGameSimpleBattlefield'
 }
 
 export interface ScreenSelectorProps {

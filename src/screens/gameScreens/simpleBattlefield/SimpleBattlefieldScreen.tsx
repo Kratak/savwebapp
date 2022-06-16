@@ -37,7 +37,7 @@ const SimpleBattlefieldScreen = (props: ScreenSelectorProps): JSX.Element => {
                         {data.tiles.map((item, index) =>
                             item.map(innerItem => {
                                     if (!innerItem.renderTile) {
-                                        return;
+                                        return null;
                                     }
                                     return (
                                         <SimpleBox<SimpleGameModeColorsKeys>

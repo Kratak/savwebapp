@@ -91,7 +91,7 @@ const Box = <ColorKeys extends string>(props: BoxProps<ColorKeys>) => {
         if (!includesCheck) {
             setClicked(false);
         }
-    }, [selectedTiles, clicked]);
+    }, [selectedTiles, clicked, props.boxId]);
 
     useEffect(() => {
         if (clicked && selectedTiles.length > 1) {
@@ -121,7 +121,7 @@ const Box = <ColorKeys extends string>(props: BoxProps<ColorKeys>) => {
             props.setReadyForCounting(true);
             setClicked(false);
         }
-    }, [selectedTiles]);
+    }, [selectedTiles, clicked, props]);
 
     return (
         <mesh
@@ -132,7 +132,7 @@ const Box = <ColorKeys extends string>(props: BoxProps<ColorKeys>) => {
             onClick={handleSelect}
             onPointerOver={(event) => setHovered(true)}
             onPointerOut={(event) => setHovered(false)}>
-            <boxGeometry args={[.7, .7, .7]} />
+            <boxGeometry args={[.7, .7, .2]} />
             <meshStandardMaterial
                 color={hovered ? hoveredColor() : SimpleGameModeColors[props.boxColor as SimpleGameModeColorsKeys] || 'orange'}
                 {...props.meshStandardMaterial}

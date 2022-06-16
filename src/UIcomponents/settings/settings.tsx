@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { MenuItem, Modal, Select, SelectChangeEvent } from '@mui/material';
 import { ModalProps } from '@mui/material/Modal/Modal';
 
 import { Screens } from '../../screens/types';
 import { ColorThemeObject } from '../../screens/gameScreens/simpleBattlefield/initials';
 import { CurrentGameModes, useGameSaves } from '../../helpers';
-import { SlotDataProps, initialSaveSlots } from '../../screens/loads';
+// import { SlotDataProps, initialSaveSlots } from '../../screens/loads';
+import { initialSaveSlots } from '../../screens/loads';
 import { DataToSaveProps } from '../../screens/gameScreens/simpleBattlefield/types';
 
 import { useStyles } from './styles';
@@ -45,25 +46,24 @@ export const newDate = new Date();
 const saveIdPromProps = initialSaveSlots[0].saveId;
 
 const Settings = <ThemeKeys extends string, ColorKey extends string>(props: SettingsProps<ThemeKeys, ColorKey>) => {
-    console.log('Settings rendered');
     const { settingsHandlers, passedValues, saveData, ...rest } = props;
 
     const styles = useStyles();
     const { save, getSaveSlot } = useGameSaves();
 
     const [devSettingAllowed, setDevSettingAllowed] = useState<boolean>(true);
-    const [saveSlots, setSaveSlots] = useState<Array<SlotDataProps>>([...initialSaveSlots]);
+    // const [saveSlots, setSaveSlots] = useState<Array<SlotDataProps>>([...initialSaveSlots]);
     const [autoSaveId, setAutoSaveId] = useState<string>(saveIdPromProps);
 
-    const handleChange = (event: SelectChangeEvent) => {
+    const handleChange = useCallback((event: SelectChangeEvent) => {
         settingsHandlers.setSelectedTheme(event.target.value as ThemeKeys);
-    };
+    }, [settingsHandlers]);
 
-    const handleCloseModal = () => {
+    const handleCloseModal = useCallback(() => {
         settingsHandlers.onClose(false);
-    };
+    }, [settingsHandlers]);
 
-    const handleSave = (slotNumber: string) => {
+    const handleSave = useCallback((slotNumber: string) => {
         console.log('handleSave', slotNumber);
         let gameSaved = false;
         try {
@@ -91,7 +91,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
         if (gameSaved) {
             handleCloseModal();
         }
-    };
+    }, [save, handleCloseModal, saveData.scoreCounters]);
 
     const handleBackToMainMenu = async () => {
         await handleSave(autoSaveId);
@@ -109,6 +109,9 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
     // }, [saveData]);
 
     useEffect(() => {
+        if (props.saveData.saveId !== null) {
+            setAutoSaveId(props.saveData.saveId);
+        }
         getSaveSlot()
             .then(saveData => {
                 if (saveData.length > 0) {
@@ -117,13 +120,12 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
                         console.log(savedFile);
                     }
                 } else {
-                    console.log('getSaveSlot() else')
                     handleSave(initialSaveSlots[0].saveId);
                 }
             })
             .catch(e => console.log('Issue with save load', e));
 
-    }, []);
+    }, [autoSaveId, getSaveSlot, handleSave, props.saveData.saveId]);
 
     return (<Modal {...rest}>
         <div className={styles.module}>
