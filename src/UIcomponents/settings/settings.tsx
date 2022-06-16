@@ -55,13 +55,13 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
     // const [saveSlots, setSaveSlots] = useState<Array<SlotDataProps>>([...initialSaveSlots]);
     const [autoSaveId, setAutoSaveId] = useState<string>(saveIdPromProps);
 
-    const handleChange = (event: SelectChangeEvent) => {
+    const handleChange = useCallback((event: SelectChangeEvent) => {
         settingsHandlers.setSelectedTheme(event.target.value as ThemeKeys);
-    };
+    }, [settingsHandlers.setSelectedTheme]);
 
-    const handleCloseModal = () => {
+    const handleCloseModal = useCallback(() => {
         settingsHandlers.onClose(false);
-    };
+    }, [settingsHandlers]);
 
     const handleSave = useCallback((slotNumber: string) => {
         console.log('handleSave', slotNumber);
