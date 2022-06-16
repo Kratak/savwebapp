@@ -65,7 +65,7 @@ const LoadsScreen = (props: ScreenSelectorProps): JSX.Element => {
 
             });
 
-    }, []);
+    }, [getSaveSlot]);
 
 
     return (

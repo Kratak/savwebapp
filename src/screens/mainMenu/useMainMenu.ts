@@ -42,7 +42,8 @@ export const useMainMenu = (props: ScreenSelectorProps) => {
                 }
             })
             .catch(e => console.log('Issue during load saves', e));
-    }, []);
+
+    }, [getSaveSlot]);
 
     return {
         styles,

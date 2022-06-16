@@ -26,9 +26,9 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
 
     const styles: { [key in NewGameFiberStylesKeys]: string } = {
         ...baseStyles,
-        [NewGameFiberStylesKeys.title]: classnames(baseStyles.uiElementsWrapper,baseStyles.title),
+        [NewGameFiberStylesKeys.title]: classnames(baseStyles.uiElementsWrapper, baseStyles.title),
         [NewGameFiberStylesKeys.uiWrapper]: classnames(baseStyles.uiElementsWrapper, baseStyles.uiWrapper),
-        [NewGameFiberStylesKeys.counters]: `${baseStyles.counters} ${baseStyles.uiElementsWrapper}`
+        [NewGameFiberStylesKeys.counters]: `${baseStyles.counters} ${baseStyles.uiElementsWrapper}`,
     };
 
     const passedValues: SettingPassedValuesProps<AvailableThemesKeys> = {
@@ -345,7 +345,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             setReadyForCounting(false);
         }
 
-    }, [scoreCounters, tiles, selectedTiles[0], readyForCounting]);
+    }, [tilesToDelete, scoreCounters, selectedTiles, tiles, selectedTiles[0], readyForCounting]);
 
     return {
         settings: {
@@ -355,7 +355,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             saveData: {
                 saveId: props.globalData.currentSaveData.id,
                 scoreCounters,
-            }
+            },
         },
         handlers: {
             setOpenSetting,

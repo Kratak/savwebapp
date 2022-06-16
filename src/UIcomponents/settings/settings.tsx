@@ -5,7 +5,8 @@ import { ModalProps } from '@mui/material/Modal/Modal';
 import { Screens } from '../../screens/types';
 import { ColorThemeObject } from '../../screens/gameScreens/simpleBattlefield/initials';
 import { CurrentGameModes, useGameSaves } from '../../helpers';
-import { SlotDataProps, initialSaveSlots } from '../../screens/loads';
+// import { SlotDataProps, initialSaveSlots } from '../../screens/loads';
+import { initialSaveSlots } from '../../screens/loads';
 import { DataToSaveProps } from '../../screens/gameScreens/simpleBattlefield/types';
 
 import { useStyles } from './styles';
@@ -51,7 +52,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
     const { save, getSaveSlot } = useGameSaves();
 
     const [devSettingAllowed, setDevSettingAllowed] = useState<boolean>(true);
-    const [saveSlots, setSaveSlots] = useState<Array<SlotDataProps>>([...initialSaveSlots]);
+    // const [saveSlots, setSaveSlots] = useState<Array<SlotDataProps>>([...initialSaveSlots]);
     const [autoSaveId, setAutoSaveId] = useState<string>(saveIdPromProps);
 
     const handleChange = (event: SelectChangeEvent) => {

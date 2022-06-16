@@ -62,7 +62,7 @@ const NewGameScreen = (props: ScreenSelectorProps): JSX.Element => {
 
             });
 
-    }, []);
+    }, [getSaveSlot]);
 
 
     return (
