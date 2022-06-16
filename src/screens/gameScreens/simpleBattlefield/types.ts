@@ -33,6 +33,7 @@ export interface ScoreCounterProps<ColorKeys extends string> {
 
 export interface DataToSaveProps<ColorKeys extends string> {
     scoreCounters: Array<ScoreCounterProps<ColorKeys>>;
+    saveId: string | null;
 }
 
 export interface UseGameActionsReturn<ColorKeys extends string> {

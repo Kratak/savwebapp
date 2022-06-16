@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import classnames from 'classnames';
 
 import { SettingCustomHandlesProps, SettingPassedValuesProps } from '../../../UIcomponents/settings/settings';
@@ -26,9 +26,9 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
 
     const styles: { [key in NewGameFiberStylesKeys]: string } = {
         ...baseStyles,
-        [NewGameFiberStylesKeys.title]: classnames(baseStyles.uiElementsWrapper,baseStyles.title),
+        [NewGameFiberStylesKeys.title]: classnames(baseStyles.uiElementsWrapper, baseStyles.title),
         [NewGameFiberStylesKeys.uiWrapper]: classnames(baseStyles.uiElementsWrapper, baseStyles.uiWrapper),
-        [NewGameFiberStylesKeys.counters]: `${baseStyles.counters} ${baseStyles.uiElementsWrapper}`
+        [NewGameFiberStylesKeys.counters]: `${baseStyles.counters} ${baseStyles.uiElementsWrapper}`,
     };
 
     const passedValues: SettingPassedValuesProps<AvailableThemesKeys> = {
@@ -48,7 +48,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
         setWireframeOn: (toggle) => setWireframeOn(toggle),
     };
 
-    const tilesToDelete = (toDelete: HandlerDeleteProps): void => {
+    const tilesToDelete = useCallback((toDelete: HandlerDeleteProps): void => {
         setTiles(tiles.map((column, originColumnIndex) => {
             let columnIndex = originColumnIndex;
             if (toDelete.column?.index) {
@@ -120,7 +120,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
                 return newRow;
             });
         }));
-    };
+    }, [tiles]);
 
     useEffect(() => {
         const selectedColorKey = initials.availableColorThemes[selectedTheme] as Array<ColorKeys>;
@@ -345,7 +345,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             setReadyForCounting(false);
         }
 
-    }, [scoreCounters, tiles, selectedTiles[0], readyForCounting]);
+    }, [tilesToDelete, scoreCounters, selectedTiles, tiles, readyForCounting]);
 
     return {
         settings: {
@@ -353,8 +353,9 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             passedValues: passedValues,
             open: openSetting,
             saveData: {
-                scoreCounters
-            }
+                saveId: props.globalData.currentSaveData.id,
+                scoreCounters,
+            },
         },
         handlers: {
             setOpenSetting,

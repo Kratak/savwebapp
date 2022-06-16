@@ -1,11 +1,11 @@
 import React from 'react';
 import { Screens, ScreenSelectorProps } from '../types';
-import { useStyles } from './styles';
+// import { useStyles } from './styles';
 import { useInGameScreenPush } from '../../helpers/useInGameScreenPush';
 
 
 const CreditsScreen = (props: ScreenSelectorProps): JSX.Element => {
-    const styles = useStyles();
+    // const styles = useStyles();
     const { screenHandlers } = useInGameScreenPush(props);
 
     return (

@@ -30,7 +30,7 @@ export const useMainMenu = (props: ScreenSelectorProps) => {
 
     const handleStartNewGame = () => {
         console.log('handleResumeGame');
-        screenHandlers.gotToSelectedScreen(Screens.InGameSimpleBattlefield);
+        screenHandlers.gotToSelectedScreen(Screens.NewGame);
     };
 
     useEffect(() => {
@@ -42,7 +42,8 @@ export const useMainMenu = (props: ScreenSelectorProps) => {
                 }
             })
             .catch(e => console.log('Issue during load saves', e));
-    }, []);
+
+    }, [getSaveSlot]);
 
     return {
         styles,
