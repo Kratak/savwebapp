@@ -125,7 +125,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
             })
             .catch(e => console.log('Issue with save load', e));
 
-    }, []);
+    }, [autoSaveId, getSaveSlot, handleSave, props.saveData.saveId]);
 
     return (<Modal {...rest}>
         <div className={styles.module}>
