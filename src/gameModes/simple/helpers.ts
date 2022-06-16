@@ -64,7 +64,7 @@ export const getTilesGrid = <ColorKeys extends string>(given: GetTilesGridProps<
                 },
                 renderTile: true,
                 color,
-                position: [columnNumber, rowNumber, 0],
+                position: [columnNumber, rowNumber, .9],
                 boxId: `ID_${columnNumber}C_${rowNumber}R_${color}`,
             }];
         }

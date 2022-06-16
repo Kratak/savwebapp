@@ -15,7 +15,10 @@ export interface GlobalDataProviderProps {
 }
 
 export const initialGlobalDataProvider: GlobalDataProviderProps = {
-    currentScreen: Screens.MainMenu,
+    currentScreen: Screens.NewGame,
+    currentSaveData: {
+        id: null,
+    },
 };
 
 const theme: Theme = createTheme({});
