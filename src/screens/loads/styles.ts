@@ -13,6 +13,18 @@ export const useStyles = makeStyles(() => ({
         fontSize: '4rem',
         color: SpacePalletColors.Corruption,
     },
+    buttonWrapper: {
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: '1.2rem',
+    },
+    deleteIcon: {
+        '&.MuiSvgIcon-root': {
+            height: '4rem',
+            width: '4rem',
+            cursor: 'pointer',
+        },
+    },
     buttonsWrapper: {
         display: 'flex',
         flexDirection: 'column',
@@ -20,9 +32,7 @@ export const useStyles = makeStyles(() => ({
     actionButton: {
         '&.MuiButton-root': {
             fontSize: '2rem',
-            minWidth: '25rem',
-            maxWidth: '30rem',
-            marginBottom: '1.2rem',
+            width: '30rem',
             padding: '.9rem 3rem',
             fontWeight: 700,
             backgroundColor: SpacePalletColors.WordleWhite,

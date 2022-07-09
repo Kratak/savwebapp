@@ -15,7 +15,7 @@ export interface GlobalDataProviderProps {
 }
 
 export const initialGlobalDataProvider: GlobalDataProviderProps = {
-    currentScreen: Screens.NewGame,
+    currentScreen: Screens.MainMenu,
     currentSaveData: {
         id: null,
     },

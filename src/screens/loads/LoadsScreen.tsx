@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
+import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
 
 import { useInGameScreenPush } from '../../helpers/useInGameScreenPush';
 import { useGameSaves } from '../../helpers';
@@ -30,12 +31,16 @@ export const initialSaveSlots: Array<SlotDataProps> = [
 const LoadsScreen = (props: ScreenSelectorProps): JSX.Element => {
     const styles = useStyles();
     const { screenHandlers } = useInGameScreenPush(props);
-    const { getSaveSlot } = useGameSaves();
+    const { getSaveSlot, deleteSave } = useGameSaves();
 
     const [slotData, setSlotData] = useState<Array<SlotDataProps>>([]);
 
     const handleLoadGame = () => {
         screenHandlers.gotToSelectedScreen(Screens.InGameSimpleBattlefield);
+    };
+
+    const handleDeleteSave = (saveId: string) => {
+        deleteSave(saveId);
     };
 
     const handleBackToMainMenu = () => {
@@ -72,14 +77,19 @@ const LoadsScreen = (props: ScreenSelectorProps): JSX.Element => {
         <div className={styles.mainMenuWrapper}>
             <h1 className={styles.gameTitle}>Load game from save</h1>
             <div className={styles.buttonsWrapper}>
-                {slotData.map(slot => (<Button
-                    key={slot.saveId}
-                    className={styles.actionButton}
-                    disabled={slot.disabled}
-                    onClick={handleLoadGame}
-                    variant={'outlined'}>
-                    {slot.name}
-                </Button>))}
+                {slotData.map(slot => (<div className={styles.buttonWrapper} key={slot.saveId}>
+                    <Button
+                        className={styles.actionButton}
+                        disabled={slot.disabled}
+                        onClick={handleLoadGame}
+                        variant={'outlined'}>
+                        {slot.name}
+                    </Button>
+                    {!slot.disabled &&
+                        <DeleteForeverTwoToneIcon
+                            onClick={() => handleDeleteSave(slot.saveId)}
+                            className={styles.deleteIcon} />}
+                </div>))}
                 <Button
                     className={styles.actionButton}
                     // disabled={!flags.resumeAvailable}
