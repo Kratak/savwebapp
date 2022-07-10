@@ -23,21 +23,25 @@ const LocalSystem = (props: ScreenSelectorProps): JSX.Element => {
     return (
         <div className={styles.mainMenuWrapper}>
             <h1 className={styles.gameTitle}>System/area name</h1>
-            <div style={{ display: 'flex', flexDirection: 'row', padding: 10 }}>
+            <div className={styles.wrapper}>
+                {/*<div style={{ display: 'flex', flexDirection: 'row', padding: 10 }}>*/}
                 {generatedTiles.map((column, columnIndex) => {
-                    return <div key={columnIndex}>
-                        {column.map(row => {
-                            return <div
-                                key={row.boxId}
-                                onClick={() => console.log(row.color, row.position)}
-                                style={{
-                                    backgroundColor: row.color,
-                                    width: 32,
-                                    height: 32,
-                                    marginLeft: isOdd(row.position[1]) ? 0 : -16,
-                                }} />;
-                        })}
-                    </div>;
+                    return column.map(row => {
+                        return <div
+                            className={styles.hexagon}
+                            key={row.boxId}
+                            onClick={() => console.log(row.color, row.position)}
+                            // style={{
+                            //     backgroundColor: row.color,
+                            //     width: 32,
+                            //     height: 32,
+                            //     marginLeft: isOdd(row.position[1]) ? 0 : -16,
+                            // }}
+                        >
+                            {/*<div className={styles.hexagontent}></div>*/}
+                        </div>;
+                    });
+
                 })}
             </div>
         </div>
