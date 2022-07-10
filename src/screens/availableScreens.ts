@@ -5,6 +5,7 @@ import SettingsScreen from './settings';
 import { SimpleBattlefield } from './gameScreens';
 import LoadsScreen from './loads';
 import NewGameScreen from './newGame';
+import LocalSystemScreen from './localSystemScreen';
 
 export const AvailableScreens: {
     [key in Screens]: {
@@ -35,5 +36,9 @@ export const AvailableScreens: {
     [Screens.InGameSimpleBattlefield]: {
         key: Screens.InGameSimpleBattlefield,
         component: SimpleBattlefield,
+    },
+    [Screens.LocalSystem]: {
+        key: Screens.LocalSystem,
+        component: LocalSystemScreen,
     },
 };

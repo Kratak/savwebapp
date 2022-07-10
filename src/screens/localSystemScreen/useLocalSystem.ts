@@ -6,7 +6,7 @@ import { useGameSaves } from '../../helpers';
 import { useStyles } from './styles';
 import { Screens, ScreenSelectorProps } from '../types';
 
-export const useMainMenu = (props: ScreenSelectorProps) => {
+export const useLocalSystem = (props: ScreenSelectorProps) => {
     const styles = useStyles();
     const { getSaveSlot } = useGameSaves();
     const { screenHandlers } = useInGameScreenPush(props);
@@ -15,7 +15,7 @@ export const useMainMenu = (props: ScreenSelectorProps) => {
 
     const handleResumeGame = () => {
         console.log('handleResumeGame');
-        screenHandlers.gotToSelectedScreen(Screens.LocalSystem);
+        screenHandlers.gotToSelectedScreen(Screens.InGameSimpleBattlefield);
     };
 
     const handleOpenLoadScreen = () => {
@@ -30,9 +30,7 @@ export const useMainMenu = (props: ScreenSelectorProps) => {
 
     const handleStartNewGame = () => {
         console.log('handleResumeGame');
-        //todo add condition if no saves than go to load screen
-        //todo add save data place as select screen
-        screenHandlers.gotToSelectedScreen(Screens.LocalSystem);
+        screenHandlers.gotToSelectedScreen(Screens.NewGame);
     };
 
     useEffect(() => {
