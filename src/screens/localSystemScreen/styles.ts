@@ -1,5 +1,6 @@
 import { makeStyles } from '@mui/styles';
 import { SpacePalletColors } from '../../constans/tileColors';
+import { firstSystemTiles } from './helepers';
 
 export const useStyles = makeStyles(() => ({
     mainMenuWrapper: {
@@ -47,7 +48,8 @@ export const useStyles = makeStyles(() => ({
         display: 'inline-block',
         /* left/right margin approx. 25% of .hexagon width + spacing */
         margin: '1px 18px',
-        backgroundColor: 'hsl(220, 75%, 75%)',
+        borderTop: '1px solid hsl(220, 75%, 75%)',
+        borderBottom: '1px solid hsl(220, 75%, 75%)',
         textAlign: 'center',
         width: '67px',
         height: '116px',
@@ -56,8 +58,10 @@ export const useStyles = makeStyles(() => ({
             width: '67px',
             height: '116px',
             borderRadius: '20%/5%',
+            borderTop: '1px solid hsl(220, 75%, 75%)',
+            borderBottom: '1px solid hsl(220, 75%, 75%)',
             backgroundColor: 'inherit',
-            content: "''",
+            content: '\'\'',
             position: 'absolute',
             left: 0,
         },
@@ -82,5 +86,32 @@ export const useStyles = makeStyles(() => ({
         fontSize: '1.4rem',
         lineHeight: 1.2,
         zIndex: 100,
+    },
+    [`${firstSystemTiles.endSystemTile.name}`]: {
+        backgroundColor: firstSystemTiles.endSystemTile.color,
+        color: SpacePalletColors.Space,
+    },
+    [`${firstSystemTiles.startSystemTile.name}`]: {
+        backgroundColor: firstSystemTiles.startSystemTile.color,
+    },
+    [`${firstSystemTiles.smalAsteroidTile.name}`]: {
+        backgroundColor: firstSystemTiles.smalAsteroidTile.color,
+        color: SpacePalletColors.Space,
+    },
+    [`${firstSystemTiles.mediumAsteroidTile.name}`]: {
+        backgroundColor: firstSystemTiles.mediumAsteroidTile.color,
+    },
+    [`${firstSystemTiles.normalFightEvent.name}`]: {
+        backgroundColor: firstSystemTiles.normalFightEvent.color,
+    },
+    [`${firstSystemTiles.bossFightEvent.name}`]: {
+        backgroundColor: firstSystemTiles.bossFightEvent.color,
+    },
+    [`${firstSystemTiles.normalAnomalyEvent.name}`]: {
+        backgroundColor: firstSystemTiles.normalAnomalyEvent.color,
+    },
+    [`${firstSystemTiles.normalSpace.name}`]: {
+        backgroundColor: firstSystemTiles.normalSpace.color,
+        color: SpacePalletColors.Space,
     },
 }));

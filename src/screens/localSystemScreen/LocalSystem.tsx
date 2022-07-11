@@ -2,21 +2,17 @@ import React from 'react';
 import { ScreenSelectorProps } from '../types';
 
 import { useLocalSystem } from './useLocalSystem';
-import { getTilesGrid } from '../../gameModes/simple';
-import { SimpleGameModeColorsKeys } from '../../gameModes/simple/colors';
-import { AvailableThemesKeys, initials } from '../gameScreens/simpleBattlefield/initials';
-import { calculationsHelpers } from '../../helpers';
+import { getFirstSystemRandomGrid } from './helepers';
+import classNames from 'classnames';
 
 
 const LocalSystem = (props: ScreenSelectorProps): JSX.Element => {
     const { styles } = useLocalSystem(props);
-    const { isOdd } = calculationsHelpers;
 
-    const selectedColorKey = initials.availableColorThemes[AvailableThemesKeys.simple] as Array<SimpleGameModeColorsKeys>;
-    const generatedTiles = getTilesGrid<SimpleGameModeColorsKeys>({
-        colors: selectedColorKey,
-        rows: 20,
-        columns: 20,
+    const generatedTiles = getFirstSystemRandomGrid({
+        rows: 8,
+        columns: 8,
+        selectedTiles: []
     });
 
 
@@ -28,9 +24,9 @@ const LocalSystem = (props: ScreenSelectorProps): JSX.Element => {
                 {generatedTiles.map((column, columnIndex) => {
                     return column.map(row => {
                         return <div
-                            className={styles.hexagon}
-                            key={row.boxId}
-                            onClick={() => console.log(row.color, row.position)}
+                            className={classNames(styles.hexagon, styles[row.name])}
+                            key={row.tileId}
+                            onClick={() => console.log(row.color)}
                             // style={{
                             //     backgroundColor: row.color,
                             //     width: 32,
@@ -38,7 +34,7 @@ const LocalSystem = (props: ScreenSelectorProps): JSX.Element => {
                             //     marginLeft: isOdd(row.position[1]) ? 0 : -16,
                             // }}
                         >
-                            {/*<div className={styles.hexagontent}></div>*/}
+                            <div className={styles.hexagontent}>{row.name}</div>
                         </div>;
                     });
 
