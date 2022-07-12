@@ -34,7 +34,9 @@ const LocalSystem = (props: ScreenSelectorProps): JSX.Element => {
                             //     marginLeft: isOdd(row.position[1]) ? 0 : -16,
                             // }}
                         >
-                            <div className={styles.hexagontent}>{row.name}</div>
+                            <div
+                                className={styles.hexagontent}>{row.name}<br />{['XL:', row.hexPosition.XL, 'Y:', row.hexPosition.Y, 'XR:', row.hexPosition.XR].toString()}
+                            </div>
                         </div>;
                     });
 

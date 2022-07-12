@@ -1,4 +1,5 @@
 import { SpacePalletColors } from '../../constans/tileColors';
+import { calculationsHelpers } from '../../helpers';
 
 export enum SystemTileKeys {
     startSystemTile = 'startSystemTile',
@@ -100,8 +101,15 @@ export const firstSystemTiles: { [key in SystemTileKeys]: SystemTileData } = {
     },
 };
 
+interface HexPositionParameters {
+    Y: number;
+    XL: number;
+    XR: number;
+}
+
 interface FirstSystemGridItem extends SystemTileData {
     tileId: string;
+    hexPosition: HexPositionParameters;
 }
 
 function shuffle(array: Array<any>) {
@@ -139,10 +147,11 @@ const tilesSet001 = (totalNumer: number): Array<SystemTileData> => {
         arr.push(...[firstSystemTiles.normalSpace]);
     }
     arr.splice(totalNumer);
-
-    return shuffle(arr);
+    arr = shuffle(arr);
+    return arr;
 };
 
+const { isOdd } = calculationsHelpers;
 export const getFirstSystemRandomGrid = (given: {
     rows: number,
     columns: number,
@@ -154,7 +163,7 @@ export const getFirstSystemRandomGrid = (given: {
     let depTiles: Array<Array<FirstSystemGridItem>> = [];
 
     for (let columns = 0; columns < given.columns; columns++) {
-        let getObj = depTiles[columns] || [];
+        let getObj: Array<FirstSystemGridItem> = depTiles[columns] || [];
         for (let rows = 0; rows < given.rows; rows++) {
             // let color = given.colors[getRandomInt(given.colors.length)];
             const columnNumber = columns - Math.floor(given.columns / 2);
@@ -168,9 +177,24 @@ export const getFirstSystemRandomGrid = (given: {
             //     color = availableColor[getRandomInt(availableColor.length - 1)];
             //
             // }
+            let XR = given.rows - rows - 1;
+            let XL = rows;
+
+            //todo figureout propper XL and XR
+
+            if (isOdd(rows)) {
+
+            } else {
+
+            }
 
             let innerObject = {
                 ...test001Memo[(given.columns * columns) + rows],
+                hexPosition: {
+                    Y: columns,
+                    XL,
+                    XR,
+                },
                 tileId: `ID_${columnNumber}C_${rowNumber}R_${firstSystemTiles.normalSpace.name}`,
             };
 
