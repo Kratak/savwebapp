@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ScreenSelectorProps } from '../types';
 
 import { useLocalSystem } from './useLocalSystem';
@@ -9,11 +9,11 @@ import classNames from 'classnames';
 const LocalSystem = (props: ScreenSelectorProps): JSX.Element => {
     const { styles } = useLocalSystem(props);
 
-    const generatedTiles = getFirstSystemRandomGrid({
+    const generatedTiles = useMemo(() => getFirstSystemRandomGrid({
         rows: 8,
         columns: 8,
-        selectedTiles: []
-    });
+        selectedTiles: [],
+    }), []);
 
 
     return (

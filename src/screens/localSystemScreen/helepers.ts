@@ -42,7 +42,7 @@ export const firstSystemTiles: { [key in SystemTileKeys]: SystemTileData } = {
         description: '',
         size: 1,
         radius: [0, 0, 0, 0, 0, 0],
-        color: SpacePalletColors.Void,
+        color: SpacePalletColors.Gravitation,
         specialConditions: {
             howMany: 1,
             farFrom: [
@@ -151,7 +151,6 @@ export const getFirstSystemRandomGrid = (given: {
 }) => {
 
     const test001Memo = tilesSet001(given.columns * given.rows);
-    console.log(test001Memo, given.columns * given.rows);
     let depTiles: Array<Array<FirstSystemGridItem>> = [];
 
     for (let columns = 0; columns < given.columns; columns++) {
@@ -170,9 +169,8 @@ export const getFirstSystemRandomGrid = (given: {
             //
             // }
 
-
             let innerObject = {
-                ...test001Memo[columns + rows],
+                ...test001Memo[(given.columns * columns) + rows],
                 tileId: `ID_${columnNumber}C_${rowNumber}R_${firstSystemTiles.normalSpace.name}`,
             };
 
