@@ -69,7 +69,7 @@ export const firstSystemTiles: { [key in SystemTileKeys]: SystemTileData } = {
         name: SystemTileKeys.smalAsteroidTile,
         description: '',
         size: 1,
-        color: SpacePalletColors.Corruption,
+        color: SpacePalletColors.WordleGrey,
         radius: [0, 0, 0, 0, 0, 0],
     },
     mediumAsteroidTile: {
@@ -152,6 +152,28 @@ const tilesSet001 = (totalNumer: number): Array<SystemTileData> => {
     return arr;
 };
 
+const tileSet002 = (): Array<SystemTileData> => {
+    const {
+        normalSpace,
+        startSystemTile,
+        endSystemTile,
+        smalAsteroidTile,
+        normalAnomalyEvent,
+        bossFightEvent,
+        normalFightEvent,
+    } = firstSystemTiles;
+    return [
+        normalAnomalyEvent, normalFightEvent, normalSpace, normalSpace, normalSpace, bossFightEvent, endSystemTile, bossFightEvent,
+        smalAsteroidTile, normalSpace, normalSpace, normalSpace, normalSpace, smalAsteroidTile, bossFightEvent, normalSpace,
+        smalAsteroidTile, smalAsteroidTile, normalSpace, normalFightEvent, smalAsteroidTile, normalAnomalyEvent, smalAsteroidTile, normalSpace,
+        normalSpace, normalSpace, smalAsteroidTile, normalSpace, smalAsteroidTile, smalAsteroidTile, normalFightEvent, smalAsteroidTile,
+        normalFightEvent, smalAsteroidTile, normalSpace, normalSpace, normalAnomalyEvent, smalAsteroidTile, normalSpace, normalSpace,
+        normalSpace, normalSpace, smalAsteroidTile, smalAsteroidTile, smalAsteroidTile, normalFightEvent, normalSpace, normalSpace,
+        smalAsteroidTile, normalSpace, smalAsteroidTile, normalAnomalyEvent, normalSpace, smalAsteroidTile, smalAsteroidTile, normalSpace,
+        normalSpace, startSystemTile, normalSpace, normalSpace, normalSpace, normalSpace, normalFightEvent, normalAnomalyEvent,
+    ];
+};
+
 const { isOdd } = calculationsHelpers;
 export const getFirstSystemRandomGrid = (given: {
     rows: number,
@@ -160,7 +182,8 @@ export const getFirstSystemRandomGrid = (given: {
 
 }) => {
 
-    const test001Memo = tilesSet001(given.columns * given.rows);
+    // const test001Memo = tilesSet001(given.columns * given.rows);
+    const test002Memo = tileSet002();
     let depTiles: Array<Array<FirstSystemGridItem>> = [];
 
     for (let columns = 0; columns < given.columns; columns++) {
@@ -227,7 +250,7 @@ export const getFirstSystemRandomGrid = (given: {
             }
 
             let innerObject = {
-                ...test001Memo[(given.columns * columns) + rows],
+                ...test002Memo[(given.columns * columns) + rows],
                 hexPosition: {
                     Y: columns,
                     XL,
