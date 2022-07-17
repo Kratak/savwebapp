@@ -77,6 +77,13 @@ export const useStyles = makeStyles(() => ({
             transform: 'rotate(60deg)',
         },
     },
+    player: {
+        position: 'absolute',
+        color: 'red',
+        backgroundColor: 'transparent',
+        fontSize: '80px',
+        zIndex: '10'
+    },
     hexagontent: {
         position: 'absolute',
         top: '50%',

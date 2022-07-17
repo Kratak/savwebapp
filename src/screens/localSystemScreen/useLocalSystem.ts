@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useInGameScreenPush } from '../../helpers/useInGameScreenPush';
 import { useGameSaves } from '../../helpers';
 
 import { useStyles } from './styles';
 import { Screens, ScreenSelectorProps } from '../types';
+import { getFirstSystemRandomGrid, SystemTileKeys } from './helepers';
 
 export const useLocalSystem = (props: ScreenSelectorProps) => {
     const styles = useStyles();
@@ -12,6 +13,13 @@ export const useLocalSystem = (props: ScreenSelectorProps) => {
     const { screenHandlers } = useInGameScreenPush(props);
     const [resumeAvailable, setResumeAvailable] = useState<boolean>(false);
     const [loadAvailable, setLoadAvailable] = useState<boolean>(false);
+    const [playerLocation, sePlayerLocation] = useState<{ X: number, Y: number }>({ X: 0, Y: 0 });
+
+    const generatedTiles = useMemo(() => getFirstSystemRandomGrid({
+        rows: 8,
+        columns: 8,
+        selectedTiles: [],
+    }), []);
 
     const handleResumeGame = () => {
         console.log('handleResumeGame');
@@ -32,6 +40,13 @@ export const useLocalSystem = (props: ScreenSelectorProps) => {
         console.log('handleResumeGame');
         screenHandlers.gotToSelectedScreen(Screens.NewGame);
     };
+
+    useEffect(() => {
+        const startLocations = generatedTiles.find(item => item.find(innerItem => innerItem.name === SystemTileKeys.startSystemTile))?.find(item => item.name === SystemTileKeys.startSystemTile);
+        if (startLocations) {
+            sePlayerLocation({ ...startLocations.hexPosition });
+        }
+    }, []);
 
     useEffect(() => {
         getSaveSlot()
@@ -56,6 +71,10 @@ export const useLocalSystem = (props: ScreenSelectorProps) => {
             handleStartNewGame,
             handleOpenLoadScreen,
             handleOpenSettingsScreen,
+        },
+        data: {
+            playerLocation,
+            generatedTiles,
         },
         screenHandlers,
     };
