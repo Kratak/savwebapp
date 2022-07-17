@@ -105,6 +105,7 @@ interface HexPositionParameters {
     Y: number;
     XL: number;
     XR: number;
+    X: number;
 }
 
 interface FirstSystemGridItem extends SystemTileData {
@@ -177,15 +178,52 @@ export const getFirstSystemRandomGrid = (given: {
             //     color = availableColor[getRandomInt(availableColor.length - 1)];
             //
             // }
-            let XR = given.rows - rows - 1;
-            let XL = rows;
+            let XL = 0;
+            let XR = 0;
 
-            //todo figureout propper XL and XR
+            if (!isOdd(rows)) {
+                if (columns + (columns % rows) >= rows) {
+                    XL = rows;
+                    XR = given.rows - rows - 1;
+                } else {
+                    XL = 2 * columns;
+                }
 
+                if (columns + (columns % (given.rows - rows)) >= (given.rows - rows)) {
+                    XR = given.rows - rows - 1;
+                } else {
+                    XR = 2 * columns;
+                }
+
+
+            }
             if (isOdd(rows)) {
+                if (columns + (columns % rows) + 1 >= rows) {
+                    XL = rows;
+                    XR = given.rows - rows - 1;
+                } else {
+                    XL = (2 * columns) + 1;
+                }
 
-            } else {
+                if (columns + (columns % (given.rows - rows) + 1) >= (given.rows - rows)) {
+                    XR = given.rows - rows - 1;
+                } else {
+                    XR = 2 * columns + 1;
+                }
 
+            }
+
+            if (rows === 0) {
+                XL = 0;
+                XR = given.rows - 1;
+
+                if (given.rows / 2 > columns) {
+                    XR = 2 * columns;
+                }
+            }
+
+            if (rows === given.rows - 1) {
+                XR = 0;
             }
 
             let innerObject = {
@@ -194,6 +232,7 @@ export const getFirstSystemRandomGrid = (given: {
                     Y: columns,
                     XL,
                     XR,
+                    X: rows,
                 },
                 tileId: `ID_${columnNumber}C_${rowNumber}R_${firstSystemTiles.normalSpace.name}`,
             };
