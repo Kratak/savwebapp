@@ -6,30 +6,49 @@ import { useLocalSystem } from './useLocalSystem';
 
 
 const LocalSystem = (props: ScreenSelectorProps): JSX.Element => {
-    const { styles, data } = useLocalSystem(props);
+    const { styles, data, handlers, player } = useLocalSystem(props);
 
     return (
         <div className={styles.mainMenuWrapper}>
             <h1 className={styles.gameTitle}>System/area name</h1>
             <div className={styles.wrapper}>
-                {/*<div style={{ display: 'flex', flexDirection: 'row', padding: 10 }}>*/}
                 {data.generatedTiles.map((column, columnIndex) => {
                     return column.map(row => {
                         let showPlayer = false;
-                        if (row.hexPosition.X === data.playerLocation.X && row.hexPosition.Y === data.playerLocation.Y) {
-                            console.log(row);
+                        let showHover: false | 'canMove' | 'canotMove' = false;
+                        let className = classNames(styles.hexagon, styles[row.name]);
+                        const { X: rowX, Y: rowY } = row.hexPosition;
+                        //todo add XR XL handling
+                        const { X: playerX, Y: playerY } = player.position;
+                        if (rowX === playerX && rowY === playerY) {
                             showPlayer = true;
                         }
+
+                        if (!showPlayer && data.hoveredTile && rowX === data.hoveredTile.X && rowY === data.hoveredTile.Y) {
+                            showHover = 'canotMove';
+                            if (rowX === playerX) {
+                                if (playerY + player.range === rowY || playerY - player.range === rowY) {
+                                    showHover = 'canMove';
+                                }
+                            }
+
+                            if (rowY === playerY) {
+                                if (playerX + player.range === rowX || playerX - player.range === rowX) {
+                                    showHover = 'canMove';
+                                }
+                            }
+
+                            console.log('showHover', showHover);
+                            className = classNames(className, styles.hovered, showHover);
+                        }
+
                         return <div
-                            className={classNames(styles.hexagon, styles[row.name])}
+                            className={className}
                             key={row.tileId}
-                            onClick={() => console.log(row.color)}
-                            // style={{
-                            //     backgroundColor: row.color,
-                            //     width: 32,
-                            //     height: 32,
-                            //     marginLeft: isOdd(row.position[1]) ? 0 : -16,
-                            // }}
+                            onClick={handlers.handleOnTileSelect(row)}
+                            onMouseEnter={handlers.handleOnTileHover(row)}
+                            onMouseLeave={handlers.handleOnTileHoverOff}
+
                         >
                             {showPlayer && <div className={styles.player}>P</div>}
                             <div

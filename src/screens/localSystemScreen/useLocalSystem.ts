@@ -5,7 +5,7 @@ import { useGameSaves } from '../../helpers';
 
 import { useStyles } from './styles';
 import { Screens, ScreenSelectorProps } from '../types';
-import { getFirstSystemRandomGrid, SystemTileKeys } from './helepers';
+import { FirstSystemGridItem, getFirstSystemRandomGrid, HexPositionParameters, SystemTileKeys } from './helepers';
 
 export const useLocalSystem = (props: ScreenSelectorProps) => {
     const styles = useStyles();
@@ -13,7 +13,8 @@ export const useLocalSystem = (props: ScreenSelectorProps) => {
     const { screenHandlers } = useInGameScreenPush(props);
     const [resumeAvailable, setResumeAvailable] = useState<boolean>(false);
     const [loadAvailable, setLoadAvailable] = useState<boolean>(false);
-    const [playerLocation, sePlayerLocation] = useState<{ X: number, Y: number }>({ X: 0, Y: 0 });
+    const [playerLocation, sePlayerLocation] = useState<HexPositionParameters>({ X: 0, Y: 0, XR: 0, XL: 0 });
+    const [hoveredTile, setHoveredTile] = useState<HexPositionParameters | null>(null);
 
     const generatedTiles = useMemo(() => getFirstSystemRandomGrid({
         rows: 8,
@@ -21,6 +22,7 @@ export const useLocalSystem = (props: ScreenSelectorProps) => {
         selectedTiles: [],
     }), []);
 
+    const playerRange = 1;
     const handleResumeGame = () => {
         console.log('handleResumeGame');
         screenHandlers.gotToSelectedScreen(Screens.InGameSimpleBattlefield);
@@ -39,6 +41,25 @@ export const useLocalSystem = (props: ScreenSelectorProps) => {
     const handleStartNewGame = () => {
         console.log('handleResumeGame');
         screenHandlers.gotToSelectedScreen(Screens.NewGame);
+    };
+
+    const handleAttemptToMovePlayer = () => {
+
+    };
+
+    const handleOnTileSelect = (row: FirstSystemGridItem) => () => {
+        sePlayerLocation(row.hexPosition);
+        // console.log(row.hexPosition, row.name);
+    };
+
+    const handleOnTileHover = (row: FirstSystemGridItem) => () => {
+        setHoveredTile(row.hexPosition);
+        // console.log('hovered tile: ', row.hexPosition, row.name);
+    };
+
+    const handleOnTileHoverOff = () => {
+        setHoveredTile(null);
+        // console.log('hovered tile off: ');
     };
 
     useEffect(() => {
@@ -71,10 +92,18 @@ export const useLocalSystem = (props: ScreenSelectorProps) => {
             handleStartNewGame,
             handleOpenLoadScreen,
             handleOpenSettingsScreen,
+            sePlayerLocation,
+            handleOnTileSelect,
+            handleOnTileHover,
+            handleOnTileHoverOff,
         },
         data: {
-            playerLocation,
+            hoveredTile,
             generatedTiles,
+        },
+        player: {
+            range: playerRange,
+            position: playerLocation,
         },
         screenHandlers,
     };

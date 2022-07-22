@@ -101,14 +101,14 @@ export const firstSystemTiles: { [key in SystemTileKeys]: SystemTileData } = {
     },
 };
 
-interface HexPositionParameters {
+export interface HexPositionParameters {
     Y: number;
     XL: number;
     XR: number;
     X: number;
 }
 
-interface FirstSystemGridItem extends SystemTileData {
+export interface FirstSystemGridItem extends SystemTileData {
     tileId: string;
     hexPosition: HexPositionParameters;
 }
@@ -180,7 +180,7 @@ export const getFirstSystemRandomGrid = (given: {
     columns: number,
     selectedTiles: Array<SystemTileData>
 
-}) => {
+}): Array<Array<FirstSystemGridItem>> => {
 
     // const test001Memo = tilesSet001(given.columns * given.rows);
     const test002Memo = tileSet002();
