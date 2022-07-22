@@ -9,6 +9,7 @@ export const useStyles = makeStyles(() => ({
         alignItems: 'center',
         padding: 30,
         backgroundColor: SpacePalletColors.SimpleHull + 99,
+        overflow: 'overlay',
     },
     gameTitle: {
         fontSize: '4rem',
@@ -35,6 +36,7 @@ export const useStyles = makeStyles(() => ({
         backgroundColor: 'hsl(0, 0%, 95%)',
         borderTop: '5px solid hsl(220, 50%, 75%)',
         maxWidth: '920px',
+        minWidth: '920px',
         margin: '0 auto',
         padding: '30px',
         bottom: 0,
@@ -77,12 +79,19 @@ export const useStyles = makeStyles(() => ({
             transform: 'rotate(60deg)',
         },
     },
+    hovered: {
+        transform: 'scale(1.055)',
+        borderColor: 'green',
+        '&:before, &:after': {
+            borderColor: 'green',
+        },
+    },
     player: {
         position: 'absolute',
         color: 'red',
         backgroundColor: 'transparent',
         fontSize: '80px',
-        zIndex: '10'
+        zIndex: '10',
     },
     hexagontent: {
         position: 'absolute',
