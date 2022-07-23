@@ -13,7 +13,13 @@ export const useLocalSystem = (props: ScreenSelectorProps) => {
     const { screenHandlers } = useInGameScreenPush(props);
     const [resumeAvailable, setResumeAvailable] = useState<boolean>(false);
     const [loadAvailable, setLoadAvailable] = useState<boolean>(false);
-    const [playerLocation, sePlayerLocation] = useState<HexPositionParameters>({ X: 0, Y: 0, XR: 0, XL: 0 });
+    const [playerLocation, sePlayerLocation] = useState<HexPositionParameters>({
+        X: 0,
+        Y: 0,
+        XR: 0,
+        XL: 0,
+        isOdd: false,
+    });
     const [hoveredTile, setHoveredTile] = useState<HexPositionParameters | null>(null);
 
     const generatedTiles = useMemo(() => getFirstSystemRandomGrid({
