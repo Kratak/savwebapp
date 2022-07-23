@@ -106,6 +106,7 @@ export interface HexPositionParameters {
     XL: number;
     XR: number;
     X: number;
+    isOdd: boolean;
 }
 
 export interface FirstSystemGridItem extends SystemTileData {
@@ -256,6 +257,7 @@ export const getFirstSystemRandomGrid = (given: {
                     XL,
                     XR,
                     X: rows,
+                    isOdd: isOdd(rows)
                 },
                 tileId: `ID_${columnNumber}C_${rowNumber}R_${firstSystemTiles.normalSpace.name}`,
             };

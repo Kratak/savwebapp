@@ -17,26 +17,31 @@ const LocalSystem = (props: ScreenSelectorProps): JSX.Element => {
                         let showPlayer = false;
                         let showHover: false | 'canMove' | 'canotMove' = false;
                         let className = classNames(styles.hexagon, styles[row.name]);
-                        const { X: rowX, Y: rowY } = row.hexPosition;
-                        //todo add XR XL handling
-                        const { X: playerX, Y: playerY } = player.position;
+                        const { X: rowX, Y: rowY, XR: rowXR, XL: rowXL } = row.hexPosition;
+                        const { X: playerX, Y: playerY, XL: playerXL, XR: playerXR } = player.position;
                         if (rowX === playerX && rowY === playerY) {
                             showPlayer = true;
                         }
 
                         if (!showPlayer && data.hoveredTile && rowX === data.hoveredTile.X && rowY === data.hoveredTile.Y) {
                             showHover = 'canotMove';
-                            if (rowX === playerX) {
-                                if (playerY + player.range === rowY || playerY - player.range === rowY) {
-                                    showHover = 'canMove';
-                                }
+                            console.log(rowY, playerY, player.range);
+
+                            // bottom && top condition
+                            if ((rowY > playerY && rowY - playerY <= player.range || playerY > rowY && playerY - rowY <= player.range) &&
+                                (rowXR === playerXR || rowXL === playerXL)) {
+                                showHover = 'canMove';
                             }
 
-                            if (rowY === playerY) {
-                                if (playerX + player.range === rowX || playerX - player.range === rowX) {
-                                    showHover = 'canMove';
-                                }
+                            // XR and negative XR case
+
+                            if (rowXR > playerXR && rowXR - playerXR <= player.range && rowY === playerY ||
+                                playerXR > rowXR && playerXR - rowXR <= player.range && rowY + 1 === playerY) {
+                                showHover = 'canMove';
                             }
+
+                            // todo ned to handle odd and even columns
+
 
                             console.log('showHover', showHover);
                             className = classNames(className, styles.hovered, showHover);
