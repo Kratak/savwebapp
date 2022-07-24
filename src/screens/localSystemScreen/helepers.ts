@@ -257,7 +257,7 @@ export const getFirstSystemRandomGrid = (given: {
                     XL,
                     XR,
                     X: rows,
-                    isOdd: isOdd(rows)
+                    isOdd: !isOdd(rows)
                 },
                 tileId: `ID_${columnNumber}C_${rowNumber}R_${firstSystemTiles.normalSpace.name}`,
             };

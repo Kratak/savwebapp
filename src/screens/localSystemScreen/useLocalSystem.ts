@@ -53,8 +53,10 @@ export const useLocalSystem = (props: ScreenSelectorProps) => {
 
     };
 
-    const handleOnTileSelect = (row: FirstSystemGridItem) => () => {
-        sePlayerLocation(row.hexPosition);
+    const handleOnTileSelect = (row: FirstSystemGridItem, actionAllowed: boolean) => () => {
+        if (actionAllowed) {
+            sePlayerLocation(row.hexPosition);
+        }
         // console.log(row.hexPosition, row.name);
     };
 
