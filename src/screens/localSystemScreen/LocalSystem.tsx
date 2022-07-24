@@ -17,47 +17,52 @@ const LocalSystem = (props: ScreenSelectorProps): JSX.Element => {
                         let showPlayer = false;
                         let showHover: false | 'canMove' | 'canotMove' = false;
                         let className = classNames(styles.hexagon, styles[row.name]);
-                        const { X: rowX, Y: rowY, XR: rowXR, XL: rowXL } = row.hexPosition;
-                        const { X: playerX, Y: playerY, XL: playerXL, XR: playerXR } = player.position;
+                        const { X: rowX, Y: rowY } = row.hexPosition;
+                        const { X: playerX, Y: playerY } = player.position;
                         if (rowX === playerX && rowY === playerY) {
                             showPlayer = true;
                         }
 
                         if (!showPlayer && data.hoveredTile && rowX === data.hoveredTile.X && rowY === data.hoveredTile.Y) {
                             showHover = 'canotMove';
-                            console.log(rowY, playerY, player.range);
+                            const oddFactor = row.hexPosition.isOdd ? 1 : -1;
 
-                            // bottom && top condition
-                            if ((rowY > playerY && rowY - playerY <= player.range || playerY > rowY && playerY - rowY <= player.range) &&
-                                (rowXR === playerXR || rowXL === playerXL)) {
-                                showHover = 'canMove';
+
+                            if (playerY === rowY || playerY + oddFactor === rowY) {
+                                if (playerX > rowX && playerX - rowX <= player.range) {
+                                    showHover = 'canMove';
+                                }
+
+                                if (rowX > playerX && rowX - playerX <= player.range) {
+                                    showHover = 'canMove';
+                                }
                             }
 
-                            // XR and negative XR case
+                            if (playerX === rowX) {
 
-                            if (rowXR > playerXR && rowXR - playerXR <= player.range && rowY === playerY ||
-                                playerXR > rowXR && playerXR - rowXR <= player.range && rowY + 1 === playerY) {
-                                showHover = 'canMove';
+                                if (playerY > rowY && playerY - rowY <= player.range) {
+                                    showHover = 'canMove';
+                                }
+                                if (rowY > playerY && rowY - playerY <= player.range) {
+                                    showHover = 'canMove';
+                                }
+
                             }
 
-                            // todo ned to handle odd and even columns
-
-
-                            console.log('showHover', showHover);
                             className = classNames(className, styles.hovered, showHover);
                         }
 
                         return <div
                             className={className}
                             key={row.tileId}
-                            onClick={handlers.handleOnTileSelect(row)}
+                            onClick={handlers.handleOnTileSelect(row, showHover === 'canMove')}
                             onMouseEnter={handlers.handleOnTileHover(row)}
                             onMouseLeave={handlers.handleOnTileHoverOff}
 
                         >
                             {showPlayer && <div className={styles.player}>P</div>}
                             <div
-                                className={styles.hexagontent}>{row.name}<br />{['XL:', row.hexPosition.XL, 'Y:', row.hexPosition.Y, 'XR:', row.hexPosition.XR].toString()}
+                                className={styles.hexagontent}>{row.name}<br />{['Y:', row.hexPosition.Y, 'X:', row.hexPosition.X, row.hexPosition.isOdd].toString().replace(/,/g, ' ')}
                             </div>
                         </div>;
                     });

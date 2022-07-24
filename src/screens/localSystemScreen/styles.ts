@@ -80,10 +80,19 @@ export const useStyles = makeStyles(() => ({
         },
     },
     hovered: {
-        transform: 'scale(1.055)',
-        borderColor: 'green',
-        '&:before, &:after': {
+        transform: 'scale(1.025)',
+        '&.canMove': {
             borderColor: 'green',
+            '&:before, &:after': {
+                borderColor: 'green',
+            },
+        },
+
+        '&.canotMove': {
+            borderColor: 'red',
+            '&:before, &:after': {
+                borderColor: 'red',
+            },
         },
     },
     player: {
