@@ -74,6 +74,8 @@ const SimpleBattlefieldScreen = (props: ScreenSelectorProps): JSX.Element => {
                         }
                         }>row 2 from 2-4 // column 3 from 0-2
                         </div>
+                        <div onClick={() => handlers.handleWinMatch()}>win round</div>
+                        <div onClick={() => handlers.handleFailMatch()}>fail round</div>
 
                     </div>
                 </div>

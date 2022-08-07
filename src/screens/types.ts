@@ -6,7 +6,8 @@ export enum Screens {
     Credits = 'Credits',
     Settings = 'Settings',
     Loads = 'Loads',
-    InGameSimpleBattlefield = 'InGameSimpleBattlefield'
+    InGameSimpleBattlefield = 'InGameSimpleBattlefield',
+    LocalSystem = 'LocalSystem'
 }
 
 export interface ScreenSelectorProps {

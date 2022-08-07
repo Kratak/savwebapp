@@ -53,6 +53,21 @@ export const useGameSaves = <ColorKeys extends string>() => {
         localStorage.setItem(LocalStorageKeys.saves, JSON.stringify(data));
     };
 
+    const deleteSave = async (saveId: string) => {
+        let data: Array<SaveDataProps<ColorKeys>> = [];
+        const stringedOldSaves = await localStorage.getItem(LocalStorageKeys.saves);
+
+        if (!!stringedOldSaves) {
+            const oldSaves: Array<SaveDataProps<ColorKeys>> = JSON.parse(stringedOldSaves);
+
+            if (saveId && oldSaves.length > 0) {
+                data = [...oldSaves.filter(item => item.saveId !== saveId)];
+            }
+        }
+
+        localStorage.setItem(LocalStorageKeys.saves, JSON.stringify(data));
+    };
+
     const load = (id: string): SaveDataProps<ColorKeys> => {
         console.log('game load');
 
@@ -90,6 +105,7 @@ export const useGameSaves = <ColorKeys extends string>() => {
     return {
         save,
         load,
+        deleteSave,
         getSaveSlot,
     };
 

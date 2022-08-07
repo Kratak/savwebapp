@@ -15,7 +15,7 @@ export const useMainMenu = (props: ScreenSelectorProps) => {
 
     const handleResumeGame = () => {
         console.log('handleResumeGame');
-        screenHandlers.gotToSelectedScreen(Screens.InGameSimpleBattlefield);
+        screenHandlers.gotToSelectedScreen(Screens.LocalSystem);
     };
 
     const handleOpenLoadScreen = () => {
@@ -30,7 +30,9 @@ export const useMainMenu = (props: ScreenSelectorProps) => {
 
     const handleStartNewGame = () => {
         console.log('handleResumeGame');
-        screenHandlers.gotToSelectedScreen(Screens.NewGame);
+        //todo add condition if no saves than go to load screen
+        //todo add save data place as select screen
+        screenHandlers.gotToSelectedScreen(Screens.LocalSystem);
     };
 
     useEffect(() => {
