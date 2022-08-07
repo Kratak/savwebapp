@@ -9,7 +9,7 @@ import { FirstSystemGridItem, getFirstSystemRandomGrid, HexPositionParameters, S
 
 export const useLocalSystem = (props: ScreenSelectorProps) => {
     const styles = useStyles();
-    const { getSaveSlot } = useGameSaves();
+    const { getSaveSlot, save } = useGameSaves();
     const { screenHandlers } = useInGameScreenPush(props);
     const [resumeAvailable, setResumeAvailable] = useState<boolean>(false);
     const [loadAvailable, setLoadAvailable] = useState<boolean>(false);
@@ -53,9 +53,14 @@ export const useLocalSystem = (props: ScreenSelectorProps) => {
 
     };
 
-    const handleOnTileSelect = (row: FirstSystemGridItem, actionAllowed: boolean) => () => {
-        if (actionAllowed) {
-            sePlayerLocation(row.hexPosition);
+    const handleOnTileSelect = (tileData: FirstSystemGridItem, actionAllowed: boolean) => () => {
+        if (actionAllowed && hoveredTile !==null && tileData.available) {
+            if (tileData.specialConditions?.action) {
+                // save()
+                tileData.specialConditions.action(props);
+            }
+            // switch ()
+            sePlayerLocation(tileData.hexPosition);
         }
         // console.log(row.hexPosition, row.name);
     };

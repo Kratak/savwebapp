@@ -1,5 +1,6 @@
 import { SpacePalletColors } from '../../constans/tileColors';
 import { calculationsHelpers } from '../../helpers';
+import { Screens, ScreenSelectorProps } from '../types';
 
 export enum SystemTileKeys {
     startSystemTile = 'startSystemTile',
@@ -18,7 +19,9 @@ export interface SystemTileData {
     size: number;
     radius: [number, number, number, number, number, number];
     color: string;
+    available: boolean;
     specialConditions?: {
+        action?: (props: ScreenSelectorProps) => void;
         howMany?: number;
         farFrom?: Array<{ name: SystemTileKeys, minimal: number, maximal?: number }>;
     };
@@ -30,6 +33,7 @@ export const firstSystemTiles: { [key in SystemTileKeys]: SystemTileData } = {
         description: '',
         size: 1,
         radius: [0, 0, 0, 0, 0, 0],
+        available: true,
         color: SpacePalletColors.YellowSun,
         specialConditions: {
             howMany: 1,
@@ -42,9 +46,17 @@ export const firstSystemTiles: { [key in SystemTileKeys]: SystemTileData } = {
         name: SystemTileKeys.endSystemTile,
         description: '',
         size: 1,
+        available: true,
         radius: [0, 0, 0, 0, 0, 0],
         color: SpacePalletColors.Gravitation,
         specialConditions: {
+            action: (screenSelectorProps) => {
+                alert('you won');
+                screenSelectorProps.setGlobalDataProvider({
+                    ...screenSelectorProps.globalData,
+                    currentScreen: Screens.Credits,
+                });
+            },
             howMany: 1,
             farFrom: [
                 { name: SystemTileKeys.startSystemTile, minimal: 10, maximal: 20 },
@@ -55,6 +67,7 @@ export const firstSystemTiles: { [key in SystemTileKeys]: SystemTileData } = {
         name: SystemTileKeys.normalSpace,
         description: '',
         size: 1,
+        available: true,
         color: SpacePalletColors.Void,
         radius: [0, 0, 0, 0, 0, 0],
     },
@@ -62,13 +75,18 @@ export const firstSystemTiles: { [key in SystemTileKeys]: SystemTileData } = {
         name: SystemTileKeys.normalAnomalyEvent,
         description: '',
         size: 1,
+        available: true,
         color: SpacePalletColors.Regeneration,
         radius: [0, 0, 0, 0, 0, 0],
+        specialConditions: {
+            action: () => alert('anomaly'),
+        },
     },
     smalAsteroidTile: {
         name: SystemTileKeys.smalAsteroidTile,
         description: '',
         size: 1,
+        available: false,
         color: SpacePalletColors.WordleGrey,
         radius: [0, 0, 0, 0, 0, 0],
     },
@@ -76,6 +94,7 @@ export const firstSystemTiles: { [key in SystemTileKeys]: SystemTileData } = {
         name: SystemTileKeys.mediumAsteroidTile,
         description: '',
         size: 1,
+        available: false,
         color: SpacePalletColors.Corruption,
         radius: [0, 1, 1, 0, 1, 0],
     },
@@ -83,9 +102,17 @@ export const firstSystemTiles: { [key in SystemTileKeys]: SystemTileData } = {
         name: SystemTileKeys.normalFightEvent,
         description: '',
         size: 1,
+        available: true,
         color: SpacePalletColors.RedDwarf,
         radius: [1, 1, 1, 1, 1, 1],
         specialConditions: {
+            action: (screenSelectorProps) => {
+                alert('prepare for fight');
+                screenSelectorProps.setGlobalDataProvider({
+                    ...screenSelectorProps.globalData,
+                    currentScreen: Screens.InGameSimpleBattlefield,
+                });
+            },
             farFrom: [{ name: SystemTileKeys.startSystemTile, minimal: 3 }],
         },
     },
@@ -93,9 +120,17 @@ export const firstSystemTiles: { [key in SystemTileKeys]: SystemTileData } = {
         name: SystemTileKeys.bossFightEvent,
         description: '',
         size: 1,
+        available: true,
         color: SpacePalletColors.RedDwarf,
         radius: [2, 2, 2, 2, 2, 2],
         specialConditions: {
+            action: (screenSelectorProps) => {
+                alert('prepare for boss fight');
+                screenSelectorProps.setGlobalDataProvider({
+                    ...screenSelectorProps.globalData,
+                    currentScreen: Screens.InGameSimpleBattlefield,
+                });
+            },
             farFrom: [{ name: SystemTileKeys.startSystemTile, minimal: 1, maximal: 1 }],
         },
     },
@@ -257,7 +292,7 @@ export const getFirstSystemRandomGrid = (given: {
                     XL,
                     XR,
                     X: rows,
-                    isOdd: !isOdd(rows)
+                    isOdd: !isOdd(rows),
                 },
                 tileId: `ID_${columnNumber}C_${rowNumber}R_${firstSystemTiles.normalSpace.name}`,
             };

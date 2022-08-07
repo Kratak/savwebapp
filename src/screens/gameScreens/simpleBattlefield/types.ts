@@ -48,6 +48,8 @@ export interface UseGameActionsReturn<ColorKeys extends string> {
         setReadyForCounting: Dispatch<boolean>;
         setTiles: Dispatch<Array<Array<TilesGridObject<ColorKeys>>>>
         tilesToDelete: (toDelete: HandlerDeleteProps) => void;
+        handleFailMatch: () => void;
+        handleWinMatch: () => void;
     };
     data: {
         displayData: {
