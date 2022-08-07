@@ -5,7 +5,7 @@ import { SettingCustomHandlesProps, SettingPassedValuesProps } from '../../../UI
 import { getTilesGrid, TilesGridObject } from '../../../gameModes/simple/helpers';
 import { useInGameScreenPush } from '../../../helpers/useInGameScreenPush';
 
-import { ScreenSelectorProps } from '../../types';
+import { Screens, ScreenSelectorProps } from '../../types';
 import { AvailableThemesKeys, initials } from './initials';
 import { NewGameFiberStylesKeys, useStyles } from './styles';
 import { HandlerDeleteProps, SelectedTilesData, UseGameActionsReturn } from './types';
@@ -22,6 +22,14 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
     const [selectedTheme, setSelectedTheme] = useState<AvailableThemesKeys>(initials.colorThemes[0].value);
     const [scoreCounters, setScoreCounters] = useState<Array<{ key: ColorKeys; value: number }>>([]);
     const [readyForCounting, setReadyForCounting] = useState<boolean>(false);
+
+    const handleWinMatch = () => {
+        screenHandlers.gotToSelectedScreen(Screens.LocalSystem);
+    }
+
+    const handleFailMatch = () => {
+        screenHandlers.gotToSelectedScreen(Screens.LocalSystem);
+    }
 
 
     const styles: { [key in NewGameFiberStylesKeys]: string } = {
@@ -362,6 +370,8 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             setReadyForCounting,
             setTiles,
             tilesToDelete,
+            handleWinMatch,
+            handleFailMatch
         },
         data: {
             displayData: {
