@@ -9,7 +9,7 @@ import { FirstSystemGridItem, getFirstSystemRandomGrid, HexPositionParameters, S
 
 export const useLocalSystem = (props: ScreenSelectorProps) => {
     const styles = useStyles();
-    const { getSaveSlot, save } = useGameSaves();
+    const { getSaveSlot, save } = useGameSaves(props);
     const { screenHandlers } = useInGameScreenPush(props);
     const [resumeAvailable, setResumeAvailable] = useState<boolean>(false);
     const [loadAvailable, setLoadAvailable] = useState<boolean>(false);
@@ -26,6 +26,7 @@ export const useLocalSystem = (props: ScreenSelectorProps) => {
         rows: 8,
         columns: 8,
         selectedTiles: [],
+        gridId: 'first-system',
     }), []);
 
     const playerRange = 1;
@@ -54,7 +55,7 @@ export const useLocalSystem = (props: ScreenSelectorProps) => {
     };
 
     const handleOnTileSelect = (tileData: FirstSystemGridItem, actionAllowed: boolean) => () => {
-        if (actionAllowed && hoveredTile !==null && tileData.available) {
+        if (actionAllowed && hoveredTile !== null && tileData.available) {
             if (tileData.specialConditions?.action) {
                 // save()
                 tileData.specialConditions.action(props);
@@ -76,10 +77,16 @@ export const useLocalSystem = (props: ScreenSelectorProps) => {
     };
 
     useEffect(() => {
-        const startLocations = generatedTiles.find(item => item.find(innerItem => innerItem.name === SystemTileKeys.startSystemTile))?.find(item => item.name === SystemTileKeys.startSystemTile);
+        const startLocations = generatedTiles.data.find(item => item.find(innerItem => innerItem.name === SystemTileKeys.startSystemTile))?.find(item => item.name === SystemTileKeys.startSystemTile);
         if (startLocations) {
             sePlayerLocation({ ...startLocations.hexPosition });
         }
+        props.setGlobalDataProvider({
+            ...props.globalData,
+            currentScreen: Screens.LocalSystem,
+            saving: true,
+            currentSaveData: { ...props.globalData.currentSaveData, saveId: generatedTiles.gridId, },
+        });
     }, []);
 
     useEffect(() => {
@@ -112,7 +119,7 @@ export const useLocalSystem = (props: ScreenSelectorProps) => {
         },
         data: {
             hoveredTile,
-            generatedTiles,
+            generatedTiles: generatedTiles.data,
         },
         player: {
             range: playerRange,

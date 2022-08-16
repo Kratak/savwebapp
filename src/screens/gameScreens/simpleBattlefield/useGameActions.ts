@@ -25,11 +25,11 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
 
     const handleWinMatch = () => {
         screenHandlers.gotToSelectedScreen(Screens.LocalSystem);
-    }
+    };
 
     const handleFailMatch = () => {
         screenHandlers.gotToSelectedScreen(Screens.LocalSystem);
-    }
+    };
 
 
     const styles: { [key in NewGameFiberStylesKeys]: string } = {
@@ -361,9 +361,10 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             passedValues: passedValues,
             open: openSetting,
             saveData: {
-                saveId: props.globalData.currentSaveData.id,
+                saveId: props.globalData.currentSaveData.saveId,
                 scoreCounters,
             },
+            screenSelectorProps: props,
         },
         handlers: {
             setOpenSetting,
@@ -371,7 +372,7 @@ export const UseGameActions = <ColorKeys extends string>(props: ScreenSelectorPr
             setTiles,
             tilesToDelete,
             handleWinMatch,
-            handleFailMatch
+            handleFailMatch,
         },
         data: {
             displayData: {

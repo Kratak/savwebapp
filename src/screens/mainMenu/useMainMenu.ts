@@ -8,7 +8,7 @@ import { Screens, ScreenSelectorProps } from '../types';
 
 export const useMainMenu = (props: ScreenSelectorProps) => {
     const styles = useStyles();
-    const { getSaveSlot } = useGameSaves();
+    const { getSaveSlot } = useGameSaves(props);
     const { screenHandlers } = useInGameScreenPush(props);
     const [resumeAvailable, setResumeAvailable] = useState<boolean>(false);
     const [loadAvailable, setLoadAvailable] = useState<boolean>(false);

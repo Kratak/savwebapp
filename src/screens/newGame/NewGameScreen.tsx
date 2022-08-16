@@ -19,7 +19,7 @@ const formatDate = (date: Date) => {
 const NewGameScreen = (props: ScreenSelectorProps): JSX.Element => {
     const styles = useStyles();
     const { screenHandlers } = useInGameScreenPush(props);
-    const { getSaveSlot } = useGameSaves();
+    const { getSaveSlot } = useGameSaves(props);
 
     const [slotData, setSlotData] = useState<Array<SlotDataProps>>([]);
 
@@ -29,7 +29,7 @@ const NewGameScreen = (props: ScreenSelectorProps): JSX.Element => {
             currentScreen: Screens.InGameSimpleBattlefield,
             currentSaveData: {
                 ...props.globalData.currentSaveData,
-                id: slotId,
+                saveId: slotId,
             },
         };
         props.setGlobalDataProvider(dataToSet);

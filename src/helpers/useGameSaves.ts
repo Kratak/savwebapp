@@ -1,5 +1,8 @@
 import { ScoreCounterProps } from '../screens/gameScreens/simpleBattlefield/types';
 import { newDate, SaveSlotProps } from '../UIcomponents/settings/settings';
+import { ScreenSelectorProps } from '../screens/types';
+import { useEffect } from 'react';
+import { HexPositionParameters } from '../screens/localSystemScreen/helepers';
 
 export interface MetaGameDataProps {
     shardCount: number;
@@ -10,10 +13,10 @@ export enum CurrentGameModes {
     match3 = 'match3'
 }
 
-export interface CurrentGameDataProps<ColorKeys extends string> {
+export interface CurrentGameDataProps {
     mode: CurrentGameModes;
-    galaxyMapPosition: string;
-    scoreCounters: Array<ScoreCounterProps<ColorKeys>>;
+    galaxyMapPosition?: HexPositionParameters;
+    // scoreCounters: Array<ScoreCounterProps<ColorKeys>>;
 
 }
 
@@ -25,25 +28,25 @@ export enum SaveDataField {
     currentGameData = 'currentGameData'
 }
 
-export interface SaveDataProps<ColorKeys extends string> {
+export interface SaveDataProps {
     [SaveDataField.saveId]: string;
     [SaveDataField.saveName]: string;
     [SaveDataField.date]: Date;
     [SaveDataField.metaGameData]: MetaGameDataProps;
-    [SaveDataField.currentGameData]: CurrentGameDataProps<ColorKeys>;
+    [SaveDataField.currentGameData]: CurrentGameDataProps;
 }
 
 export enum LocalStorageKeys {
     saves = 'saves'
 }
 
-export const useGameSaves = <ColorKeys extends string>() => {
-    const save = async (saveData: SaveDataProps<ColorKeys>) => {
+export const useGameSaves = (props: ScreenSelectorProps) => {
+    const save = async (saveData: SaveDataProps) => {
         let data = [saveData];
         const stringedOldSaves = await localStorage.getItem(LocalStorageKeys.saves);
 
         if (!!stringedOldSaves) {
-            const oldSaves: Array<SaveDataProps<ColorKeys>> = JSON.parse(stringedOldSaves);
+            const oldSaves: Array<SaveDataProps> = JSON.parse(stringedOldSaves);
 
             if (saveData.saveId && !!oldSaves.filter(item => item.saveId === saveData.saveId)) {
                 data = [...data, ...oldSaves.filter(item => item.saveId !== saveData.saveId)];
@@ -54,11 +57,11 @@ export const useGameSaves = <ColorKeys extends string>() => {
     };
 
     const deleteSave = async (saveId: string) => {
-        let data: Array<SaveDataProps<ColorKeys>> = [];
+        let data: Array<SaveDataProps> = [];
         const stringedOldSaves = await localStorage.getItem(LocalStorageKeys.saves);
 
         if (!!stringedOldSaves) {
-            const oldSaves: Array<SaveDataProps<ColorKeys>> = JSON.parse(stringedOldSaves);
+            const oldSaves: Array<SaveDataProps> = JSON.parse(stringedOldSaves);
 
             if (saveId && oldSaves.length > 0) {
                 data = [...oldSaves.filter(item => item.saveId !== saveId)];
@@ -68,8 +71,18 @@ export const useGameSaves = <ColorKeys extends string>() => {
         localStorage.setItem(LocalStorageKeys.saves, JSON.stringify(data));
     };
 
-    const load = (id: string): SaveDataProps<ColorKeys> => {
+    const load = (id: string): SaveDataProps => {
+        let data = null;
         console.log('game load');
+        getSaveSlot().then(reponse => {
+            if (reponse.find(item => item.saveId === id)) {
+                data = reponse.find(item => item.saveId === id);
+            }
+        }).catch(e => console.log(e));
+
+        if (!!data) {
+            return data;
+        }
 
         return {
             saveId: '',
@@ -79,9 +92,8 @@ export const useGameSaves = <ColorKeys extends string>() => {
                 shardCount: 0,
             },
             currentGameData: {
-                galaxyMapPosition: 'position',
                 mode: CurrentGameModes.match3,
-                scoreCounters: [],
+                // scoreCounters: [],
             },
         };
     };
@@ -91,7 +103,7 @@ export const useGameSaves = <ColorKeys extends string>() => {
         const stringedOldSaves = await localStorage.getItem(LocalStorageKeys.saves);
 
         if (!!stringedOldSaves) {
-            const oldSaves: Array<SaveDataProps<ColorKeys>> = JSON.parse(stringedOldSaves);
+            const oldSaves: Array<SaveDataProps> = JSON.parse(stringedOldSaves);
             saveData = oldSaves.map((item) => ({
                 date: item.date,
                 name: item.saveName,
@@ -101,6 +113,25 @@ export const useGameSaves = <ColorKeys extends string>() => {
 
         return saveData;
     };
+
+    useEffect(() => {
+        if (props.globalData.saving && !!props.globalData.currentSaveData.saveId && !!props.globalData.currentSaveData.saveName) {
+            props.setGlobalDataProvider({ ...props.globalData, saving: false });
+            save({
+                [SaveDataField.currentGameData]: {
+                    mode: props.globalData.currentSaveData.currentGameModes,
+                    galaxyMapPosition: props.globalData.currentSaveData.sectorData?.playerPosition,
+                },
+                [SaveDataField.date]: newDate,
+                [SaveDataField.saveId]: props.globalData.currentSaveData.saveId,
+                [SaveDataField.saveName]: props.globalData.currentSaveData.saveName,
+                [SaveDataField.metaGameData]: {
+                    shardCount: props.globalData.currentSaveData.shardCount,
+                },
+
+            });
+        }
+    }, [props.globalData.saving, props.globalData.currentSaveData.saveId, props.globalData.currentSaveData.saveName]);
 
     return {
         save,
