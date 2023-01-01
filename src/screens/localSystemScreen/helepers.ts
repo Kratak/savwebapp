@@ -214,9 +214,10 @@ const { isOdd } = calculationsHelpers;
 export const getFirstSystemRandomGrid = (given: {
     rows: number,
     columns: number,
-    selectedTiles: Array<SystemTileData>
+    selectedTiles: Array<SystemTileData>,
+    gridId: string
 
-}): Array<Array<FirstSystemGridItem>> => {
+}): { data: Array<Array<FirstSystemGridItem>>; gridId: string } => {
 
     // const test001Memo = tilesSet001(given.columns * given.rows);
     const test002Memo = tileSet002();
@@ -302,5 +303,5 @@ export const getFirstSystemRandomGrid = (given: {
         depTiles = [...depTiles, getObj];
     }
 
-    return depTiles;
+    return { data: depTiles, gridId: given.gridId };
 };

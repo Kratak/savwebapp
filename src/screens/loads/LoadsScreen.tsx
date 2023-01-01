@@ -36,7 +36,7 @@ export const initialSaveSlots: Array<SlotDataProps> = [
 const LoadsScreen = (props: ScreenSelectorProps): JSX.Element => {
     const styles = useStyles();
     const { screenHandlers } = useInGameScreenPush(props);
-    const { getSaveSlot, deleteSave } = useGameSaves();
+    const { getSaveSlot, deleteSave } = useGameSaves(props);
 
     const [slotData, setSlotData] = useState<Array<SlotDataProps>>([]);
     const [openModal, setOpenModal] = useState(false);

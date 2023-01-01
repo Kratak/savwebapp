@@ -7,6 +7,7 @@ import { GridPositionProps, TilesGridObject } from '../../../gameModes/simple/he
 
 import { NewGameFiberStylesKeys } from './styles';
 import { AvailableThemesKeys } from './initials';
+import { ScreenSelectorProps } from '../../types';
 
 export interface SelectedTilesData<ColorKeys extends string> {
     boxId: string;
@@ -42,6 +43,7 @@ export interface UseGameActionsReturn<ColorKeys extends string> {
         passedValues: SettingPassedValuesProps<AvailableThemesKeys>;
         open: boolean;
         saveData: DataToSaveProps<ColorKeys>;
+        screenSelectorProps: ScreenSelectorProps;
     };
     handlers: {
         setOpenSetting: Dispatch<boolean>;

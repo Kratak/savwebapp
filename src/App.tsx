@@ -1,23 +1,40 @@
 import React, { useState } from 'react';
 import { createTheme, CssBaseline, Theme, ThemeProvider } from '@mui/material';
 // import { useTranslation } from 'react-i18next';
-
 import { Screens } from './screens/types';
 import { ScreenSelector } from './screens';
 import './i18n';
 import { useStyles } from './styles';
+import { HexPositionParameters } from './screens/localSystemScreen/helepers';
+import { CurrentGameModes } from './helpers';
 
 export interface GlobalDataProviderProps {
     currentScreen: Screens;
+    saving: boolean;
     currentSaveData: {
-        id: string | null;
+        currentGameModes: CurrentGameModes;
+        shardCount: number;
+        saveId: string | null;
+        saveName: string | null;
+        sectorData: null | {
+            playerPosition: HexPositionParameters;
+            sectorId: string;
+        };
+        tileGameData: null | {};
     };
 }
 
 export const initialGlobalDataProvider: GlobalDataProviderProps = {
     currentScreen: Screens.MainMenu,
+    saving: false,
     currentSaveData: {
-        id: null,
+        shardCount: 0,
+        currentGameModes: CurrentGameModes.galaxy,
+        saveId: null,
+        saveName: null,
+        sectorData: null,
+        tileGameData: null,
+
     },
 };
 

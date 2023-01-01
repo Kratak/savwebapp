@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { MenuItem, Modal, Select, SelectChangeEvent } from '@mui/material';
 import { ModalProps } from '@mui/material/Modal/Modal';
 
-import { Screens } from '../../screens/types';
+import { Screens, ScreenSelectorProps } from '../../screens/types';
 import { ColorThemeObject } from '../../screens/gameScreens/simpleBattlefield/initials';
 import { CurrentGameModes, useGameSaves } from '../../helpers';
 // import { SlotDataProps, initialSaveSlots } from '../../screens/loads';
@@ -15,6 +15,7 @@ export interface SettingsProps<ThemesKeys extends string, ColorKey extends strin
     settingsHandlers: SettingCustomHandlesProps<ThemesKeys>;
     passedValues: SettingPassedValuesProps<ThemesKeys>;
     saveData: DataToSaveProps<ColorKey>;
+    screenSelectorProps: ScreenSelectorProps;
 }
 
 export interface SettingCustomHandlesProps<ThemesKeys extends string> {
@@ -49,7 +50,7 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
     const { settingsHandlers, passedValues, saveData, ...rest } = props;
 
     const styles = useStyles();
-    const { save, getSaveSlot } = useGameSaves();
+    const { save, getSaveSlot } = useGameSaves(props.screenSelectorProps);
 
     const [devSettingAllowed, setDevSettingAllowed] = useState<boolean>(true);
     // const [saveSlots, setSaveSlots] = useState<Array<SlotDataProps>>([...initialSaveSlots]);
@@ -78,8 +79,8 @@ const Settings = <ThemeKeys extends string, ColorKey extends string>(props: Sett
                 },
                 currentGameData: {
                     mode: CurrentGameModes.match3,
-                    galaxyMapPosition: 'position',
-                    scoreCounters: saveData.scoreCounters,
+                    // galaxyMapPosition: 'position',
+                    // scoreCounters: saveData.scoreCounters,
                 },
             });
             gameSaved = true;
