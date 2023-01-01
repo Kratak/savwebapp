@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 import { ScreenSelectorProps } from '../types';
 import { useLocalSystem } from './useLocalSystem';
+import { Inventory } from '../../UIcomponents/inventory';
 
 
 const LocalSystem = (props: ScreenSelectorProps): JSX.Element => {
@@ -11,6 +12,7 @@ const LocalSystem = (props: ScreenSelectorProps): JSX.Element => {
     return (
         <div className={styles.mainMenuWrapper}>
             <h1 className={styles.gameTitle}>System/area name</h1>
+            <Inventory screenSelectorProps={props} />
             <div className={styles.wrapper}>
                 {data.generatedTiles.map((column, columnIndex) => {
                     return column.map(row => {
